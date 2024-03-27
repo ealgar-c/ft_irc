@@ -1,3 +1,7 @@
+# MACOS
+.DS_Store
+ircserv
+
 # Prerequisites
 *.d
 

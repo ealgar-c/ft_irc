@@ -1,10 +1,10 @@
 NAME = ircserv
 
 SRC_PATH = src/
-SRC = main.cpp
+OBJ_PATH = objs/
 
-OBJ_PATH = obj/
-OBJ = $(addprefix $(OBJ_PATH), $(SRC:.cpp=.o))
+SRC = $(wildcard $(SRC_PATH)/*.cpp)
+OBJ = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC))
 
 CC = c++
 CPPFLAGS = -std=c++98 -Wall -Werror -Wextra
