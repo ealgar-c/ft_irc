@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/03/26 20:05:27 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/03/28 18:49:30 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ class	SockInfo
 		//	getters
 		//	methods
 			void	createSocket();
+			void    runServ();
 };

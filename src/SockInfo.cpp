@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/03/28 17:23:03 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/03/28 19:02:31 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,9 @@ void	SockInfo::createSocket(void) // tenemos un super socket
 		close(this->_sockfd);
 		printError(ERR_SOCKLISTEN);
 	}
+}
+
+void	SockInfo::runServ(void)
+{
+	// aqui va un bucle con el poll
 }
