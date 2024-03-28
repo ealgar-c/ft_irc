@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/03/28 16:31:29 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/03/28 17:23:03 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ SockInfo::~SockInfo(){}
  * @brief Creates the socket
  * 
  */
-void	SockInfo::createSocket(void)
+void	SockInfo::createSocket(void) // tenemos un super socket
 {
 	sockaddr_in	sockAddrConf;
 	int	opt = 1;
