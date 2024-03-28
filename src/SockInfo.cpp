@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/03/27 12:04:18 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/03/28 16:31:29 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	SockInfo::createSocket(void)
 	sockaddr_in	sockAddrConf;
 	int	opt = 1;
 
-	this->_sockfd = socket(SOCK_STREAM, AF_INET, 0);
+	this->_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_sockfd == -1)
 		printError(ERR_SOCKCREAT);
 	sockAddrConf.sin_port = htons(this->_port);

@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/03/27 10:59:43 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/03/28 16:32:39 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ int	main(int ac, char **av) // pablo te puedo pasar muchas cosas pero ponme los 
 		printError(ERR_EMPTYPWD);
 	SockInfo	sock(av);
 	sock.createSocket();
+	std::cout << "socket created" << std::endl;
 	return 0;
 }
