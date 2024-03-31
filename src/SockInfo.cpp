@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/03/28 19:02:31 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/03/30 14:27:36 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ SockInfo::~SockInfo(){}
 
 /**
  * @brief Creates the socket
- * 
  */
 void	SockInfo::createSocket(void) // tenemos un super socket
 {
@@ -56,7 +55,17 @@ void	SockInfo::createSocket(void) // tenemos un super socket
 	}
 }
 
+/**
+ * @brief it executes a loop that is using poll (in a non-blocking way)
+ * 			to read from the socket fd any POLLIN event
+ */
 void	SockInfo::runServ(void)
 {
-	// aqui va un bucle con el poll
+	std::vector<struct pollfd> fds;
+
+	fds.push_back((struct pollfd){this->_sockfd, POLLIN, 0});
+	while (poll(&fds[0], fds.size(), -1))
+	{
+		
+	}
 }
