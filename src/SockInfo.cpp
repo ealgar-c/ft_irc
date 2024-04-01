@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 16:31:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:44:04 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,11 @@ Client	*searchClient(std::vector<Client *>clients, int fd)
 	return (NULL);
 }
 
+void	SockInfo::deleteClient(Client *clt)
+{
+	
+}
+
 /**
  * @brief it executes a loop that is using poll (in a non-blocking way)
  * 			to read from the socket fd any POLLIN event
@@ -148,6 +153,11 @@ void	SockInfo::runServ(void)
 			}
 			else if (this->_fds[i].revents & POLLIN)
 				this->readRequestFromClient(searchClient(this->_clients, this->_fds[i].fd));
+		}
+		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
+		{
+			if (searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
+				this->deleteClient(searchClient(this->_clients, v_it->fd));
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 14:40:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:44:12 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class	SockInfo
 			void	createSocket();
 			void    runServ();
 			void	createClient();
+			void	deleteClient(Client *);
 			void	readClientInfo();
 			void	readRequestFromClient(Client *);
 };
