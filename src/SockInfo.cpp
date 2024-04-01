@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 16:20:24 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:31:49 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		readed = recv(clt->getClientFd(), buf, 1024, 0);
 		if (!readed)
 		{
+			std::cout << "[-] Client disconnected" << std::endl;
 			clt->changeStatus(DISCONNECTED);
 			return ;
 		}
