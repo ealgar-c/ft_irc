@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SockInfo.hpp                                       :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 14:40:49 by ealgar-c         ###   ########.fr       */
+/*   Created: 2024/04/01 14:04:00 by ealgar-c          #+#    #+#             */
+/*   Updated: 2024/04/01 15:49:50 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,28 @@
 
 # include "ft_irc.hpp"
 
-class Client;
+enum C_STATUS{
+	UNKNOWN,
+	AUTHENTICATED,
+	CONNECTED,
+	DISCONNECTED
+};
 
-class	SockInfo
+class Client
 {
 	private:
-		int							_sockfd;
-		std::string					_passwd;
-		int							_port;
-		std::vector<struct pollfd>	_fds;
-		std::vector<Client *>			_clients;
+		C_STATUS	_status;
+		std::string	_nickname;
+		std::string	_ip;
+		int			_clientfd;
 	public:
-		//	constructor
-			SockInfo(char **);
-		//	destructor
-			~SockInfo();
-		//	overloads
-		//	getters
-		//	methods
-			void	createSocket();
-			void    runServ();
-			void	createClient();
-			void	readClientInfo();
-			void	readRequestFromClient(Client *);
+		Client();
+		Client(C_STATUS, std::string, int);
+		~Client();
+		Client &operator=(const Client &);
+		std::string	_messagebuffer;
+		C_STATUS	getStatus(void) const;
+		std::string	getIp(void) const;
+		int			getClientFd(void) const;
+		void		changeStatus(C_STATUS);
 };

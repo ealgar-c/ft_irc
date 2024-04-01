@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/03/28 16:32:39 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:36:31 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ void	printError(std::string err)
 	exit(1);
 }
 
+void	signalOverride(int receivedsig)
+{
+	if (receivedsig == SIGINT)
+	{
+		std::cout << "server closed" << std::endl;
+		exit (0);
+	}	
+}
+
 int	main(int ac, char **av) // pablo te puedo pasar muchas cosas pero ponme los corchetes bien
 {
 	if (ac != 3)
@@ -29,7 +38,9 @@ int	main(int ac, char **av) // pablo te puedo pasar muchas cosas pero ponme los 
 	if (strcmp(av[2], "") == 0)
 		printError(ERR_EMPTYPWD);
 	SockInfo	sock(av);
+	signal(SIGINT, signalOverride);
 	sock.createSocket();
-	std::cout << "socket created" << std::endl;
+	std::cout << "[INFO] socket created" << std::endl;
+	sock.runServ();
 	return 0;
 }

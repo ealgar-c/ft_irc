@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/03/30 14:27:36 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:20:24 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,14 @@ SockInfo::SockInfo(char **av){
 }
 
 //	destructor
-SockInfo::~SockInfo(){}
+SockInfo::~SockInfo()
+{
+	for (std::vector<Client *>::const_iterator v_it= this->_clients.begin(); v_it != this->_clients.end(); v_it++)
+	{
+		delete *v_it;
+	}
+	
+}
 
 //	methods
 
@@ -56,16 +63,90 @@ void	SockInfo::createSocket(void) // tenemos un super socket
 }
 
 /**
+ * @brief accepts the connection of new clients
+ */
+void	SockInfo::createClient()
+{
+	sockaddr_in	clientAddr;
+	socklen_t	socklen = sizeof(clientAddr);
+	int newconnection;
+
+	newconnection = accept(this->_sockfd, (sockaddr *)&clientAddr, &socklen);
+	if (newconnection == -1)
+		printError("");
+	fcntl(newconnection, F_SETFL, O_NONBLOCK);
+	struct in_addr	clientInetInfo;
+	clientInetInfo.s_addr = clientAddr.sin_addr.s_addr;
+	Client *newClient = new Client(UNKNOWN, inet_ntoa(clientInetInfo), newconnection);
+	this->_clients.push_back(newClient);
+	this->_fds.push_back((struct pollfd){newconnection, POLLIN | POLLOUT, 0});
+	std::cout << "[+] New client connected with fd " << newconnection << std::endl;
+}
+
+void	SockInfo::readClientInfo(void)
+{
+	std::vector<Client *>::const_iterator v_it = this->_clients.begin();
+	while (v_it != this->_clients.end())
+		v_it++;
+	v_it--;
+	std::cout << "[DEBUG] Client info:\n" << "\tstatus -> " << (*v_it)->getStatus() << std::endl << "\tip -> " << (*v_it)->getIp() << std::endl << "\tclient fd -> " << (*v_it)->getClientFd() << std::endl;
+	std::cout << "[DEBUG] There are currently " << this->_clients.size() << " clients." << std::endl;
+}
+
+void	SockInfo::readRequestFromClient(Client *clt)
+{
+	int 	readed = 0;
+	char	buf[1024];
+
+	memset(buf, 0, 1024);
+	while (1)
+	{
+		readed = recv(clt->getClientFd(), buf, 1024, 0);
+		if (!readed)
+		{
+			clt->changeStatus(DISCONNECTED);
+			return ;
+		}
+		else if (readed < 0)
+			printError("");
+		clt->_messagebuffer.append(buf);
+		if(clt->_messagebuffer.find("\n") != std::string::npos)
+		{
+			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			clt->_messagebuffer.clear();
+			return ;
+		}
+	}
+}
+
+Client	*searchClient(std::vector<Client *>clients, int fd)
+{
+	for(std::vector<Client *>::const_iterator v_it= clients.begin(); v_it != clients.end(); v_it++)
+	{
+		if ((*v_it)->getClientFd() == fd)
+			return (*v_it);
+	}
+	return (NULL);
+}
+
+/**
  * @brief it executes a loop that is using poll (in a non-blocking way)
  * 			to read from the socket fd any POLLIN event
  */
 void	SockInfo::runServ(void)
 {
-	std::vector<struct pollfd> fds;
-
-	fds.push_back((struct pollfd){this->_sockfd, POLLIN, 0});
-	while (poll(&fds[0], fds.size(), -1))
+	this->_fds.push_back((struct pollfd){this->_sockfd, POLLIN, 0});
+	while (poll(&this->_fds[0], this->_fds.size(), -1) > 0)
 	{
-		
+		for (size_t i = 0; i != this->_fds.size(); i++)
+		{
+			if (this->_fds[i].fd == this->_sockfd && this->_fds[i].revents & POLLIN)
+			{
+				this->createClient();
+				this->readClientInfo();
+			}
+			else if (this->_fds[i].revents & POLLIN)
+				this->readRequestFromClient(searchClient(this->_clients, this->_fds[i].fd));
+		}
 	}
 }
