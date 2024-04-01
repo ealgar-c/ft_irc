@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 17:06:24 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:08:17 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	SockInfo::createSocket(void) // tenemos un super socket
 		close(this->_sockfd);
 		printError(ERR_SOCKLISTEN);
 	}
+	Channel *general = new Channel("#general");
+	this->_channels.push_back(general);
 }
 
 /**
@@ -114,12 +116,20 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
 			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
+			{
+				int i = clt->_messagebuffer.find("JOIN");
+				clt->_messagebuffer.erase(0, i);
+				std::string test;
+				test = ":ealgar-c " + clt->_messagebuffer + "\r\n";
+				std::cout << test;
+				send(clt->getClientFd(), test.c_str(), test.length(), 0);
+			}
 			clt->_messagebuffer.clear();
 			return ;
 		}
 	}
 }
-
 
 static Client	*searchClient(std::vector<Client *>clients, int fd)
 {
@@ -133,7 +143,7 @@ static Client	*searchClient(std::vector<Client *>clients, int fd)
 
 void	SockInfo::deleteClient(Client *clt)
 {
-	
+	(void)clt;
 }
 
 /**
@@ -155,13 +165,13 @@ void	SockInfo::runServ(void)
 			else if (this->_fds[i].revents & POLLIN)
 				this->readRequestFromClient(searchClient(this->_clients, this->_fds[i].fd));
 		}
-		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
+/* 		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
 		{
 			if (searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
 			{
 				this->deleteClient(searchClient(this->_clients, v_it->fd));
 				v_it = this->_fds.begin();
 			}
-		}
+		} */
 	}
 }
