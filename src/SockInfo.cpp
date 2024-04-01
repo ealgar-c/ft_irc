@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 16:44:04 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:06:24 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,8 @@ void	SockInfo::readRequestFromClient(Client *clt)
 	}
 }
 
-Client	*searchClient(std::vector<Client *>clients, int fd)
+
+static Client	*searchClient(std::vector<Client *>clients, int fd)
 {
 	for(std::vector<Client *>::const_iterator v_it= clients.begin(); v_it != clients.end(); v_it++)
 	{
@@ -157,7 +158,10 @@ void	SockInfo::runServ(void)
 		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
 		{
 			if (searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
+			{
 				this->deleteClient(searchClient(this->_clients, v_it->fd));
+				v_it = this->_fds.begin();
+			}
 		}
 	}
 }
