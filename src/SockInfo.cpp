@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:08:29 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:09:45 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 //	constructor
 SockInfo::SockInfo(char **av){
-	std::string	passwd_str(av[2]);
 	this->_port = atoi(av[1]);
-	this->_passwd = passwd_str;
+	this->_passwd = av[2];
 }
 
 //	destructor
