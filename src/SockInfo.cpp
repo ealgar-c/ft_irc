@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:09:45 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:56:40 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,31 +96,41 @@ void	SockInfo::readClientInfo(void)
 
 void	SockInfo::readRequestFromClient(Client *clt)
 {
-	int 	readed = 0;
+	int 	readfd = 0;
 	char	buf[1024];
 
 	memset(buf, 0, 1024);
 	while (1)
 	{
-		readed = recv(clt->getClientFd(), buf, 1024, 0);
-		if (!readed)
+		readfd = recv(clt->getClientFd(), buf, 1024, 0);
+		if (!readfd)
 		{
 			std::cout << "[-] Client disconnected" << std::endl;
 			clt->changeStatus(DISCONNECTED);
 			return ;
 		}
-		else if (readed < 0)
+		else if (readfd < 0)
 			printError("");
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
-			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+
+			
+			//TODO:  Aqui van cosas utiles
+			std::stringstream	ss(clt->_messagebuffer);
+			std::string			cmd;
+			while (std::getline(ss, cmd, '\n'))
+			{
+				Request	rqt(cmd);
+			}
+
 			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
 			{
 				int i = clt->_messagebuffer.find("JOIN");
 				clt->_messagebuffer.erase(0, i);
 				std::string test;
-				test = ":ealgar-c " + clt->_messagebuffer + "\r\n";
+				test = ":palucena " + clt->_messagebuffer + "\r\n";
 				std::cout << test;
 				send(clt->getClientFd(), test.c_str(), test.length(), 0);
 			}

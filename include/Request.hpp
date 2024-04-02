@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 16:38:51 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/01 16:43:32 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:57:57 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Request {
 		// Constructors
 			Request();
 			Request(const Request &);
+			Request(const std::string &);
 
 		// Destructor
 			~Request();

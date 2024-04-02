@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:45:11 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 15:50:57 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:25:22 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ Client	&Client::operator=(const Client &toEqual)
 C_STATUS	Client::getStatus(void) const
 {
 	return (this->_status);
+}
+
+std::string	Client::getNickname(void) const
+{
+	return (this->_nickname);
 }
 
 std::string	Client::getIp(void) const

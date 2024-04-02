@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/02 13:07:49 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:54:30 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # include <cstdlib>
 # include <cerrno>
 # include <vector>
+# include <sstream>
 
 /************************************
  _____ _____ _   _ _____ _____ _____ 
