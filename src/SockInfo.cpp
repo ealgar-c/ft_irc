@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 16:57:26 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:33:02 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,4 +187,11 @@ void	SockInfo::runServ(void)
 			}
 		}
 	}
+}
+
+bool	SockInfo::checkPassword(const std::string toCheck)
+{
+	if (toCheck == this->_passwd)
+		return (true);
+	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:07:55 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:31:24 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,5 @@ class	SockInfo
 			void	deleteClient(Client *);
 			void	readClientInfo();
 			void	readRequestFromClient(Client *);
+			bool	checkPassword(const std::string);
 };

@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/02 17:03:45 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:35:04 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ Request::Request(std::string cmd, Client *clt, SockInfo &sockInfo)
 	if (cmd.find("PASS") != std::string::npos)
 	{
 		this->_cmd = "PASS";
-		
+		if (sockInfo.checkPassword(cmd.substr(5, cmd.size())) == true)
+			clt.changeStatus();
+		else
+			// TODO: cosas malas
+			// TODO: crear clase command
 	}
 	// else if (cmd.find("NICK") != std::string::npos)
 	// else if (cmd.find("USER") != std::string::npos)
