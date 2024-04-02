@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 18:43:11 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:07:55 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 # include "ft_irc.hpp"
 
-class Client;
+class	Client;
+class	Channel;
 
 class	SockInfo
 {
@@ -23,7 +24,8 @@ class	SockInfo
 		std::string					_passwd;
 		int							_port;
 		std::vector<struct pollfd>	_fds;
-		std::vector<Client *>			_clients;
+		std::vector<Client *>		_clients;
+		std::vector<Channel *>		_channels;
 	public:
 		// Constructor
 			SockInfo(char **);
@@ -35,6 +37,7 @@ class	SockInfo
 			void	createSocket();
 			void    runServ();
 			void	createClient();
+			void	deleteClient(Client *);
 			void	readClientInfo();
 			void	readRequestFromClient(Client *);
 };

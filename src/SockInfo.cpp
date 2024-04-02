@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 19:55:32 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:08:01 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	SockInfo::createSocket(void) // tenemos un super socket
 		close(this->_sockfd);
 		printError(ERR_SOCKLISTEN);
 	}
+	Channel *general = new Channel("#general");
+	this->_channels.push_back(general);
 }
 
 /**
@@ -112,23 +114,14 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
-			std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
-			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
-			{
-				int i = clt->_messagebuffer.find("JOIN");
-				clt->_messagebuffer.erase(0, i);
-				std::string test;
-				test = ":ealgar-c " + clt->_messagebuffer + "\r\n";
-				std::cout << test;
-				send(clt->getClientFd(), test.c_str(), test.length(), 0);
-			}
+			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
 			clt->_messagebuffer.clear();
 			return ;
 		}
 	}
 }
 
-Client	*searchClient(std::vector<Client *>clients, int fd)
+static Client	*searchClient(std::vector<Client *>clients, int fd)
 {
 	for(std::vector<Client *>::const_iterator v_it= clients.begin(); v_it != clients.end(); v_it++)
 	{
@@ -136,6 +129,11 @@ Client	*searchClient(std::vector<Client *>clients, int fd)
 			return (*v_it);
 	}
 	return (NULL);
+}
+
+void	SockInfo::deleteClient(Client *clt)
+{
+	(void)clt;
 }
 
 /**
@@ -157,5 +155,13 @@ void	SockInfo::runServ(void)
 			else if (this->_fds[i].revents & POLLIN)
 				this->readRequestFromClient(searchClient(this->_clients, this->_fds[i].fd));
 		}
+/* 		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
+		{
+			if (searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
+			{
+				this->deleteClient(searchClient(this->_clients, v_it->fd));
+				v_it = this->_fds.begin();
+			}
+		} */
 	}
 }

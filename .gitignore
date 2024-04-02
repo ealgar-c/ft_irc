@@ -1,6 +1,7 @@
 # MACOS
 .DS_Store
 ircserv
+.vscode
 
 # Prerequisites
 *.d

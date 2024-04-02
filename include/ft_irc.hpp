@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/01 16:50:11 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:07:49 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@
 *******************************************/
 # include "SockInfo.hpp"
 # include "Client.hpp"
+# include "Channel.hpp"
+# include "Response.hpp"
 # include "Request.hpp"
 
 /******************************************************
