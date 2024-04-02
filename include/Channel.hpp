@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 17:27:55 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:56:57 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include "ft_irc.hpp"
 
 class Client;
+class Response;
+class SockInfo;
 
 class Channel
 {
@@ -28,5 +30,5 @@ class Channel
 		~Channel();
 		Channel &operator=(const Channel &);
 		std::string	getName() const;
-		void	addClientToChannel(Client *);
+		void	addClientToChannel(Client *, SockInfo &serv);
 };

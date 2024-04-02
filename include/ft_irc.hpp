@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/01 18:12:33 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:28:16 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,37 @@
 # define ERR_SETSOCKOPT "Error while setting socket options."
 # define ERR_BINDSOCK "Error binding socket."
 # define ERR_SOCKLISTEN "Error trying to listen from the socket."
+# ifndef HOST
+#  define HOST
+# endif
+
+/********************************
+ _____ _   _ _   ____  ________ 
+|  ___| \ | | | | |  \/  /  ___|
+| |__ |  \| | | | | .  . \ `--. 
+|  __|| . ` | | | | |\/| |`--. \
+| |___| |\  | |_| | |  | /\__/ /
+\____/\_| \_/\___/\_|  |_|____/ 
+********************************/
+enum C_STATUS{
+	UNKNOWN,
+	AUTHENTICATED,
+	CONNECTED,
+	DISCONNECTED
+};
+
+enum RESP_CODE{
+	ERR_NICKNAMEONUSE = 433,
+	ERR_USERONCHANNEL = 443,
+	RPL_TOPIC = 332,
+	RPL_WHOREPLY = 352,
+	RPL_ENDOFWHO = 315,
+};
+
+enum RESP_TYPE{
+	CLIENT,
+	SERVER,
+};
 
 /*******************************************
  _____ _      ___  _____ _____ _____ _____ 
@@ -65,6 +96,7 @@
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Response.hpp"
+
 
 /******************************************************
 ______ _   _ _   _ _____ _____ _____ _____ _   _ _____ 

@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:04:00 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 15:49:50 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:12:13 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 
 # include "ft_irc.hpp"
 
-enum C_STATUS{
-	UNKNOWN,
-	AUTHENTICATED,
-	CONNECTED,
-	DISCONNECTED
-};
+enum C_STATUS;
 
 class Client
 {

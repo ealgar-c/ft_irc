@@ -6,14 +6,14 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:44:44 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/02 18:01:02 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
 //	constructor
-SockInfo::SockInfo(char **av){
+SockInfo::SockInfo(char **av): _hostname(HOST){
 	std::string	passwd_str(av[2]);
 	this->_port = atoi(av[1]);
 	this->_passwd = passwd_str;
@@ -27,6 +27,12 @@ SockInfo::~SockInfo()
 		delete *v_it;
 	}
 	
+}
+
+//	getters
+std::string	SockInfo::getHostname(void) const
+{
+	return (this->_hostname);
 }
 
 //	methods
@@ -95,6 +101,24 @@ void	SockInfo::readClientInfo(void)
 	std::cout << "[DEBUG] There are currently " << this->_clients.size() << " clients." << std::endl;
 }
 
+void	SockInfo::joinChannel(std::string msg, Client *clt)
+{
+	std::string	newChannelName = msg.substr(5, msg.length() - 7);
+	std::cout << "new ch name: " << newChannelName << std::endl;
+	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+	{
+		if ((*v_it)->getName() == newChannelName)
+		{
+			std::cout << "channel already existing" << std::endl;
+			(*v_it)->addClientToChannel(clt, *this);
+			return ;
+		}
+	}
+	Channel *newChannel = new Channel(newChannelName);
+	this->_channels.push_back(newChannel);
+	newChannel->addClientToChannel(clt, *this);
+}
+
 void	SockInfo::readRequestFromClient(Client *clt)
 {
 	int 	readed = 0;
@@ -106,7 +130,6 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		readed = recv(clt->getClientFd(), buf, 1024, 0);
 		if (!readed)
 		{
-			std::cout << "[-] Client disconnected" << std::endl;
 			clt->changeStatus(DISCONNECTED);
 			return ;
 		}
@@ -115,16 +138,9 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
-			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer;
 			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
-			{
-				int i = clt->_messagebuffer.find("JOIN");
-				clt->_messagebuffer.erase(0, i);
-				std::string test;
-				test = ":ealgar-c " + clt->_messagebuffer + "\r\n";
-				std::cout << test;
-				send(clt->getClientFd(), test.c_str(), test.length(), 0);
-			}
+				this->joinChannel(clt->_messagebuffer, clt);
 			clt->_messagebuffer.clear();
 			return ;
 		}
@@ -159,7 +175,9 @@ void	SockInfo::deleteClient(Client *clt)
 		i++;
 	}
 	this->_clients.erase(this->_clients.begin() + i);
+	close(clt->getClientFd());
 	delete clt;
+	std::cout << "[-] Client disconnected" << std::endl;
 }
 
 /**
