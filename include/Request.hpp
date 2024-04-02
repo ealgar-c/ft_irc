@@ -1,40 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SockInfo.hpp                                       :+:      :+:    :+:   */
+/*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 18:43:11 by palucena         ###   ########.fr       */
+/*   Created: 2024/04/01 16:38:51 by palucena          #+#    #+#             */
+/*   Updated: 2024/04/01 16:43:32 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include "ft_irc.hpp"
+#include "ft_irc.hpp"
 
-class Client;
-
-class	SockInfo
-{
+class Request {
 	private:
-		int							_sockfd;
-		std::string					_passwd;
-		int							_port;
-		std::vector<struct pollfd>	_fds;
-		std::vector<Client *>			_clients;
 	public:
-		// Constructor
-			SockInfo(char **);
+		// Constructors
+			Request();
+			Request(const Request &);
+
 		// Destructor
-			~SockInfo();
-		// Overloads
-		// Getters
-		// Methods
-			void	createSocket();
-			void    runServ();
-			void	createClient();
-			void	readClientInfo();
-			void	readRequestFromClient(Client *);
+			~Request();
+
+		// Operator overload
+			Request	&operator=(const Request &);
 };

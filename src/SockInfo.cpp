@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/01 16:31:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:55:32 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
-//	constructor
-SockInfo::SockInfo(char **av){
-	std::string	passwd_str(av[2]);
+//	Constructor
+SockInfo::SockInfo(char **av) {
 	this->_port = atoi(av[1]);
-	this->_passwd = passwd_str;
+	this->_passwd = av[2];
 }
 
-//	destructor
+//	Destructor
 SockInfo::~SockInfo()
 {
 	for (std::vector<Client *>::const_iterator v_it= this->_clients.begin(); v_it != this->_clients.end(); v_it++)
@@ -29,7 +28,7 @@ SockInfo::~SockInfo()
 	
 }
 
-//	methods
+//	Methods
 
 /**
  * @brief Creates the socket
@@ -95,25 +94,34 @@ void	SockInfo::readClientInfo(void)
 
 void	SockInfo::readRequestFromClient(Client *clt)
 {
-	int 	readed = 0;
+	int 	readFd = 0;
 	char	buf[1024];
 
 	memset(buf, 0, 1024);
 	while (1)
 	{
-		readed = recv(clt->getClientFd(), buf, 1024, 0);
-		if (!readed)
+		readFd = recv(clt->getClientFd(), buf, 1024, 0);
+		if (!readFd)
 		{
 			std::cout << "[-] Client disconnected" << std::endl;
 			clt->changeStatus(DISCONNECTED);
 			return ;
 		}
-		else if (readed < 0)
+		else if (readFd < 0)
 			printError("");
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
-			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
+			{
+				int i = clt->_messagebuffer.find("JOIN");
+				clt->_messagebuffer.erase(0, i);
+				std::string test;
+				test = ":ealgar-c " + clt->_messagebuffer + "\r\n";
+				std::cout << test;
+				send(clt->getClientFd(), test.c_str(), test.length(), 0);
+			}
 			clt->_messagebuffer.clear();
 			return ;
 		}

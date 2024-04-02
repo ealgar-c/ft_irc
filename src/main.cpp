@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/01 14:36:31 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:50:27 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	signalOverride(int receivedsig)
 	}	
 }
 
-int	main(int ac, char **av) // pablo te puedo pasar muchas cosas pero ponme los corchetes bien
+int	main(int ac, char **av)
 {
 	if (ac != 3)
 		printError(ERR_ARGNO);
