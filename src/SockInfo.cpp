@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:56:40 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:00:00 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,23 @@ static Client	*searchClient(std::vector<Client *>clients, int fd)
 
 void	SockInfo::deleteClient(Client *clt)
 {
-	(void)clt;
+	int i = 0;
+	for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin();v_it != this->_fds.end(); v_it++)
+	{
+		if ((*v_it).fd == clt->getClientFd())
+			break;
+		i++;
+	}
+	this->_fds.erase(this->_fds.begin() + i);
+	i = 0;
+	for (std::vector<Client *>::const_iterator v_it = this->_clients.begin();v_it != this->_clients.end(); v_it++)
+	{
+		if (*v_it == clt)
+			break;
+		i++;
+	}
+	this->_clients.erase(this->_clients.begin() + i);
+	delete clt;
 }
 
 /**
@@ -174,13 +190,13 @@ void	SockInfo::runServ(void)
 			else if (this->_fds[i].revents & POLLIN)
 				this->readRequestFromClient(searchClient(this->_clients, this->_fds[i].fd));
 		}
-/* 		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
+		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
 		{
-			if (searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
+			if (searchClient(this->_clients, v_it->fd) && searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
 			{
 				this->deleteClient(searchClient(this->_clients, v_it->fd));
 				v_it = this->_fds.begin();
 			}
-		} */
+		}
 	}
 }
