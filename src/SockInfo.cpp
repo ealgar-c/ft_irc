@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 14:00:00 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:57:26 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,26 +114,14 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
-			std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << std::endl << clt->_messagebuffer << std::endl;
 
-			
-			//TODO:  Aqui van cosas utiles
 			std::stringstream	ss(clt->_messagebuffer);
 			std::string			cmd;
-			while (std::getline(ss, cmd, '\n'))
-			{
-				Request	rqt(cmd);
-			}
 
-			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
-			{
-				int i = clt->_messagebuffer.find("JOIN");
-				clt->_messagebuffer.erase(0, i);
-				std::string test;
-				test = ":palucena " + clt->_messagebuffer + "\r\n";
-				std::cout << test;
-				send(clt->getClientFd(), test.c_str(), test.length(), 0);
-			}
+			while (std::getline(ss, cmd, '\n'))
+				Request	rqt(cmd.substr(0, cmd.length() - 1), clt, *this);
+
 			clt->_messagebuffer.clear();
 			return ;
 		}

@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/02 13:54:30 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:41:53 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@
 | |____| |_| |_/ //\__/ /
 \_____|___/\____/ \____/ 
 ************************/
-# include <sys/socket.h>   // Para socket, setsockopt, getsockname, getaddrinfo, freeaddrinfo, bind, connect, listen, accept, recv, send
-# include <netinet/in.h>   // Para htons, htonl, ntohs, ntohl, inet_addr, inet_ntoa
-# include <arpa/inet.h>    // Para inet_addr, inet_ntoa
-# include <netdb.h>        // Para getprotobyname, gethostbyname, getaddrinfo, freeaddrinfo
-# include <unistd.h>       // Para close
-# include <signal.h>       // Para signal, sigaction
-# include <sys/types.h>    // Para fcntl, lseek
-# include <sys/stat.h>     // Para fstat
-# include <fcntl.h>        // Para fcntl
-# include <poll.h>         // Para poll
+# include <sys/socket.h>   // For socket, setsockopt, getsockname, getaddrinfo, freeaddrinfo, bind, connect, listen, accept, recv, send
+# include <netinet/in.h>   // For htons, htonl, ntohs, ntohl, inet_addr, inet_ntoa
+# include <arpa/inet.h>    // For inet_addr, inet_ntoa
+# include <netdb.h>        // For getprotobyname, gethostbyname, getaddrinfo, freeaddrinfo
+# include <unistd.h>       // For close
+# include <signal.h>       // For signal, sigaction
+# include <sys/types.h>    // For fcntl, lseek
+# include <sys/stat.h>     // For fstat
+# include <fcntl.h>        // For fcntl
+# include <poll.h>         // For poll
 # include <cstring>
 # include <iostream>
 # include <cstdlib>
@@ -45,7 +45,7 @@
 | \__/\ \_/ / |\  /\__/ / | | /\__/ /
  \____/\___/\_| \_|____/  \_/ \____/ 
 ************************************/
-# define CONST_MAXSCONN 5
+# define CONST_MAXSCONN 2
 # define ERR_ARGNO "Number of arguments incorrect."
 # define ERR_PORTARG "The received port is incorrect."
 # define ERR_EMPTYPWD "An empty password is invalid."
@@ -53,6 +53,7 @@
 # define ERR_SETSOCKOPT "Error while setting socket options."
 # define ERR_BINDSOCK "Error binding socket."
 # define ERR_SOCKLISTEN "Error trying to listen from the socket."
+# define ERR_NEEDMOREPARAMS "Not enough parameters. "
 
 /*******************************************
  _____ _      ___  _____ _____ _____ _____ 
