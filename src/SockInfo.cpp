@@ -6,19 +6,20 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:08:01 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/02 13:08:29 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
-//	Constructor
-SockInfo::SockInfo(char **av) {
+//	constructor
+SockInfo::SockInfo(char **av){
+	std::string	passwd_str(av[2]);
 	this->_port = atoi(av[1]);
-	this->_passwd = av[2];
+	this->_passwd = passwd_str;
 }
 
-//	Destructor
+//	destructor
 SockInfo::~SockInfo()
 {
 	for (std::vector<Client *>::const_iterator v_it= this->_clients.begin(); v_it != this->_clients.end(); v_it++)
@@ -28,7 +29,7 @@ SockInfo::~SockInfo()
 	
 }
 
-//	Methods
+//	methods
 
 /**
  * @brief Creates the socket
@@ -96,25 +97,34 @@ void	SockInfo::readClientInfo(void)
 
 void	SockInfo::readRequestFromClient(Client *clt)
 {
-	int 	readFd = 0;
+	int 	readed = 0;
 	char	buf[1024];
 
 	memset(buf, 0, 1024);
 	while (1)
 	{
-		readFd = recv(clt->getClientFd(), buf, 1024, 0);
-		if (!readFd)
+		readed = recv(clt->getClientFd(), buf, 1024, 0);
+		if (!readed)
 		{
 			std::cout << "[-] Client disconnected" << std::endl;
 			clt->changeStatus(DISCONNECTED);
 			return ;
 		}
-		else if (readFd < 0)
+		else if (readed < 0)
 			printError("");
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
 			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer << std::endl;
+			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
+			{
+				int i = clt->_messagebuffer.find("JOIN");
+				clt->_messagebuffer.erase(0, i);
+				std::string test;
+				test = ":ealgar-c " + clt->_messagebuffer + "\r\n";
+				std::cout << test;
+				send(clt->getClientFd(), test.c_str(), test.length(), 0);
+			}
 			clt->_messagebuffer.clear();
 			return ;
 		}
