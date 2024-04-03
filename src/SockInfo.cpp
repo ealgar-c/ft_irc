@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 18:01:02 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:15:20 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,11 @@ void	SockInfo::deleteClient(Client *clt)
 			break;
 		i++;
 	}
+	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+	{
+		if ((*v_it)->clientIsInChannel(clt))
+			(*v_it)->removeClientFormChannel(clt);
+	} // TODO: hacer las funciones
 	this->_clients.erase(this->_clients.begin() + i);
 	close(clt->getClientFd());
 	delete clt;

@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 18:07:04 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:09:18 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 		break;
 	case 332:
 		this->_to = "332 " + to;
-		/* code */
+		break;
 	case 352:
 		this->_to = "352 " + to;
-		/* code */
+		break;
 	case 315:
 		this->_to = "315 " + to;
-		/* code */
+		break;
 	
 	default:
 		this->_to = "300 " + to;
