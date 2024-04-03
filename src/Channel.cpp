@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 18:55:48 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:42:29 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ Channel &Channel::operator=(const Channel &toEqual)
 	if (this != &toEqual)
 	{
 		this->_name = toEqual.getName();
+		this->_clientsconnected = toEqual._clientsconnected;
 	}
 	return (*this);
 }
@@ -44,6 +45,11 @@ Channel &Channel::operator=(const Channel &toEqual)
 std::string	Channel::getName() const
 {
 	return (this->_name);
+}
+
+std::vector<Client *>	Channel::getClientsConnected(void) const
+{
+	return (this->_clientsconnected);
 }
 
 void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
@@ -58,7 +64,7 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 		}
 	}
 	this->_clientsconnected.push_back(newClient);
-	Response reply("ealgar-c", "ealgar-c", "JOIN #General");
+	Response reply("ealgar-c", "ealgar-c", "JOIN " + this->getName());
 	reply.reply(newClient);
 }
 

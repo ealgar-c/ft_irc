@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 11:22:52 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:41:59 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ class Channel
 		~Channel();
 		Channel &operator=(const Channel &);
 		std::string	getName() const;
+		std::vector<Client *>	getClientsConnected(void) const;
 		void	addClientToChannel(Client *, SockInfo &serv);
 		bool	clientIsInChannel(const Client *) const;
 		void	removeClientFromChannel(const Client *);
+		
 };

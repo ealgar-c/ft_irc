@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 19:01:54 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:55:37 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ enum RESP_CODE{
 	RPL_WHOREPLY = 352,
 	RPL_ENDOFWHO = 315,
 	ERR_PASSWDMISMATCH = 464,
+	RPL_NAMREPLY = 353,
+	RPL_ENDOFNAMES = 366
 };
 
 enum RESP_TYPE{
