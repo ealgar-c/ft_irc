@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:45:11 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 19:32:26 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:56:51 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,26 @@ std::string	Client::getNickname(void) const
 void	Client::setNickname(const std::string str)
 {
 	this->_nickname = str;
+}
+
+std::string	Client::getUsername(void) const
+{
+	return (this->_username);
+}
+
+void	Client::setUsername(const std::string str)
+{
+	this->_username = str;
+}
+
+std::string	Client::getRealname(void) const
+{
+	return (this->_realname);
+}
+
+void	Client::setRealname(const std::string str)
+{
+	this->_realname = str;
 }
 
 std::string	Client::getIp(void) const

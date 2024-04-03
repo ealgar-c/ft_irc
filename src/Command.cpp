@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 20:09:37 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 21:01:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,24 @@ void	Command::execNick(std::string cmd, Client *clt, SockInfo &sockInfo)
 	if (sockInfo.searchNick(newNick) == false)
 		clt->setNickname(newNick);
 	else
-		std::cout << "nnick feo" << std::endl;
+		std::cout << "nick feo" << std::endl;
 }
 
 void	Command::execUser(std::string cmd, Client *clt, SockInfo &sockInfo)
 {
-	(void)cmd;
 	(void)clt;
 	(void)sockInfo;
+	std::cout << "\t ESTOY CON ESTO --> " << cmd << "." << std::endl;
+	cmd = cmd.substr(5, cmd.size() - 1);
+	clt->setUsername(cmd.substr(0, cmd.find(' ')));
+	cmd = cmd.substr(cmd.find(' ') + 1, cmd.size() - 1);
+	cmd = cmd.substr(cmd.find(' ') + 1, cmd.size() - 1);
+	cmd = cmd.substr(cmd.find(' ') + 1, cmd.size() - 1);
+	if (cmd[0] == ':')
+		clt->setRealname(cmd.substr(1, cmd.size() - 1));
+	else
+		clt->setRealname(cmd);
+	std:: cout << clt->getUsername() << " " << clt->getRealname() << std::endl;
 }
 
 void	Command::execJoin(std::string cmd, Client *clt, SockInfo &sockInfo)
