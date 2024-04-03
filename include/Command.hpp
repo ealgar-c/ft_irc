@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:56:26 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 18:55:34 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:09:28 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ class Command
 			static void	execPass(std::string cmd, Client *clt, SockInfo &sockInfo);
 			static void	execNick(std::string cmd, Client *clt, SockInfo &sockInfo);
 			static void	execUser(std::string cmd, Client *clt, SockInfo &sockInfo);
-			static void	execConn(std::string cmd, Client *clt, SockInfo &sockInfo);
 			static void	execJoin(std::string cmd, Client *clt, SockInfo &sockInfo);
 			static void	execPrivmsg(std::string cmd, Client *clt, SockInfo &sockInfo);
 			static void	execWho(std::string cmd, Client *clt, SockInfo &sockInfo);
