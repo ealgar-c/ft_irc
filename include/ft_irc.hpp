@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/02 16:41:53 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:16:46 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 # define ERR_SETSOCKOPT "Error while setting socket options."
 # define ERR_BINDSOCK "Error binding socket."
 # define ERR_SOCKLISTEN "Error trying to listen from the socket."
-# define ERR_NEEDMOREPARAMS "Not enough parameters. "
 
 /*******************************************
  _____ _      ___  _____ _____ _____ _____ 
@@ -68,6 +67,7 @@
 # include "Channel.hpp"
 # include "Response.hpp"
 # include "Request.hpp"
+# include "Command.hpp"
 
 /******************************************************
 ______ _   _ _   _ _____ _____ _____ _____ _   _ _____ 

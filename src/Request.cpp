@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/02 20:35:04 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:55:52 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,43 @@ Request::Request(std::string cmd, Client *clt, SockInfo &sockInfo)
 	if (cmd.find("PASS") != std::string::npos)
 	{
 		this->_cmd = "PASS";
-		if (sockInfo.checkPassword(cmd.substr(5, cmd.size())) == true)
-			clt.changeStatus();
-		else
-			// TODO: cosas malas
-			// TODO: crear clase command
+		Command::execPass(cmd, clt, sockInfo);
 	}
-	// else if (cmd.find("NICK") != std::string::npos)
-	// else if (cmd.find("USER") != std::string::npos)
-	// else if (cmd.find("CONN") != std::string::npos)
+	else if (cmd.find("NICK") != std::string::npos)
+	{
+		this->_cmd = "NICK";
+		Command::execNick(cmd, clt, sockInfo);
+	}
+	else if (cmd.find("USER") != std::string::npos)
+	{
+		this->_cmd = "USER";
+		Command::execUser(cmd, clt, sockInfo);
+	}
+	else if (cmd.find("CONN") != std::string::npos)
+	{
+		this->_cmd = "CONN";
+		Command::execConn(cmd, clt, sockInfo);
+	}
 	if (cmd.find("JOIN") != std::string::npos)
 	{
 		this->_cmd = "JOIN";
-		std::string test;
-		test = ":palucena " + cmd + "\r\n";
-		std::cout << test;
-		send(clt->getClientFd(), test.c_str(), test.length(), 0);
+		Command::execJoin(cmd, clt, sockInfo);
 	}
-	// else if (cmd.find("PRIVMSG") != std::string::npos)
-	// else if (cmd.find("WHO") != std::string::npos)
-	// else if (cmd.find("PING") != std::string::npos)
+	else if (cmd.find("PRIVMSG") != std::string::npos)
+	{
+		this->_cmd = "PRIVMSG";
+		Command::execPrivmsg(cmd, clt, sockInfo);
+	}
+	else if (cmd.find("WHO") != std::string::npos)
+	{
+		this->_cmd = "WHO";
+		Command::execWho(cmd, clt, sockInfo);
+	}
+	else if (cmd.find("PING") != std::string::npos)
+	{
+		this->_cmd = "PING";
+		Command::execPing(cmd, clt, sockInfo);
+	}
 }
 
 Request::~Request()
