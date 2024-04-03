@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 19:55:07 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:08:09 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ void	Command::execWho(std::string cmd, Client *clt, SockInfo &sockInfo)
 void	Command::execPing(std::string cmd, Client *clt, SockInfo &sockInfo)
 {
 	std::string pingCode = cmd.substr(5, cmd.length() - 5);
-	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + pingCode§§);
+	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + pingCode);
 	reply.reply(clt);
 }
