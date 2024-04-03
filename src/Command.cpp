@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 19:12:03 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 19:42:46 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,12 @@ void	Command::execPass(std::string cmd, Client *clt, SockInfo &sockInfo)
 
 void	Command::execNick(std::string cmd, Client *clt, SockInfo &sockInfo)
 {
-	(void)cmd;
-	(void)clt;
-	(void)sockInfo;
+	std::string	newNick = cmd.substr(5, cmd.size() - 1);
+
+	if (sockInfo.searchNick(newNick) == false)
+		clt->setNickname(newNick);
+	else
+		std::cout << "nnick feo" << std::endl;
 }
 
 void	Command::execUser(std::string cmd, Client *clt, SockInfo &sockInfo)

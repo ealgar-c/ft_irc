@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:45:11 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 13:25:22 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 19:32:26 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ C_STATUS	Client::getStatus(void) const
 std::string	Client::getNickname(void) const
 {
 	return (this->_nickname);
+}
+
+void	Client::setNickname(const std::string str)
+{
+	this->_nickname = str;
 }
 
 std::string	Client::getIp(void) const

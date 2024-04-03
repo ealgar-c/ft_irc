@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:04:00 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 19:01:03 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 19:28:29 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Client
 		std::string	_messagebuffer;
 		C_STATUS	getStatus(void) const;
 		std::string	getNickname(void) const;
+		void		setNickname(const std::string);
 		std::string	getIp(void) const;
 		int			getClientFd(void) const;
 		void		changeStatus(C_STATUS);

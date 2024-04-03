@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 19:02:59 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 19:46:27 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,5 +224,22 @@ bool	SockInfo::checkPassword(const std::string toCheck)
 {
 	if (toCheck == this->_passwd)
 		return (true);
+	return (false);
+}
+
+/**
+ * @brief Returns true if the Nickname already exists
+ * 
+ * @param str 
+ * @return true 
+ * @return false 
+ */
+bool	SockInfo::searchNick(const std::string str)
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->_clients[i]->getNickname() == str)
+			return (true);
+	}
 	return (false);
 }
