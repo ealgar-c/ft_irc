@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/02 17:48:02 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:24:32 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,14 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	this->_clientsconnected.push_back(newClient);
 	Response reply("ealgar-c", "ealgar-c", "JOIN #General");
 	reply.reply(newClient);
+}
+
+bool	Channel::clientIsInChannel(const Client *clt) const
+{
+	// TODO: hacer
+}
+
+void	Channel::removeClientFromChannel(const Client *clt)
+{
+	// TODO: hacer
 }
