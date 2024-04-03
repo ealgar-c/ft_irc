@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 20:08:09 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 20:09:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,6 @@ void	Command::execNick(std::string cmd, Client *clt, SockInfo &sockInfo)
 }
 
 void	Command::execUser(std::string cmd, Client *clt, SockInfo &sockInfo)
-{
-	(void)cmd;
-	(void)clt;
-	(void)sockInfo;
-}
-
-void	Command::execConn(std::string cmd, Client *clt, SockInfo &sockInfo)
 {
 	(void)cmd;
 	(void)clt;
