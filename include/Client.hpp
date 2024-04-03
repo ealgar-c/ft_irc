@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:04:00 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 16:20:34 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/03 19:01:03 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 
 # include "ft_irc.hpp"
 
-enum C_STATUS{
-	UNKNOWN,
-	AUTHENTICATED,
-	CONNECTED,
-	DISCONNECTED
-};
+enum C_STATUS;
 
 class Client
 {

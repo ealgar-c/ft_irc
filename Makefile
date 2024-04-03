@@ -9,7 +9,9 @@ OBJ = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC))
 CC = c++
 CPPFLAGS = -std=c++98 -Wall -Werror -Wextra
 
-HEADERS = -I ./include
+HOSTNAME = $(shell hostname)
+
+HEADERS = -I ./include -D HOST=\"$(HOSTNAME)\"
 
 #//= Colors =//#
 BOLD    := \033[1m
