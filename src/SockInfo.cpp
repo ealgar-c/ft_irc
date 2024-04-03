@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 11:15:20 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:56:21 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,11 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
 			std::cout << "[DEBUG] message readed from client " << clt->getClientFd() << ": " << clt->_messagebuffer;
+			if (clt->_messagebuffer.find("PASS") != std::string::npos)
+			{
+				Response reply(this->getHostname(), "ealgar-c", ERR_PASSWDMISMATCH, ":Password incorrect");
+				reply.reply(clt);
+			}
 			if (clt->_messagebuffer.find("JOIN") != std::string::npos)
 				this->joinChannel(clt->_messagebuffer, clt);
 			clt->_messagebuffer.clear();
@@ -177,8 +182,8 @@ void	SockInfo::deleteClient(Client *clt)
 	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
 	{
 		if ((*v_it)->clientIsInChannel(clt))
-			(*v_it)->removeClientFormChannel(clt);
-	} // TODO: hacer las funciones
+			(*v_it)->removeClientFromChannel(clt);
+	}
 	this->_clients.erase(this->_clients.begin() + i);
 	close(clt->getClientFd());
 	delete clt;

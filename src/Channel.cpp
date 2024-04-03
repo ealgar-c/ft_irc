@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 11:24:32 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:55:48 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,22 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 
 bool	Channel::clientIsInChannel(const Client *clt) const
 {
-	// TODO: hacer
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsconnected.begin(); v_it != this->_clientsconnected.end();v_it++)
+	{
+		if ((*v_it) == clt)
+			return true;
+	}
+	return false;
 }
 
 void	Channel::removeClientFromChannel(const Client *clt)
 {
-	// TODO: hacer
+	int	i = 0;
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsconnected.begin(); v_it != this->_clientsconnected.end();v_it++)
+	{
+		if ((*v_it) == clt)
+			break ;
+		i++;
+	}
+	this->_clientsconnected.erase(this->_clientsconnected.begin() + i);
 }
