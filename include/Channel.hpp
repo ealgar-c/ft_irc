@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 20:41:59 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:26:34 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ class SockInfo;
 class Channel
 {
 	private:
-		std::string			 _name;
-		std::vector<Client *> _clientsconnected;
+		std::string				_name;
+		std::string				_passwd;
+		std::string				_topic;
+		std::vector<Client *>	_operatorClients;
+		std::vector<Client *>	_clientsConnected;
 	public:
 		Channel();
 		Channel(std::string);
