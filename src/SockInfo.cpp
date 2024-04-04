@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 19:46:27 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:08:56 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,10 @@ void	SockInfo::readRequestFromClient(Client *clt)
 			std::string			cmd;
 
 			while (std::getline(ss, cmd, '\n'))
-				Request	rqt(cmd.substr(0, cmd.length() - 1), clt, *this);
+			{
+				Request	rqt(cmd.substr(0, cmd.length() - 1), clt);
+				rqt.reply(*this);
+			}
 
 			clt->_messagebuffer.clear();
 			return ;

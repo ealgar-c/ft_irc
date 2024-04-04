@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 21:01:37 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:33:52 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,71 +29,72 @@ Command	&Command::operator=(const Command &toCopy)
 	return (*this);
 }
 
-void	Command::execPass(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execPass(std::string args, Client *clt, SockInfo &sockInfo)
 {
-	if (sockInfo.checkPassword(cmd.substr(5, cmd.size())) == true)
+	if (sockInfo.checkPassword(args) == true)
 		clt->changeStatus(AUTHENTICATED);
 	else
 	{
 		clt->changeStatus(DISCONNECTED);
-		Response reply(sockInfo.getHostname(), "ealgar-c", ERR_PASSWDMISMATCH, ":Password incorrect");
+		Response reply(sockInfo.getHostname(), clt->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
 		reply.reply(clt);
 	}
 }
 
-void	Command::execNick(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execNick(std::string args, Client *clt, SockInfo &sockInfo)
 {
-	std::string	newNick = cmd.substr(5, cmd.size() - 1);
-
-	if (sockInfo.searchNick(newNick) == false)
-		clt->setNickname(newNick);
+	if (sockInfo.searchNick(args) == false)
+		clt->setNickname(args);
 	else
 		std::cout << "nick feo" << std::endl;
 }
 
-void	Command::execUser(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execUser(std::string args, Client *clt, SockInfo &sockInfo) // ✓
 {
 	(void)clt;
 	(void)sockInfo;
-	std::cout << "\t ESTOY CON ESTO --> " << cmd << "." << std::endl;
-	cmd = cmd.substr(5, cmd.size() - 1);
-	clt->setUsername(cmd.substr(0, cmd.find(' ')));
-	cmd = cmd.substr(cmd.find(' ') + 1, cmd.size() - 1);
-	cmd = cmd.substr(cmd.find(' ') + 1, cmd.size() - 1);
-	cmd = cmd.substr(cmd.find(' ') + 1, cmd.size() - 1);
-	if (cmd[0] == ':')
-		clt->setRealname(cmd.substr(1, cmd.size() - 1));
+	clt->setUsername(args.substr(0, args.find(' ')));
+	args = args.substr(args.find(' ') + 1, args.size() - 1);
+	args = args.substr(args.find(' ') + 1, args.size() - 1);
+	args = args.substr(args.find(' ') + 1, args.size() - 1);
+	if (args[0] == ':')
+		clt->setRealname(args.substr(1, args.size() - 1));
 	else
-		clt->setRealname(cmd);
-	std:: cout << clt->getUsername() << " " << clt->getRealname() << std::endl;
+		clt->setRealname(args);
 }
 
-void	Command::execJoin(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execJoin(std::string args, Client *clt, SockInfo &sockInfo) // ✓
 {
 	(void)sockInfo;
 	std::string test;
-	test = ":" + clt->getNickname() + " " + cmd + "\r\n";
+	test = ":" + clt->getNickname() + " JOIN " + args + "\r\n";
 	std::cout << test;
 	send(clt->getClientFd(), test.c_str(), test.length(), 0);
 }
 
-void	Command::execPrivmsg(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execPrivmsg(std::string args, Client *clt, SockInfo &sockInfo)
 {
-	(void)cmd;
+	(void)args;
 	(void)clt;
 	(void)sockInfo;
 }
 
-void	Command::execWho(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execMode(std::string args, Client *clt, SockInfo &sockInfo)
 {
-	(void)cmd;
+	(void)args;
 	(void)clt;
 	(void)sockInfo;
 }
 
-void	Command::execPing(std::string cmd, Client *clt, SockInfo &sockInfo)
+void	Command::execPart(std::string args, Client *clt, SockInfo &sockInfo)
 {
-	std::string pingCode = cmd.substr(5, cmd.length() - 5);
-	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + pingCode);
+	(void)args;
+	(void)clt;
+	(void)sockInfo;
+}
+
+void	Command::execPing(std::string args, Client *clt, SockInfo &sockInfo) // ✓
+{
+	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + args);
 	reply.reply(clt);
 }

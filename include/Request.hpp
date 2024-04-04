@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 16:38:51 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/02 16:27:58 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:08:26 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ class Request {
 	private:
 		std::string	_cmd;
 		std::string	_msg;
+		Client		*_client;
 	public:
 		// Constructors
 			Request();
 			Request(const Request &);
-			Request(std::string, Client *, SockInfo &);
+			Request(std::string, Client *);
 
 		// Destructor
 			~Request();
@@ -31,6 +32,7 @@ class Request {
 			Request	&operator=(const Request &);
 
 		// Members
+			void		reply(SockInfo &);
 			std::string	getCmd(void) const;
 			std::string	getMsg(void) const;
 			void		setCmd(const std::string);

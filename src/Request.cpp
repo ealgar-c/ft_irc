@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/03 20:31:51 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:08:11 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,46 +24,49 @@ Request::Request(const Request &toCopy)
 	this->_msg = toCopy._msg;
 }
 
-Request::Request(std::string cmd, Client *clt, SockInfo &sockInfo)
+Request::Request(std::string cmd, Client *clt)
 {
-	(void)sockInfo;
-
-//	std::cout << "[REQUESTEADO] " << cmd << "[eor]" << std::endl;
+	this->_client = clt;
 
 	if (cmd.find("PASS") != std::string::npos)
 	{
 		this->_cmd = "PASS";
-		Command::execPass(cmd, clt, sockInfo);
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 	else if (cmd.find("NICK") != std::string::npos)
 	{
 		this->_cmd = "NICK";
-		Command::execNick(cmd, clt, sockInfo);
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 	else if (cmd.find("USER") != std::string::npos) // ESTOY CON ESTO
 	{
 		this->_cmd = "USER";
-		Command::execUser(cmd, clt, sockInfo);
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 	else if (cmd.find("JOIN") != std::string::npos)
 	{
 		this->_cmd = "JOIN";
-		Command::execJoin(cmd, clt, sockInfo);
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 	else if (cmd.find("PRIVMSG") != std::string::npos)
 	{
 		this->_cmd = "PRIVMSG";
-		Command::execPrivmsg(cmd, clt, sockInfo);
+		this->_msg = cmd.substr(7, cmd.size() - 1);
 	}
-	else if (cmd.find("WHO") != std::string::npos)
+	else if (cmd.find("MODE") != std::string::npos)
 	{
-		this->_cmd = "WHO";
-		Command::execWho(cmd, clt, sockInfo);
+		this->_cmd = "MODE";
+		this->_msg = cmd.substr(5, cmd.size() - 1);
+	}
+	else if (cmd.find("PART") != std::string::npos)
+	{
+		this->_cmd = "PART";
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 	else if (cmd.find("PING") != std::string::npos)
 	{
 		this->_cmd = "PING";
-		Command::execPing(cmd, clt, sockInfo);
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 }
 
@@ -74,6 +77,28 @@ Request	&Request::operator=(const Request &toCopy)
 {
 	(void)toCopy;
 	return (*this);
+}
+
+void	Request::reply(SockInfo &sockInfo)
+{
+	(void)sockInfo;
+
+	if (this->_cmd == "PASS")
+		Command::execPass(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "NICK")
+		Command::execNick(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "USER") // ESTOY CON ESTO
+		Command::execUser(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "JOIN")
+		Command::execJoin(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "PRIVMSG")
+		Command::execPrivmsg(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "MODE")
+		Command::execMode(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "PART")
+		Command::execPart(this->_msg, this->_client, sockInfo);
+	else if (this->_cmd == "PING")
+		Command::execPing(this->_msg, this->_client, sockInfo);
 }
 
 std::string	Request::getCmd(void) const
