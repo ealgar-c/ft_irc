@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 15:33:52 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:38:24 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,8 @@ void	Command::execUser(std::string args, Client *clt, SockInfo &sockInfo) // ✓
 
 void	Command::execJoin(std::string args, Client *clt, SockInfo &sockInfo) // ✓
 {
-	(void)sockInfo;
-	std::string test;
-	test = ":" + clt->getNickname() + " JOIN " + args + "\r\n";
-	std::cout << test;
-	send(clt->getClientFd(), test.c_str(), test.length(), 0);
+	std::string channelName = cmd.substr(5, cmd.length() - 5);
+	sockInfo.joinChannel(channelName, clt);
 }
 
 void	Command::execPrivmsg(std::string args, Client *clt, SockInfo &sockInfo)
@@ -88,13 +85,20 @@ void	Command::execMode(std::string args, Client *clt, SockInfo &sockInfo)
 
 void	Command::execPart(std::string args, Client *clt, SockInfo &sockInfo)
 {
-	(void)args;
-	(void)clt;
-	(void)sockInfo;
+	Channel *chl = sockInfo.getChannelByName(cmd.substr(4, cmd.length() - 4));
+	std::vector<Client *> clients = chl->getClientsConnected();
+	for (std::vector<Client *>::const_iterator v_it = clients.begin(); v_it != clients.end(); v_it++)
+	{
+		Response reply(sockInfo.getHostname(), clt->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
+		reply.reply(clt);
+	}
+	Response reply(sockInfo.getHostname(), clt->getNickname(), RPL_ENDOFNAMES, "");
+	reply.reply(clt);
 }
 
 void	Command::execPing(std::string args, Client *clt, SockInfo &sockInfo) // ✓
 {
-	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + args);
+	std::string pingCode = cmd.substr(5, cmd.length() - 5);
+	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + pingCode);
 	reply.reply(clt);
 }
