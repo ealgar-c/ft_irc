@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 15:33:52 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:33:57 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,72 +29,74 @@ Command	&Command::operator=(const Command &toCopy)
 	return (*this);
 }
 
-void	Command::execPass(std::string args, Client *clt, SockInfo &sockInfo)
+void	Command::execPass(Request &rqt, SockInfo &sockInfo)
 {
-	if (sockInfo.checkPassword(args) == true)
-		clt->changeStatus(AUTHENTICATED);
+	if (sockInfo.checkPassword(rqt.getMsg()) == true)
+		rqt.getClient()->changeStatus(AUTHENTICATED);
 	else
 	{
-		clt->changeStatus(DISCONNECTED);
-		Response reply(sockInfo.getHostname(), clt->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
-		reply.reply(clt);
+		rqt.getClient()->changeStatus(DISCONNECTED);
+		Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
+		reply.reply(rqt.getClient());
 	}
 }
 
-void	Command::execNick(std::string args, Client *clt, SockInfo &sockInfo)
+void	Command::execNick(Request &rqt, SockInfo &sockInfo)
 {
-	if (sockInfo.searchNick(args) == false)
-		clt->setNickname(args);
+	if (sockInfo.searchNick(rqt.getMsg()) == false)
+		rqt.getClient()->setNickname(rqt.getMsg());
 	else
 		std::cout << "nick feo" << std::endl;
 }
 
-void	Command::execUser(std::string args, Client *clt, SockInfo &sockInfo) // ✓
+void	Command::execUser(Request &rqt, SockInfo &sockInfo) // ✓
 {
-	(void)clt;
 	(void)sockInfo;
-	clt->setUsername(args.substr(0, args.find(' ')));
-	args = args.substr(args.find(' ') + 1, args.size() - 1);
-	args = args.substr(args.find(' ') + 1, args.size() - 1);
-	args = args.substr(args.find(' ') + 1, args.size() - 1);
-	if (args[0] == ':')
-		clt->setRealname(args.substr(1, args.size() - 1));
+	rqt.getClient()->setUsername(rqt.getMsg().substr(0, rqt.getMsg().find(' ')));
+	rqt.getMsg() = rqt.getMsg().substr(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
+	rqt.getMsg() = rqt.getMsg().substr(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
+	rqt.getMsg() = rqt.getMsg().substr(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
+	if (rqt.getMsg()[0] == ':')
+		rqt.getClient()->setRealname(rqt.getMsg().substr(1, rqt.getMsg().size() - 1));
 	else
-		clt->setRealname(args);
+		rqt.getClient()->setRealname(rqt.getMsg());
 }
 
-void	Command::execJoin(std::string args, Client *clt, SockInfo &sockInfo) // ✓
+void	Command::execJoin(Request &rqt, SockInfo &sockInfo) // ✓
 {
 	(void)sockInfo;
 	std::string test;
-	test = ":" + clt->getNickname() + " JOIN " + args + "\r\n";
+	test = ":" + rqt.getClient()->getNickname() + " JOIN " + rqt.getMsg() + "\r\n";
 	std::cout << test;
-	send(clt->getClientFd(), test.c_str(), test.length(), 0);
+	send(rqt.getClient()->getClientFd(), test.c_str(), test.length(), 0);
 }
 
-void	Command::execPrivmsg(std::string args, Client *clt, SockInfo &sockInfo)
+void	Command::execPrivmsg(Request &rqt, SockInfo &sockInfo)
 {
-	(void)args;
-	(void)clt;
+	(void)rqt;
 	(void)sockInfo;
 }
 
-void	Command::execMode(std::string args, Client *clt, SockInfo &sockInfo)
+void	Command::execMode(Request &rqt, SockInfo &sockInfo)
 {
-	(void)args;
-	(void)clt;
+	(void)rqt;
 	(void)sockInfo;
 }
 
-void	Command::execPart(std::string args, Client *clt, SockInfo &sockInfo)
+void	Command::execPart(Request &rqt, SockInfo &sockInfo)
 {
-	(void)args;
-	(void)clt;
+	(void)rqt;
 	(void)sockInfo;
 }
 
-void	Command::execPing(std::string args, Client *clt, SockInfo &sockInfo) // ✓
+void	Command::execInvite(Request &rqt, SockInfo &sockInfo)
 {
-	Response reply(sockInfo.getHostname(), clt->getNickname(), "PONG " + args);
-	reply.reply(clt);
+	(void)rqt;
+	(void)sockInfo;
+}
+
+void	Command::execPing(Request &rqt, SockInfo &sockInfo) // ✓
+{
+	Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), "PONG " + rqt.getMsg());
+	reply.reply(rqt.getClient());
 }

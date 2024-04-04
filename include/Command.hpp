@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:56:26 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 15:24:14 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:09:30 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@ class Command
 			Command	&operator=(const Command &);
 
 		// Member functions
-			static void	execPass(std::string args, Client *clt, SockInfo &sockInfo); // Falta expulsión
-			static void	execNick(std::string args, Client *clt, SockInfo &sockInfo); // ✓
-			static void	execUser(std::string args, Client *clt, SockInfo &sockInfo); // ✓
-			static void	execJoin(std::string args, Client *clt, SockInfo &sockInfo); // ✓
-			static void	execPrivmsg(std::string args, Client *clt, SockInfo &sockInfo); // Enr
-			static void	execMode(std::string args, Client *clt, SockInfo &sockInfo); // Pab
-			static void	execPart(std::string args, Client *clt, SockInfo &sockInfo);
-			static void	execPing(std::string args, Client *clt, SockInfo &sockInfo); // ✓
+			static void	execPass(Request &rqt, SockInfo &sockInfo); // Falta expulsión
+			static void	execNick(Request &rqt, SockInfo &sockInfo); // ✓
+			static void	execUser(Request &rqt, SockInfo &sockInfo); // ✓
+			static void	execJoin(Request &rqt, SockInfo &sockInfo); // ✓
+			static void	execPrivmsg(Request &rqt, SockInfo &sockInfo); // Enr
+			static void	execMode(Request &rqt, SockInfo &sockInfo); // Pab
+			static void	execPart(Request &rqt, SockInfo &sockInfo);
+			static void	execInvite(Request &rqt, SockInfo &sockInfo);
+			static void	execPing(Request &rqt, SockInfo &sockInfo); // ✓
 			// TODO: Una función para ejecutar cada comando
 };

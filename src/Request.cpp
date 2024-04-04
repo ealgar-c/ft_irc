@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 15:08:11 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:36:31 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,23 @@ void	Request::reply(SockInfo &sockInfo)
 	(void)sockInfo;
 
 	if (this->_cmd == "PASS")
-		Command::execPass(this->_msg, this->_client, sockInfo);
+		Command::execPass(*this, sockInfo);
 	else if (this->_cmd == "NICK")
-		Command::execNick(this->_msg, this->_client, sockInfo);
+		Command::execNick(*this, sockInfo);
 	else if (this->_cmd == "USER") // ESTOY CON ESTO
-		Command::execUser(this->_msg, this->_client, sockInfo);
+		Command::execUser(*this, sockInfo);
 	else if (this->_cmd == "JOIN")
-		Command::execJoin(this->_msg, this->_client, sockInfo);
+		Command::execJoin(*this, sockInfo);
 	else if (this->_cmd == "PRIVMSG")
-		Command::execPrivmsg(this->_msg, this->_client, sockInfo);
+		Command::execPrivmsg(*this, sockInfo);
 	else if (this->_cmd == "MODE")
-		Command::execMode(this->_msg, this->_client, sockInfo);
+		Command::execMode(*this, sockInfo);
 	else if (this->_cmd == "PART")
-		Command::execPart(this->_msg, this->_client, sockInfo);
+		Command::execPart(*this, sockInfo);
+	else if (this->_cmd == "INVITE")
+		Command::execInvite(*this, sockInfo);
 	else if (this->_cmd == "PING")
-		Command::execPing(this->_msg, this->_client, sockInfo);
+		Command::execPing(*this, sockInfo);
 }
 
 std::string	Request::getCmd(void) const
@@ -111,6 +113,11 @@ std::string	Request::getMsg(void) const
 	return (this->_msg);
 }
 
+Client	*Request::getClient(void) const
+{
+	return (this->_client);
+}
+
 void	Request::setCmd(const std::string newCmd)
 {
 	this->_cmd = newCmd;
@@ -119,4 +126,9 @@ void	Request::setCmd(const std::string newCmd)
 void	Request::setMsg(const std::string newMsg)
 {
 	this->_msg = newMsg;
+}
+
+void	Request::setClient(Client *clt)
+{
+	this->_client = clt;
 }
