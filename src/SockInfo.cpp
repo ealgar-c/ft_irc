@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/04 15:38:42 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:47:11 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ void	SockInfo::createSocket(void) // tenemos un super socket
 		close(this->_sockfd);
 		printError(ERR_SOCKLISTEN);
 	}
-	Channel *general = new Channel("#general");
-	this->_channels.push_back(general);
 }
 
 /**
@@ -112,7 +110,7 @@ void	SockInfo::joinChannel(std::string newChannelName, Client *clt)
 			return ;
 		}
 	}
-	Channel *newChannel = new Channel(newChannelName);
+	Channel *newChannel = new Channel(newChannelName, "");
 	this->_channels.push_back(newChannel);
 	newChannel->addClientToChannel(clt, *this);
 }
