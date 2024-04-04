@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 16:38:40 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:43:01 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ void	Command::execUser(Request &rqt, SockInfo &sockInfo) // ✓
 
 void	Command::execJoin(Request &rqt, SockInfo &sockInfo) // ✓
 {
-	std::string channelName = cmd.substr(5, cmd.length() - 5);
-	sockInfo.joinChannel(channelName, clt);
+	sockInfo.joinChannel(rqt.getMsg(), rqt.getClient());
 }
 
 void	Command::execPrivmsg(Request &rqt, SockInfo &sockInfo)
@@ -88,16 +87,22 @@ void	Command::execPart(Request &rqt, SockInfo &sockInfo)
 
 void	Command::execInvite(Request &rqt, SockInfo &sockInfo)
 {
-	Channel *chl = sockInfo.getChannelByName(cmd.substr(4, cmd.length() - 4));
+	(void)rqt;
+	(void)sockInfo;
+}
+
+/* void	Command::execWho(Request &rqt, SockInfo &sockInfo)
+{
+	Channel *chl = sockInfo.getChannelByName(rqt.getMsg());
 	std::vector<Client *> clients = chl->getClientsConnected();
 	for (std::vector<Client *>::const_iterator v_it = clients.begin(); v_it != clients.end(); v_it++)
 	{
-		Response reply(sockInfo.getHostname(), clt->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
-		reply.reply(clt);
+		Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
+		reply.reply(rqt.getClient());
 	}
-	Response reply(sockInfo.getHostname(), clt->getNickname(), RPL_ENDOFNAMES, "");
-	reply.reply(clt);
-}
+	Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), RPL_ENDOFNAMES, "");
+	reply.reply(rqt.getClient());
+} */
 
 void	Command::execPing(Request &rqt, SockInfo &sockInfo) // ✓
 {
