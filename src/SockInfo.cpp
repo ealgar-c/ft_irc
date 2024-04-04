@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/04 15:08:56 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 15:38:42 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,13 @@ void	SockInfo::readClientInfo(void)
 	std::cout << "[DEBUG] There are currently " << this->_clients.size() << " clients." << std::endl;
 }
 
-void	SockInfo::joinChannel(std::string msg, Client *clt)
+void	SockInfo::joinChannel(std::string newChannelName, Client *clt)
 {
-	std::string	newChannelName = msg.substr(5, msg.length() - 7);
-	std::cout << "new ch name: " << newChannelName << std::endl;
+	std::cout << "name of the channel to join: " << newChannelName << std::endl;
 	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
 	{
 		if ((*v_it)->getName() == newChannelName)
 		{
-			std::cout << "channel already existing" << std::endl;
 			(*v_it)->addClientToChannel(clt, *this);
 			return ;
 		}
@@ -245,4 +243,15 @@ bool	SockInfo::searchNick(const std::string str)
 			return (true);
 	}
 	return (false);
+}
+
+Channel	*SockInfo::getChannelByName(std::string ChannelName) const
+{
+	for(std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+
+	{
+		if ((*v_it)->getName() == ChannelName)
+			return (*v_it);
+	}
+	return (NULL);
 }

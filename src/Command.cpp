@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 16:33:57 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:38:40 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,8 @@ void	Command::execUser(Request &rqt, SockInfo &sockInfo) // ✓
 
 void	Command::execJoin(Request &rqt, SockInfo &sockInfo) // ✓
 {
-	(void)sockInfo;
-	std::string test;
-	test = ":" + rqt.getClient()->getNickname() + " JOIN " + rqt.getMsg() + "\r\n";
-	std::cout << test;
-	send(rqt.getClient()->getClientFd(), test.c_str(), test.length(), 0);
+	std::string channelName = cmd.substr(5, cmd.length() - 5);
+	sockInfo.joinChannel(channelName, clt);
 }
 
 void	Command::execPrivmsg(Request &rqt, SockInfo &sockInfo)
@@ -91,8 +88,15 @@ void	Command::execPart(Request &rqt, SockInfo &sockInfo)
 
 void	Command::execInvite(Request &rqt, SockInfo &sockInfo)
 {
-	(void)rqt;
-	(void)sockInfo;
+	Channel *chl = sockInfo.getChannelByName(cmd.substr(4, cmd.length() - 4));
+	std::vector<Client *> clients = chl->getClientsConnected();
+	for (std::vector<Client *>::const_iterator v_it = clients.begin(); v_it != clients.end(); v_it++)
+	{
+		Response reply(sockInfo.getHostname(), clt->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
+		reply.reply(clt);
+	}
+	Response reply(sockInfo.getHostname(), clt->getNickname(), RPL_ENDOFNAMES, "");
+	reply.reply(clt);
 }
 
 void	Command::execPing(Request &rqt, SockInfo &sockInfo) // ✓
