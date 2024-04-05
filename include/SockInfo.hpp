@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/03 20:36:54 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:11:24 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class	SockInfo
 			void	readClientInfo();
 			void	joinChannel(std::string, Client *clt);
 			void	readRequestFromClient(Client *);
-			bool	checkPassword(const std::string);
+			bool	authenticate(const std::string);
 			bool	searchNick(const std::string);
 			Channel	*getChannelByName(std::string) const;
 };

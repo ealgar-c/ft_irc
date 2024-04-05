@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 16:43:01 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:48:24 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,48 @@ Command	&Command::operator=(const Command &toCopy)
 	return (*this);
 }
 
-void	Command::execPass(Request &rqt, SockInfo &sockInfo)
+void	Command::execPass(Request &rqt, SockInfo &serv)
 {
-	if (sockInfo.checkPassword(rqt.getMsg()) == true)
+	if (serv.authenticate(rqt.getMsg()))
 		rqt.getClient()->changeStatus(AUTHENTICATED);
 	else
 	{
 		rqt.getClient()->changeStatus(DISCONNECTED);
-		Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
 		reply.reply(rqt.getClient());
+		serv.deleteClient(rqt.getClient());
 	}
 }
 
-void	Command::execNick(Request &rqt, SockInfo &sockInfo)
+bool	forbiddenChar(std::string str)
 {
-	if (sockInfo.searchNick(rqt.getMsg()) == false)
-		rqt.getClient()->setNickname(rqt.getMsg());
-	else
-		std::cout << "nick feo" << std::endl;
+	if (str[0] == '$' || str[0] == ':' || str[0] == '#')
+		return (true);
+	
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'
+			|| str[i] == '!' || str[i] == '@' || str[i] == '.')
+			return (true);
+	}
+	return (false);
 }
 
-void	Command::execUser(Request &rqt, SockInfo &sockInfo) // ✓
+void	Command::execNick(Request &rqt, SockInfo &serv)
 {
-	(void)sockInfo;
+	if (rqt.getMsg().empty())
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NONICKNAMEGIVEN, ":No nickname given");
+	else if (serv.searchNick(rqt.getMsg()) == true)
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NICKNAMEINUSE, ":Nickname is already in use");
+	else if (forbiddenChar(rqt.getMsg()) == true)
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_ERRONEUSNICKNAME, ":Erroneus nickname");
+	else
+		rqt.getClient()->setNickname(rqt.getMsg());
+}
+
+void	Command::execUser(Request &rqt, SockInfo &serv) // ✓
+{
+	(void)serv;
 	rqt.getClient()->setUsername(rqt.getMsg().substr(0, rqt.getMsg().find(' ')));
 	rqt.getMsg() = rqt.getMsg().substr(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
 	rqt.getMsg() = rqt.getMsg().substr(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
@@ -62,50 +81,50 @@ void	Command::execUser(Request &rqt, SockInfo &sockInfo) // ✓
 		rqt.getClient()->setRealname(rqt.getMsg());
 }
 
-void	Command::execJoin(Request &rqt, SockInfo &sockInfo) // ✓
+void	Command::execJoin(Request &rqt, SockInfo &serv) // ✓
 {
-	sockInfo.joinChannel(rqt.getMsg(), rqt.getClient());
+	serv.joinChannel(rqt.getMsg(), rqt.getClient());
 }
 
-void	Command::execPrivmsg(Request &rqt, SockInfo &sockInfo)
+void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 {
 	(void)rqt;
-	(void)sockInfo;
+	(void)serv;
 }
 
-void	Command::execMode(Request &rqt, SockInfo &sockInfo)
+void	Command::execMode(Request &rqt, SockInfo &serv)
 {
 	(void)rqt;
-	(void)sockInfo;
+	(void)serv;
 }
 
-void	Command::execPart(Request &rqt, SockInfo &sockInfo)
+void	Command::execPart(Request &rqt, SockInfo &serv)
 {
 	(void)rqt;
-	(void)sockInfo;
+	(void)serv;
 }
 
-void	Command::execInvite(Request &rqt, SockInfo &sockInfo)
+void	Command::execInvite(Request &rqt, SockInfo &serv)
 {
 	(void)rqt;
-	(void)sockInfo;
+	(void)serv;
 }
 
-/* void	Command::execWho(Request &rqt, SockInfo &sockInfo)
+/* void	Command::execWho(Request &rqt, SockInfo &serv)
 {
-	Channel *chl = sockInfo.getChannelByName(rqt.getMsg());
+	Channel *chl = serv.getChannelByName(rqt.getMsg());
 	std::vector<Client *> clients = chl->getClientsConnected();
 	for (std::vector<Client *>::const_iterator v_it = clients.begin(); v_it != clients.end(); v_it++)
 	{
-		Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
 		reply.reply(rqt.getClient());
 	}
-	Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), RPL_ENDOFNAMES, "");
+	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_ENDOFNAMES, "");
 	reply.reply(rqt.getClient());
 } */
 
-void	Command::execPing(Request &rqt, SockInfo &sockInfo) // ✓
+void	Command::execPing(Request &rqt, SockInfo &serv) // ✓
 {
-	Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), "PONG " + rqt.getMsg());
+	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), "PONG " + rqt.getMsg());
 	reply.reply(rqt.getClient());
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/04 16:47:11 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:11:24 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ void	SockInfo::runServ(void)
 	}
 }
 
-bool	SockInfo::checkPassword(const std::string toCheck)
+bool	SockInfo::authenticate(const std::string toCheck)
 {
 	if (toCheck == this->_passwd)
 		return (true);

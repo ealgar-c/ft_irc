@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/04 17:04:09 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:19:30 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	{
 		if (*v_it == newClient)
 		{
-			Response reply(serv.getHostname(), "ealgar-c", ERR_USERONCHANNEL, ":is already on channel");
+			Response reply(serv.getHostname(), newClient->getNickname(), ERR_USERONCHANNEL, ":is already on channel");
 			reply.reply(newClient);
 			return ;
 		}
