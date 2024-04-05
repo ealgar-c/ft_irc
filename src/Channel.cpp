@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/04 16:43:57 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:04:09 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ Channel::Channel(): _name("Default"), _passwd(""), _topic("")
 {}
 
 Channel::Channel(std::string name, std::string password): _name(name), _passwd(password), _topic("")
-{
-}
+{}
 
 Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _passwd(toCopy.getPassword()), _topic(toCopy.getTopic()), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
 {}

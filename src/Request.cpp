@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 16:36:31 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:05:13 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ Request::Request()
 
 Request::Request(const Request &toCopy)
 {
-	this->_cmd = toCopy._cmd;
-	this->_msg = toCopy._msg;
+	this->_cmd = toCopy.getCmd();
+	this->_msg = toCopy.getMsg();
+	this->_client = toCopy.getClient();
 }
 
 Request::Request(std::string cmd, Client *clt)
