@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/08 16:38:50 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 17:02:10 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	}
 	// comprobar contraseña
 	this->_clientsConnected.push_back(newClient);
-	Response reply("ealgar-c", "", "JOIN ", this->getName());
+	Response reply(newClient->getNickname(), "", "JOIN ", this->getName());
 	// enviar RPL_NAMEREPLY
 	// enviar RPL_TOPIC o RPLY_NOTOPIC
 	reply.reply(newClient);

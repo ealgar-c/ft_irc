@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/08 16:40:12 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:41:43 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ Request::Request(std::string cmd, Client *clt)
 		this->_cmd = "NICK";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
-	else if (cmd.find("USER") != std::string::npos) // ESTOY CON ESTO
+	else if (cmd.find("USER") != std::string::npos)
 	{
 		this->_cmd = "USER";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
@@ -88,7 +88,7 @@ void	Request::reply(SockInfo &sockInfo)
 		Command::execPass(*this, sockInfo);
 	else if (this->_cmd == "NICK")
 		Command::execNick(*this, sockInfo);
-	else if (this->_cmd == "USER") // ESTOY CON ESTO
+	else if (this->_cmd == "USER")
 		Command::execUser(*this, sockInfo);
 	else if (this->_cmd == "JOIN")
 		Command::execJoin(*this, sockInfo);

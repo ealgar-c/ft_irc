@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/08 16:39:55 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:50:21 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,8 @@ void	Command::execPass(Request &rqt, SockInfo &serv)
 	else
 	{
 		rqt.getClient()->changeStatus(DISCONNECTED);
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, "", ":Password incorrect");
 		reply.reply(rqt.getClient());
-		serv.deleteClient(rqt.getClient());
 	}
 }
 
@@ -59,11 +58,11 @@ bool	forbiddenChar(std::string str)
 void	Command::execNick(Request &rqt, SockInfo &serv)
 {
 	if (rqt.getMsg().empty())
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NONICKNAMEGIVEN, ":No nickname given");
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NONICKNAMEGIVEN, "", ":No nickname given");
 	else if (serv.searchNick(rqt.getMsg()) == true)
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NICKNAMEINUSE, ":Nickname is already in use");
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NICKNAMEINUSE, "", ":Nickname is already in use");
 	else if (forbiddenChar(rqt.getMsg()) == true)
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_ERRONEUSNICKNAME, ":Erroneus nickname");
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_ERRONEUSNICKNAME, "", ":Erroneus nickname");
 	else
 		rqt.getClient()->setNickname(rqt.getMsg());
 }
@@ -126,6 +125,6 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 
 void	Command::execPing(Request &rqt, SockInfo &serv) // ✓
 {
-	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), "PONG " + rqt.getMsg());
+	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), "PONG ", rqt.getMsg());
 	reply.reply(rqt.getClient());
 }
