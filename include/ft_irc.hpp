@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/05 22:46:19 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:38:27 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ enum RESP_CODE{
 enum RESP_TYPE{
 	CLIENT,
 	SERVER,
+	MESSAGE,
 };
 
 /*******************************************

@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/05 22:48:24 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:39:55 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ void	Command::execJoin(Request &rqt, SockInfo &serv) // ✓
 
 void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 {
-	(void)rqt;
+	std::cout << "cmd -> " << rqt.getCmd() << " mensaje-> " << rqt.getMsg() << std::endl;
+	//Response::reply(rqt.getClient())._from("")._to("")._cmd("")._msg("")._endmsg("")._finalResponse("")._rtype(ERR_NICKNAMEONUSE);
 	(void)serv;
 }
 

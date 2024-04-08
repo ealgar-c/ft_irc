@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 17:05:13 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:40:12 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ Request::Request(std::string cmd, Client *clt)
 	else if (cmd.find("PRIVMSG") != std::string::npos)
 	{
 		this->_cmd = "PRIVMSG";
-		this->_msg = cmd.substr(7, cmd.size() - 1);
+		this->_msg = cmd.substr(8, cmd.size() - 1);
 	}
 	else if (cmd.find("MODE") != std::string::npos)
 	{
