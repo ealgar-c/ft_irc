@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:11:29 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/05 11:53:11 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:33:14 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ class Response
 		Response(const Response &);
 		~Response();
 		Response &operator=(const Response &);
+		void	setFrom();
+		void	setTo();
+		void	setCmd();
+		void	setMsg();
+		void	setRtype();
 		void	reply(Client *clt);
 		//	void	generateResponse(std::string);
 };

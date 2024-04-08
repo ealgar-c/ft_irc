@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 16:36:31 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:36:25 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Request::Request(std::string cmd, Client *clt)
 	else if (cmd.find("PRIVMSG") != std::string::npos)
 	{
 		this->_cmd = "PRIVMSG";
-		this->_msg = cmd.substr(7, cmd.size() - 1);
+		this->_msg = cmd.substr(8, cmd.size() - 1);
 	}
 	else if (cmd.find("MODE") != std::string::npos)
 	{
