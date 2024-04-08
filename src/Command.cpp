@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/04 16:43:01 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/05 11:54:56 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	Command::execPass(Request &rqt, SockInfo &sockInfo)
 	else
 	{
 		rqt.getClient()->changeStatus(DISCONNECTED);
-		Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect");
+		Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, "", ":Password incorrect");
 		reply.reply(rqt.getClient());
 	}
 }
@@ -106,6 +106,6 @@ void	Command::execInvite(Request &rqt, SockInfo &sockInfo)
 
 void	Command::execPing(Request &rqt, SockInfo &sockInfo) // ✓
 {
-	Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), "PONG " + rqt.getMsg());
+	Response reply(sockInfo.getHostname(), rqt.getClient()->getNickname(), "PONG ", rqt.getMsg());
 	reply.reply(rqt.getClient());
 }
