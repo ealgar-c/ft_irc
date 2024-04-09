@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/08 16:38:27 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:52:12 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,17 @@ enum C_STATUS{
 };
 
 enum RESP_CODE{
+	RPL_ENDOFWHO = 315,
+	RPL_TOPIC = 332,
+	RPL_WHOREPLY = 352,
+	RPL_NAMREPLY = 353,
+	RPL_ENDOFNAMES = 366,
 	ERR_NONICKNAMEGIVEN = 431,
 	ERR_ERRONEUSNICKNAME = 432,
 	ERR_NICKNAMEINUSE = 433,
 	ERR_USERONCHANNEL = 443,
-	RPL_TOPIC = 332,
-	RPL_WHOREPLY = 352,
-	RPL_ENDOFWHO = 315,
 	ERR_PASSWDMISMATCH = 464,
-	RPL_NAMREPLY = 353,
-	RPL_ENDOFNAMES = 366
+	ERR_BADCHANNELKEY = 475
 };
 
 enum RESP_TYPE{

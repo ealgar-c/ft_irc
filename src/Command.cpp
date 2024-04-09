@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/08 16:50:21 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:19:00 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,12 @@ void	Command::execUser(Request &rqt, SockInfo &serv) // ✓
 		rqt.getClient()->setRealname(rqt.getMsg());
 }
 
-void	Command::execJoin(Request &rqt, SockInfo &serv) // ✓
+void	Command::execJoin(Request &rqt, SockInfo &serv)
 {
-	serv.joinChannel(rqt.getMsg(), rqt.getClient());
+	std::string newChannelName = rqt.getMsg();
+	if (newChannelName.find(' '))
+		newChannelName = newChannelName.substr(0, newChannelName.find(' '));
+	serv.joinChannel(newChannelName, rqt.getMsg().substr(newChannelName.size() - 1, rqt.getMsg().size() - 1), rqt.getClient());
 }
 
 void	Command::execPrivmsg(Request &rqt, SockInfo &serv)

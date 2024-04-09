@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/08 17:02:10 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:28:52 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,15 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	{
 		if (*v_it == newClient)
 		{
-			Response reply(serv.getHostname(), "ealgar-c", ERR_USERONCHANNEL, "", ":is already on channel");
+		//	if ()
+			Response reply(serv.getHostname(), newClient->getNickname(), ERR_USERONCHANNEL, "", ":is already on channel");
 			reply.reply(newClient);
 			return ;
 		}
 	}
 	// comprobar contraseña
+	if (this->_operatorClients.size() == 0)
+		this->_operatorClients.push_back(newClient);
 	this->_clientsConnected.push_back(newClient);
 	Response reply(newClient->getNickname(), "", "JOIN ", this->getName());
 	// enviar RPL_NAMEREPLY

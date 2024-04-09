@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/05 22:11:24 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:39:05 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,16 @@ void	SockInfo::readClientInfo(void)
 	std::cout << "[DEBUG] There are currently " << this->_clients.size() << " clients." << std::endl;
 }
 
-void	SockInfo::joinChannel(std::string newChannelName, Client *clt)
+void	SockInfo::joinChannel(std::string newChannelName, std::string key, Client *clt)
 {
 	std::cout << "name of the channel to join: " << newChannelName << std::endl;
 	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
 	{
 		if ((*v_it)->getName() == newChannelName)
 		{
-			(*v_it)->addClientToChannel(clt, *this);
+			if (key == (*v_it)->getPassword())
+				(*v_it)->addClientToChannel(clt, *this);
+			// TODO: else: ERROR 475				--------------------
 			return ;
 		}
 	}

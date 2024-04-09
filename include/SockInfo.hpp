@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/05 22:11:24 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:22:52 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class	SockInfo
 			void	createClient();
 			void	deleteClient(Client *);
 			void	readClientInfo();
-			void	joinChannel(std::string, Client *clt);
+			void	joinChannel(std::string, std::string, Client *clt);
 			void	readRequestFromClient(Client *);
 			bool	authenticate(const std::string);
 			bool	searchNick(const std::string);

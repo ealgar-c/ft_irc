@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/08 16:33:38 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/09 19:01:16 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 {
 	switch (rcode)
 	{
-	case 433:
-		this->_to = "433 " + to;
-		break;
-	case 443:
-		this->_to = "443 " + to;
+	case 315:
+		this->_to = "315 " + to;
 		break;
 	case 332:
 		this->_to = "332 " + to;
@@ -33,17 +30,29 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 	case 352:
 		this->_to = "352 " + to;
 		break;
-	case 315:
-		this->_to = "315 " + to;
-		break;
-	case 464:
-		this->_to = "464 " + to;
-		break;
 	case 353:
 		this->_to = "353 " + to;
 		break;
 	case 366:
 		this->_to = "366 " + to;
+		break;
+	case 431:
+		this->_to = "431 " + to;
+		break;
+	case 432:
+		this->_to = "432 " + to;
+		break;
+	case 433:
+		this->_to = "433 " + to;
+		break;
+	case 443:
+		this->_to = "443 " + to;
+		break;
+	case 464:
+		this->_to = "464 " + to;
+		break;
+	case 475:
+		this->_to = "475 " + to;
 		break;
 	default:
 		this->_to = "300 " + to;
@@ -82,4 +91,12 @@ void	Response::reply(Client *clt)
 		this->_finalResponse = ":" + this->_from + " " + this->_to + this->_cmd + this->_msg + this->_endmsg;
 	std::cout << "response to send: " << this->_finalResponse << std::endl;
 	send(clt->getClientFd(), this->_finalResponse.c_str(), this->_finalResponse.length(), 0);
+}
+
+void	Response::reply(Client *clt, Channel &ch, std::string msg)
+{
+	(void)clt;
+	(void)ch;
+	(void)msg;
+	// Esto mañana
 }
