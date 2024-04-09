@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/05 12:05:32 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:39:44 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,41 @@ std::vector<Client *>	Channel::getClientsConnected(void) const
 	return (this->_clientsConnected);
 }
 
+
+
+static std::string getNameList(std::vector<Client *> cltList)
+{
+	std::string list = ":";
+
+	for (std::vector<Client *>::const_iterator v_it = cltList.begin(); v_it != cltList.end(); v_it++)
+	{
+		list.append((*v_it)->getNickname() + " ");
+	}
+	return list;
+}
+
 void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 {
 	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
 	{
 		if (*v_it == newClient)
 		{
-			Response reply(serv.getHostname(), "ealgar-c", ERR_USERONCHANNEL, "", ":is already on channel");
+			Response reply(serv.getHostname(), newClient->getNickname(), ERR_USERONCHANNEL, "", ":is already on channel");
 			reply.reply(newClient);
 			return ;
 		}
 	}
 	// comprobar contraseña
 	this->_clientsConnected.push_back(newClient);
-	Response reply("ealgar-c", "", "JOIN ", this->getName());
+	Response reply(newClient->getNickname(), "", "JOIN ", this->getName());
+	Response namelist(serv.getHostname(), newClient->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected), "");
+	Response endname(serv.getHostname(), newClient->getNickname(), RPL_ENDOFNAMES, "end of the list", "");
 	// enviar RPL_NAMEREPLY
 	// enviar RPL_TOPIC o RPLY_NOTOPIC
 	reply.reply(newClient);
+	namelist.reply(newClient);
+	endname.reply(newClient);
+	this->broadcastChannel(newClient);
 }
 
 bool	Channel::clientIsInChannel(const Client *clt) const
@@ -107,4 +125,16 @@ bool	Channel::clientIsOperator(const Client *clt) const
 			return true;
 	}
 	return false;
+}
+
+void	Channel::broadcastChannel(Client *newClt) const
+{
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
+		if ((*v_it) != newClt)
+		{
+			std::string msg = newClt->getNickname() + " " + "JOIN " + this->getName();
+			Response::reply((*v_it), msg);
+		}
+	}
 }

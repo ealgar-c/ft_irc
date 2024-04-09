@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:11:29 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/08 16:33:14 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:33:31 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ class Response
 		void	setMsg();
 		void	setRtype();
 		void	reply(Client *clt);
+		static void	reply(Client *, std::string);
 		//	void	generateResponse(std::string);
 };

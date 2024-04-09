@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/08 16:33:38 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/09 18:37:34 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,10 @@ void	Response::reply(Client *clt)
 		this->_finalResponse = ":" + this->_from + " " + this->_to + this->_cmd + this->_msg + this->_endmsg;
 	std::cout << "response to send: " << this->_finalResponse << std::endl;
 	send(clt->getClientFd(), this->_finalResponse.c_str(), this->_finalResponse.length(), 0);
+}
+
+void	Response::reply(Client *clt, std::string msg)
+{
+	std::cout << "response to send: " << msg << std::endl;
+	send(clt->getClientFd(), msg.c_str(), msg.length(), 0);
 }
