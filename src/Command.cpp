@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/09 18:19:00 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/10 19:59:18 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	(void)serv;
 }
 
-void	Command::execMode(Request &rqt, SockInfo &serv)
+void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 {
 	(void)rqt;
 	(void)serv;
@@ -112,19 +112,6 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 	(void)rqt;
 	(void)serv;
 }
-
-/* void	Command::execWho(Request &rqt, SockInfo &serv)
-{
-	Channel *chl = serv.getChannelByName(rqt.getMsg());
-	std::vector<Client *> clients = chl->getClientsConnected();
-	for (std::vector<Client *>::const_iterator v_it = clients.begin(); v_it != clients.end(); v_it++)
-	{
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_NAMREPLY, (*v_it)->getNickname());
-		reply.reply(rqt.getClient());
-	}
-	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_ENDOFNAMES, "");
-	reply.reply(rqt.getClient());
-} */
 
 void	Command::execPing(Request &rqt, SockInfo &serv) // ✓
 {

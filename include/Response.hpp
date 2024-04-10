@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:11:29 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 18:56:44 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/10 19:11:35 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class Response
 		std::string	_finalResponse;
 		RESP_TYPE	_rtype;
 	public:
-		//	STANDARD RESONSE CONSTRUCTOR
+		//	STANDARD RESPONSE CONSTRUCTOR
 		Response(std::string from, std::string to, std::string cmd, std::string msg);
 		//	SERVER RESPONSE CONSTRUCTOR
 		Response(std::string from, std::string to, RESP_CODE rcode, std::string cmd, std::string msg);
