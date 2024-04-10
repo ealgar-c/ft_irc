@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 18:27:30 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:44:49 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ class Channel
 		bool	clientIsInChannel(const Client *) const;
 		void	removeClientFromChannel(const Client *);
 		bool	clientIsOperator(const Client *) const;
-		void	broadcastChannel(Client *) const;
+		void	broadcastChannel(Client *, Response &, bool) const;
 };

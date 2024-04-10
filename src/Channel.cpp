@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 18:39:44 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:51:25 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,15 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	}
 	// comprobar contraseña
 	this->_clientsConnected.push_back(newClient);
-	Response reply(newClient->getNickname(), "", "JOIN ", this->getName());
+	Response JoinReply(newClient->getNickname(), "", "JOIN ", this->getName());
 	Response namelist(serv.getHostname(), newClient->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected), "");
 	Response endname(serv.getHostname(), newClient->getNickname(), RPL_ENDOFNAMES, "end of the list", "");
-	// enviar RPL_NAMEREPLY
 	// enviar RPL_TOPIC o RPLY_NOTOPIC
-	reply.reply(newClient);
+	// enviar RPL_NAMEREPLY
+	JoinReply.reply(newClient);
+	this->broadcastChannel(newClient, JoinReply, false);
 	namelist.reply(newClient);
 	endname.reply(newClient);
-	this->broadcastChannel(newClient);
 }
 
 bool	Channel::clientIsInChannel(const Client *clt) const
@@ -127,14 +127,12 @@ bool	Channel::clientIsOperator(const Client *clt) const
 	return false;
 }
 
-void	Channel::broadcastChannel(Client *newClt) const
+void	Channel::broadcastChannel(Client *newClt, Response &resp, bool itself) const
 {
 	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
 	{
-		if ((*v_it) != newClt)
-		{
-			std::string msg = newClt->getNickname() + " " + "JOIN " + this->getName();
-			Response::reply((*v_it), msg);
-		}
+		if ((*v_it) == newClt && !itself)
+			continue ;
+		resp.reply((*v_it));
 	}
 }

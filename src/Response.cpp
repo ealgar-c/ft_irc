@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 18:37:34 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:46:07 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,27 @@ Response &Response::operator=(const Response &toEqual)
 	return (*this);
 }
 
+void	Response::setFrom(std::string from)
+{
+	this->_from = from;
+}
+
+void	Response::setTo(std::string to)
+{
+	this->_to = to;
+}
+
+void	Response::setCmd(std::string cmd)
+{
+	this->_cmd = cmd;
+}
+
+void	Response::setMsg(std::string msg)
+{
+	this->_msg = msg;
+}
+
+
 /* void	Response::generateResponse(std::string request)
 {
 	
@@ -79,7 +100,7 @@ void	Response::reply(Client *clt)
 	if (this->_rtype == SERVER)
 		this->_finalResponse = ":" + this->_from + " " + this->_to + " " + this->_cmd + this->_endmsg;
 	else
-		this->_finalResponse = ":" + this->_from + " " + this->_to + this->_cmd + this->_msg + this->_endmsg;
+		this->_finalResponse = ":" + this->_from + " " + this->_to + " " + this->_cmd + this->_msg + this->_endmsg;
 	std::cout << "response to send: " << this->_finalResponse << std::endl;
 	send(clt->getClientFd(), this->_finalResponse.c_str(), this->_finalResponse.length(), 0);
 }
