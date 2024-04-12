@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 18:39:05 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:46:59 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	SockInfo::joinChannel(std::string newChannelName, std::string key, Client *
 		}
 	}
 	Channel *newChannel = new Channel(newChannelName, "");
+	//	Añadir el usuario que crea el canal como operador.
 	this->_channels.push_back(newChannel);
 	newChannel->addClientToChannel(clt, *this);
 }
