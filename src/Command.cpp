@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/10 19:59:18 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:51:32 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,25 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 
 void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 {
-	(void)rqt;
-	(void)serv;
+	std::string	flag = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
+	std::string	msg = rqt.getMsg().substr(flag.size() - 1, rqt.getMsg().size() - 1);
+
+	if (flag.size() == 2 && !msg.empty())
+	{
+		if (flag == "+o")
+		else if (flag == "+l")
+		else if (flag == "+k")
+		else if (flag == "+t")
+		else if (flag == "+i")
+	}
+	else if (msg.empty())
+	{
+		// flag == mensaje
+		Channel *ch = serv.getChannelByName(flag);
+		if (ch != NULL)
+			
+			
+	}
 }
 
 void	Command::execPart(Request &rqt, SockInfo &serv)
