@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 11:45:16 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/13 17:12:16 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,5 @@ class Channel
 		bool	clientIsInChannel(const Client *) const;
 		void	removeClientFromChannel(const Client *);
 		bool	clientIsOperator(const Client *) const;
+		void	addOperator(Client *);
 };

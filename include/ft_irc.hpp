@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/09 18:52:12 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/13 17:18:54 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # include <cerrno>
 # include <vector>
 # include <sstream>
+# include <exception>
 
 /************************************
  _____ _____ _   _ _____ _____ _____ 
@@ -82,8 +83,10 @@ enum RESP_CODE{
 	ERR_ERRONEUSNICKNAME = 432,
 	ERR_NICKNAMEINUSE = 433,
 	ERR_USERONCHANNEL = 443,
+	ERR_NEEDMOREPARAMS = 461,
 	ERR_PASSWDMISMATCH = 464,
-	ERR_BADCHANNELKEY = 475
+	ERR_BADCHANNELKEY = 475,
+	ERR_NOPRIVILEGES = 481
 };
 
 enum RESP_TYPE{

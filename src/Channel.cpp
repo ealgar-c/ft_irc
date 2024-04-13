@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/09 17:28:52 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/13 16:42:53 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,10 @@ bool	Channel::clientIsOperator(const Client *clt) const
 			return true;
 	}
 	return false;
+}
+
+void	Channel::addOperator(Client *clt)
+{
+	if (!this->clientIsOperator(clt))
+		this->_operatorClients.push_back(clt);
 }

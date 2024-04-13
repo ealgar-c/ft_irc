@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/10 19:29:36 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/13 17:03:18 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,10 @@ void	Response::reply(Client *clt, Channel &ch, std::string msg)
 	std::string	finalMsg = clt->getNickname() + " " + ch.getName() + " :" + msg;
 	std::cout << "response to send: " << this->_finalResponse << std::endl; // esto fuera
 	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
+}
+
+void	Response::reply(Client *clt, std::string msg)
+{
+	std::cout << "response to send: " << msg << std::endl;
+	send(clt->getClientFd(), msg.c_str(), msg.length(), 0);
 }

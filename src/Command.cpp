@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/12 16:47:49 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/13 17:47:12 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,31 @@ void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 {
 	(void)rqt;
 	(void)serv;
-	/* std::string	flag = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
+	
+	std::cout << "Mensaje recibido por MODE: " << rqt.getMsg() << ".\n";
+
+	std::string	flag = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
 	std::string	msg = rqt.getMsg().substr(flag.size() - 1, rqt.getMsg().size() - 1);
 
-	if (flag.size() == 2 && !msg.empty())
+	/* if (msg.empty())
+		Response::reply(rqt.getClient(), " MODE :Not enough parameters"); // ERR_NEEDMOREPARAMS;
+	else if (flag.size() == 2)
 	{
-		if (flag == "+o")
-		else if (flag == "+l")
-		else if (flag == "+k")
-		else if (flag == "+t")
-		else if (flag == "+i")
+		if (flag == "+o") // Channel operator
+		{
+			try
+			{
+				if ((rqt.getClient()))
+			}
+			catch (const std::exception &e)
+			{
+				Response::reply(rqt.getClient(), e.what());
+			}
+		}
+		else if (flag == "+l") // Users limit
+		else if (flag == "+k") // Password
+		else if (flag == "+t") // Change topic
+		else if (flag == "+i") // Invite only
 	} */
 }
 
@@ -118,13 +133,13 @@ void	Command::execPart(Request &rqt, SockInfo &serv)
 	(void)serv;
 }
 
-void	Command::execInvite(Request &rqt, SockInfo &serv)
+void	Command::execInvite(Request &rqt, SockInfo &serv) // TODO: esto es mío
 {
 	(void)rqt;
 	(void)serv;
 }
 
-void	Command::execPing(Request &rqt, SockInfo &serv) // ✓
+void	Command::execPing(Request &rqt, SockInfo &serv)
 {
 	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), "PONG ", rqt.getMsg());
 	reply.reply(rqt.getClient());
