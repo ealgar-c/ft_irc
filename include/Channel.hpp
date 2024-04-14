@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/13 17:12:16 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/14 20:05:12 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Channel
 		std::string				_name;
 		std::string				_passwd;
 		std::string				_topic;
+		bool					_inviteMode;
 		std::vector<Client *>	_operatorClients;
 		std::vector<Client *>	_clientsConnected;
 	public:
@@ -35,6 +36,8 @@ class Channel
 		std::string	getName() const;
 		std::string	getPassword() const;
 		std::string	getTopic() const;
+		bool		getInviteMode() const;
+		void		setInviteMode(bool);
 		std::vector<Client *>	getClientsConnected(void) const;
 		void	addClientToChannel(Client *, SockInfo &serv);
 		bool	clientIsInChannel(const Client *) const;

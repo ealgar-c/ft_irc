@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:56:26 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/13 17:47:15 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/14 19:32:20 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,20 @@ class Command
 			static void	execUser(Request &rqt, SockInfo &sockInfo); // ✓
 			static void	execJoin(Request &rqt, SockInfo &sockInfo); // ✓
 			static void	execPrivmsg(Request &rqt, SockInfo &sockInfo); // Enr
-			static void	execMode(Request &rqt, SockInfo &sockInfo); // Pab --- Estoy con esto
+			static void	execMode(Request &rqt, SockInfo &sockInfo); // Pab
 			static void	execPart(Request &rqt, SockInfo &sockInfo); // Enr
 			static void	execInvite(Request &rqt, SockInfo &sockInfo); // Pab
 			static void	execPing(Request &rqt, SockInfo &sockInfo); // ✓
 
 		// Exception
-		/* class CommandException: public std::exception {
+		class CommandException: public std::exception {
 			private:
 				std::string	_msg;
 			public:
-				CommandException(std::string &str): _msg(str) {}
+				CommandException(const std::string &str): _msg(str) {}
 				virtual const char *what() const throw() {
 					return (this->_msg.c_str());
 				}
-		}; */
+				virtual ~CommandException() throw() {}
+		};
 };

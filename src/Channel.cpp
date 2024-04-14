@@ -6,19 +6,19 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/13 16:42:53 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/14 18:43:09 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
-Channel::Channel(): _name("Default"), _passwd(""), _topic("")
+Channel::Channel(): _name("Default"), _passwd(""), _topic(""), _inviteMode(false)
 {}
 
-Channel::Channel(std::string name, std::string password): _name(name), _passwd(password), _topic("")
+Channel::Channel(std::string name, std::string password): _name(name), _passwd(password), _topic(""), _inviteMode(false)
 {}
 
-Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _passwd(toCopy.getPassword()), _topic(toCopy.getTopic()), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
+Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _passwd(toCopy.getPassword()), _topic(toCopy.getTopic()), _inviteMode(toCopy.getInviteMode()), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
 {}
 
 Channel::~Channel()
@@ -32,6 +32,7 @@ Channel &Channel::operator=(const Channel &toEqual)
 		this->_clientsConnected = toEqual._clientsConnected;
 		this->_passwd = toEqual.getPassword();
 		this->_topic = toEqual.getTopic();
+		this->_inviteMode = toEqual.getInviteMode();
 		this->_operatorClients = toEqual._operatorClients;
 	}
 	return (*this);
@@ -50,6 +51,16 @@ std::string	Channel::getTopic() const
 std::string	Channel::getName() const
 {
 	return (this->_name);
+}
+
+bool	Channel::getInviteMode() const
+{
+	return (this->_inviteMode);
+}
+
+void	Channel::setInviteMode(bool toSet)
+{
+	this->_inviteMode = toSet;
 }
 
 std::vector<Client *>	Channel::getClientsConnected(void) const

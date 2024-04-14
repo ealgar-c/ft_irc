@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/13 17:47:12 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/14 20:18:45 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 	std::string newChannelName = rqt.getMsg();
 	if (newChannelName.find(' '))
 		newChannelName = newChannelName.substr(0, newChannelName.find(' '));
-	serv.joinChannel(newChannelName, rqt.getMsg().substr(newChannelName.size() - 1, rqt.getMsg().size() - 1), rqt.getClient());
+	if (serv.getChannelByName(newChannelName) && serv.getChannelByName(newChannelName)->getInviteMode())
+		Response::reply(rqt.getClient(), newChannelName + " :Cannot join channel (+i)");
+	else
+		serv.joinChannel(newChannelName, rqt.getMsg().substr(newChannelName.size() - 1, rqt.getMsg().size() - 1), rqt.getClient());
 }
 
 void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
@@ -137,6 +140,32 @@ void	Command::execInvite(Request &rqt, SockInfo &serv) // TODO: esto es mío
 {
 	(void)rqt;
 	(void)serv;
+	
+	std::cout << "Mensaje recibido por INVITE: " << rqt.getMsg() << ".\n";
+
+	try
+	{
+		if (rqt.getMsg().empty())
+			throw CommandException("INVITE :Not enough parameters.");
+		std::string	nick = rqt.getMsg().substr(0, rqt.getMsg().find(" "));
+		std::string	ch = rqt.getMsg().substr(nick.size() - 1, rqt.getMsg().size() - 1);
+		if (nick.empty() || ch.empty())
+			throw CommandException("INVITE :Not enough parameters.");
+		if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient()))
+			throw CommandException(ch + " :You're not on that channel.");
+		if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient()))
+			throw CommandException(ch + " :You're not channel operator.");
+		if (!serv.searchNick(nick))
+			throw CommandException(nick + " :No such nick/channel.");
+		if (serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(nick)))
+			throw CommandException(nick + ch + " :is already on channel.");
+
+		serv.joinChannel(ch, serv.getChannelByName(ch)->getPassword(), serv.getClientByNick(nick));
+	}
+	catch (const Command::CommandException &e)
+	{
+		Response::reply(rqt.getClient(), e.what());
+	}
 }
 
 void	Command::execPing(Request &rqt, SockInfo &serv)

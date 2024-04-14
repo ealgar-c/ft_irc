@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/08 16:41:43 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/14 19:19:15 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ Request::Request(std::string cmd, Client *clt)
 	{
 		this->_cmd = "MODE";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
+	}
+	else if (cmd.find("INVITE") != std::string::npos)
+	{
+		this->_cmd = "INVITE";
+		this->_msg = cmd.substr(7, cmd.size() - 1);
 	}
 	else if (cmd.find("PART") != std::string::npos)
 	{

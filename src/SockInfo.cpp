@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/12 16:46:59 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/14 20:06:26 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	SockInfo::joinChannel(std::string newChannelName, std::string key, Client *
 		}
 	}
 	Channel *newChannel = new Channel(newChannelName, "");
-	//	Añadir el usuario que crea el canal como operador.
+	newChannel->addOperator(clt);
 	this->_channels.push_back(newChannel);
 	newChannel->addClientToChannel(clt, *this);
 }
@@ -244,6 +244,17 @@ bool	SockInfo::searchNick(const std::string str)
 			return (true);
 	}
 	return (false);
+}
+
+Client	*SockInfo::getClientByNick(std::string clientNick) const
+{
+	for(std::vector<Client *>::const_iterator v_it = this->_clients.begin(); v_it != this->_clients.end(); v_it++)
+
+	{
+		if ((*v_it)->getNickname() == clientNick)
+			return (*v_it);
+	}
+	return (NULL);
 }
 
 Channel	*SockInfo::getChannelByName(std::string ChannelName) const
