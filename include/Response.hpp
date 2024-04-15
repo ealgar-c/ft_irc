@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:11:29 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/13 17:03:05 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:15:44 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ class Response
 		void	setRtype();
 		void	reply(Client *clt);
 		void	reply(Client *clt, Channel &, std::string);
-		static void	reply(Client *, std::string);
+		void	reply(Client *, std::string);
 		//	void	generateResponse(std::string);
 };

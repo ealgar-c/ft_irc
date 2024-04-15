@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/14 20:05:12 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:50:00 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class Channel
 	private:
 		std::string				_name;
 		std::string				_passwd;
+		bool					_openTopic;
 		std::string				_topic;
 		bool					_inviteMode;
 		std::vector<Client *>	_operatorClients;

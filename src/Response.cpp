@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/13 17:03:18 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:14:17 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,42 +21,66 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 {
 	switch (rcode)
 	{
-	case 315:
-		this->_to = "315 " + to;
-		break;
-	case 332:
-		this->_to = "332 " + to;
-		break;
-	case 352:
-		this->_to = "352 " + to;
-		break;
-	case 353:
-		this->_to = "353 " + to;
-		break;
-	case 366:
-		this->_to = "366 " + to;
-		break;
-	case 431:
-		this->_to = "431 " + to;
-		break;
-	case 432:
-		this->_to = "432 " + to;
-		break;
-	case 433:
-		this->_to = "433 " + to;
-		break;
-	case 443:
-		this->_to = "443 " + to;
-		break;
-	case 464:
-		this->_to = "464 " + to;
-		break;
-	case 475:
-		this->_to = "475 " + to;
-		break;
-	default:
-		this->_to = "300 " + to;
-		break;
+		case 315:
+			this->_to = "315 " + to;
+			break;
+		case 332:
+			this->_to = "332 " + to;
+			break;
+		case 341:
+			this->_to = "341 " + to;
+			break;
+		case 352:
+			this->_to = "352 " + to;
+			break;
+		case 353:
+			this->_to = "353 " + to;
+			break;
+		case 366:
+			this->_to = "366 " + to;
+			break;
+		case 401:
+			this->_to = "401 " + to;
+			break;
+		case 403:
+			this->_to = "403 " + to;
+			break;
+		case 431:
+			this->_to = "431 " + to;
+			break;
+		case 432:
+			this->_to = "432 " + to;
+			break;
+		case 433:
+			this->_to = "433 " + to;
+			break;
+		case 442:
+			this->_to = "442 " + to;
+			break;
+		case 443:
+			this->_to = "443 " + to;
+			break;
+		case 461:
+			this->_to = "461 " + to;
+			break;
+		case 464:
+			this->_to = "464 " + to;
+			break;
+		case 472:
+			this->_to = "472 " + to;
+			break;
+		case 473:
+			this->_to = "473 " + to;
+			break;
+		case 475:
+			this->_to = "475 " + to;
+			break;
+		case 482:
+			this->_to = "482 " + to;
+			break;
+		default:
+			this->_to = "300 " + to;
+			break;
 	}
 	this->_endmsg = "\r\n";
 	this->_rtype = SERVER;
@@ -102,6 +126,7 @@ void	Response::reply(Client *clt, Channel &ch, std::string msg)
 
 void	Response::reply(Client *clt, std::string msg)
 {
-	std::cout << "response to send: " << msg << std::endl;
-	send(clt->getClientFd(), msg.c_str(), msg.length(), 0);
+	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg;
+	std::cout << "response to send: " << finalMsg << std::endl; // esto fuera
+	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/14 20:18:11 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:13:41 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ enum C_STATUS{
 enum RESP_CODE{
 	RPL_ENDOFWHO = 315,
 	RPL_TOPIC = 332,
+	RPL_INVITING = 341,
 	RPL_WHOREPLY = 352,
 	RPL_NAMREPLY = 353,
 	RPL_ENDOFNAMES = 366,
 	ERR_NOSUCHNICK = 401,
+	ERR_NOSUCHCHANNEL = 403,
 	ERR_NONICKNAMEGIVEN = 431,
 	ERR_ERRONEUSNICKNAME = 432,
 	ERR_NICKNAMEINUSE = 433,
@@ -87,6 +89,7 @@ enum RESP_CODE{
 	ERR_USERONCHANNEL = 443,
 	ERR_NEEDMOREPARAMS = 461,
 	ERR_PASSWDMISMATCH = 464,
+	ERR_UNKNOWNMODE = 472,
 	ERR_INVITEONLYCHAN = 473,
 	ERR_BADCHANNELKEY = 475,
 	ERR_NOPRIVILEGES = 481,

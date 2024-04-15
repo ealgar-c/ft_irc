@@ -6,19 +6,19 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/14 18:43:09 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:52:16 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
-Channel::Channel(): _name("Default"), _passwd(""), _topic(""), _inviteMode(false)
+Channel::Channel(): _name("Default"), _passwd(""), _openTopic(false), _topic(""), _inviteMode(false)
 {}
 
-Channel::Channel(std::string name, std::string password): _name(name), _passwd(password), _topic(""), _inviteMode(false)
+Channel::Channel(std::string name, std::string password): _name(name), _passwd(password), _openTopic(false), _topic(""), _inviteMode(false)
 {}
 
-Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _passwd(toCopy.getPassword()), _topic(toCopy.getTopic()), _inviteMode(toCopy.getInviteMode()), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
+Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _passwd(toCopy.getPassword()), _openTopic(toCopy._openTopic), _topic(toCopy.getTopic()), _inviteMode(toCopy.getInviteMode()), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
 {}
 
 Channel::~Channel()
@@ -31,6 +31,7 @@ Channel &Channel::operator=(const Channel &toEqual)
 		this->_name = toEqual.getName();
 		this->_clientsConnected = toEqual._clientsConnected;
 		this->_passwd = toEqual.getPassword();
+		this->_openTopic = toEqual._openTopic;
 		this->_topic = toEqual.getTopic();
 		this->_inviteMode = toEqual.getInviteMode();
 		this->_operatorClients = toEqual._operatorClients;
@@ -41,6 +42,11 @@ Channel &Channel::operator=(const Channel &toEqual)
 std::string	Channel::getPassword() const
 {
 	return (this->_passwd);
+}
+
+bool	Channel::getOpenTopic() const
+{
+	return (this->_openTopic);
 }
 
 std::string	Channel::getTopic() const

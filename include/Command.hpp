@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:56:26 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/14 19:32:20 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:25:57 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class Command
 			static void	execPrivmsg(Request &rqt, SockInfo &sockInfo); // Enr
 			static void	execMode(Request &rqt, SockInfo &sockInfo); // Pab
 			static void	execPart(Request &rqt, SockInfo &sockInfo); // Enr
-			static void	execInvite(Request &rqt, SockInfo &sockInfo); // Pab
+			static void	execInvite(Request &rqt, SockInfo &sockInfo); // ✓
 			static void	execPing(Request &rqt, SockInfo &sockInfo); // ✓
 
 		// Exception

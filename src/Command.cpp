@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/14 20:18:45 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:46:38 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,10 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 	std::string newChannelName = rqt.getMsg();
 	if (newChannelName.find(' '))
 		newChannelName = newChannelName.substr(0, newChannelName.find(' '));
-	if (serv.getChannelByName(newChannelName) && serv.getChannelByName(newChannelName)->getInviteMode())
-		Response::reply(rqt.getClient(), newChannelName + " :Cannot join channel (+i)");
+	if (serv.getChannelByName(newChannelName) && serv.getChannelByName(newChannelName)->getInviteMode()) {
+		Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_INVITEONLYCHAN, "", "");
+		reply.reply(rqt.getClient(), newChannelName + " :Cannot join channel (+i)");
+	}
 	else
 		serv.joinChannel(newChannelName, rqt.getMsg().substr(newChannelName.size() - 1, rqt.getMsg().size() - 1), rqt.getClient());
 }
@@ -100,34 +102,54 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 
 void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 {
-	(void)rqt;
-	(void)serv;
-	
-	std::cout << "Mensaje recibido por MODE: " << rqt.getMsg() << ".\n";
+	std::cout << "Mensaje recibido por MODE: " << rqt.getMsg() << ".\n"; // esto fuera
 
-	std::string	flag = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
-	std::string	msg = rqt.getMsg().substr(flag.size() - 1, rqt.getMsg().size() - 1);
+	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
+	std::string	flag = rqt.getMsg().substr(ch.size() - 1, rqt.getMsg().find(' '));
+	std::string	msg = rqt.getMsg().substr(ch.size() + flag.size() - 2, rqt.getMsg().size() - 1);
+	RESP_CODE	rtype;
 
-	/* if (msg.empty())
-		Response::reply(rqt.getClient(), " MODE :Not enough parameters"); // ERR_NEEDMOREPARAMS;
-	else if (flag.size() == 2)
+	try
 	{
-		if (flag == "+o") // Channel operator
+		if (rqt.getMsg().empty() || flag.empty()) {
+			rtype = ERR_NEEDMOREPARAMS;
+			throw CommandException(" :Not enough parameters");
+		}
+		if (!serv.getChannelByName(ch)) {
+			rtype = ERR_NOSUCHCHANNEL;
+			throw CommandException(ch + " :No such channel");
+		}
+		if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient())) {
+			rtype = ERR_NOTONCHANNEL;
+			throw CommandException(" :You're not on that channel");
+		}
+		if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient())) {
+			rtype = ERR_CHANOPRIVSNEEDED;
+			throw CommandException(" :You're not channel operator");
+		}
+		else if (flag.size() == 2)
 		{
-			try
-			{
-				if ((rqt.getClient()))
+			if (flag == "+i") {
+				if (serv.getChannelByName(ch)->getInviteMode() == false)
+					serv.getChannelByName(ch)->setInviteMode(true);
+				else
+					serv.getChannelByName(ch)->setInviteMode(false);
 			}
-			catch (const std::exception &e)
-			{
-				Response::reply(rqt.getClient(), e.what());
+			else if (flag == "+t") {} // Change topic
+			else if (flag == "+k") {} // Password
+			else if (flag == "+o") {} // Channel operator
+			else if (flag == "+l") {} // Users limit
+			else {
+				rtype = ERR_UNKNOWNMODE;
+				throw CommandException(" :is unknown mode char to me");
 			}
 		}
-		else if (flag == "+l") // Users limit
-		else if (flag == "+k") // Password
-		else if (flag == "+t") // Change topic
-		else if (flag == "+i") // Invite only
-	} */
+	}
+	catch (const std::exception &e)
+	{
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rtype, "", "");
+		rpl.reply(rqt.getClient(), e.what());
+	}
 }
 
 void	Command::execPart(Request &rqt, SockInfo &serv)
@@ -136,35 +158,53 @@ void	Command::execPart(Request &rqt, SockInfo &serv)
 	(void)serv;
 }
 
-void	Command::execInvite(Request &rqt, SockInfo &serv) // TODO: esto es mío
+void	Command::execInvite(Request &rqt, SockInfo &serv)
 {
 	(void)rqt;
 	(void)serv;
 	
 	std::cout << "Mensaje recibido por INVITE: " << rqt.getMsg() << ".\n";
 
+	RESP_CODE	rtype;
+
 	try
 	{
 		if (rqt.getMsg().empty())
 			throw CommandException("INVITE :Not enough parameters.");
+
 		std::string	nick = rqt.getMsg().substr(0, rqt.getMsg().find(" "));
 		std::string	ch = rqt.getMsg().substr(nick.size() - 1, rqt.getMsg().size() - 1);
-		if (nick.empty() || ch.empty())
+
+		if (nick.empty() || ch.empty()) {
+			rtype = ERR_NEEDMOREPARAMS;
 			throw CommandException("INVITE :Not enough parameters.");
-		if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient()))
+		}
+		if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient())) {
+			rtype = ERR_NOTONCHANNEL;
 			throw CommandException(ch + " :You're not on that channel.");
-		if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient()))
+		}
+		if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient())) {
+			rtype = ERR_CHANOPRIVSNEEDED;
 			throw CommandException(ch + " :You're not channel operator.");
-		if (!serv.searchNick(nick))
+		}
+		if (!serv.searchNick(nick)) {
+			rtype = ERR_NOSUCHNICK;
 			throw CommandException(nick + " :No such nick/channel.");
-		if (serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(nick)))
+		}
+		if (serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(nick))) {
+			rtype = ERR_USERONCHANNEL;
 			throw CommandException(nick + ch + " :is already on channel.");
+		}
 
 		serv.joinChannel(ch, serv.getChannelByName(ch)->getPassword(), serv.getClientByNick(nick));
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), RPL_INVITING, "", "");
+		rpl.reply(rqt.getClient(), nick + " " + ch);
 	}
 	catch (const Command::CommandException &e)
 	{
-		Response::reply(rqt.getClient(), e.what());
+		// Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, "", ":Password incorrect");
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rtype, "", "");
+		rpl.reply(rqt.getClient(), e.what());
 	}
 }
 
