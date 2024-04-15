@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 20:22:52 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 20:28:54 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,12 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rcode, "", "");
 		rpl.reply(rqt.getClient(), e.what());
 	}
+}
+
+void	execTopic(Request &rqt, SockInfo &serv)
+{
+	(void)rqt;
+	(void)serv;
 }
 
 void	Command::execPing(Request &rqt, SockInfo &serv)

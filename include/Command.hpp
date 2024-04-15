@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:56:26 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 14:25:57 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 20:28:44 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,16 @@ class Command
 			Command	&operator=(const Command &);
 
 		// Member functions
-			static void	execPass(Request &rqt, SockInfo &sockInfo); // ✓
-			static void	execNick(Request &rqt, SockInfo &sockInfo); // ✓
-			static void	execUser(Request &rqt, SockInfo &sockInfo); // ✓
-			static void	execJoin(Request &rqt, SockInfo &sockInfo); // ✓
-			static void	execPrivmsg(Request &rqt, SockInfo &sockInfo); // Enr
-			static void	execMode(Request &rqt, SockInfo &sockInfo); // Pab
-			static void	execPart(Request &rqt, SockInfo &sockInfo); // Enr
-			static void	execInvite(Request &rqt, SockInfo &sockInfo); // ✓
-			static void	execPing(Request &rqt, SockInfo &sockInfo); // ✓
+			static void	execPass(Request &, SockInfo &); // ✓
+			static void	execNick(Request &, SockInfo &); // ✓
+			static void	execUser(Request &, SockInfo &); // ✓
+			static void	execJoin(Request &, SockInfo &); // ✓
+			static void	execPrivmsg(Request &, SockInfo &); // Enr
+			static void	execMode(Request &, SockInfo &); // ✓
+			static void	execPart(Request &, SockInfo &); // Enr
+			static void	execInvite(Request &, SockInfo &); // ✓
+			static void	execTopic(Request &, SockInfo &); // Enr
+			static void	execPing(Request &, SockInfo &); // ✓
 
 		// Exception
 		class CommandException: public std::exception {
