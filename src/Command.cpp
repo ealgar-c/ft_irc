@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 16:15:11 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:20:43 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 {
 	std::cout << "cmd -> " << rqt.getCmd() << " mensaje-> " << rqt.getMsg() << std::endl;
-	(void)sockInfo;
+	(void)serv;
 	//std::string dest = ;
 /* 	std::string dest;
 	if (rqt.getMsg().find("#") != std::string::npos)

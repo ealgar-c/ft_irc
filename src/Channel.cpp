@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 16:12:12 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:17:57 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,12 +141,6 @@ bool	Channel::clientIsOperator(const Client *clt) const
 			return true;
 	}
 	return false;
-}
-
-void	Channel::addOperator(Client *clt)
-{
-	if (!this->clientIsOperator(clt))
-		this->_operatorClients.push_back(clt);
 }
 
 void	Channel::addOperator(Client *clt)
