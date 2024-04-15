@@ -58,8 +58,6 @@ std::vector<Client *>	Channel::getClientsConnected(void) const
 	return (this->_clientsConnected);
 }
 
-
-
 static std::string getNameList(std::vector<Client *> cltList)
 {
 	std::string list = ":";

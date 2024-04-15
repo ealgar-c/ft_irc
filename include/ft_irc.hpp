@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/05 11:45:47 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/12 14:07:16 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 | \__/\ \_/ / |\  /\__/ / | | /\__/ /
  \____/\___/\_| \_|____/  \_/ \____/ 
 ************************************/
-# define CONST_MAXSCONN 2
+# define CONST_MAXSCONN 10
 # define ERR_ARGNO "Number of arguments incorrect."
 # define ERR_PORTARG "The received port is incorrect."
 # define ERR_EMPTYPWD "An empty password is invalid."

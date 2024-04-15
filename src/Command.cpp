@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/10 19:51:15 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:03:27 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,18 @@ void	Command::execJoin(Request &rqt, SockInfo &sockInfo) // ✓
 void	Command::execPrivmsg(Request &rqt, SockInfo &sockInfo)
 {
 	std::cout << "cmd -> " << rqt.getCmd() << " mensaje-> " << rqt.getMsg() << std::endl;
-	std::string dest = rqt.getMsg().substr(rqt.getMsg().find("#"), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
+	(void)sockInfo;
+	//std::string dest = ;
+/* 	std::string dest;
+	if (rqt.getMsg().find("#") != std::string::npos)
+		dest = rqt.getMsg().substr(rqt.getMsg().find("#"), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
+	else
+		dest = rqt.getMsg().substr(rqt.getMsg().find(" " + 1), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
 	std::string finalMsg = rqt.getMsg().erase(0, dest.length() + 1);
 	std::cout << "dest -> (" << dest << ")" << std::endl;
 	std::cout << "final -> (" << finalMsg << ")" << std::endl;
 	Response resp(rqt.getClient()->getNickname(), rqt.getCmd(), dest + " ", finalMsg);
-	sockInfo.getChannelByName(dest)->broadcastChannel(rqt.getClient(), resp, false);
+	sockInfo.getChannelByName(dest)->broadcastChannel(rqt.getClient(), resp, false); */
 }
 
 void	Command::execMode(Request &rqt, SockInfo &sockInfo)

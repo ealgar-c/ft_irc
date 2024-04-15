@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/04 16:47:11 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:50:57 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ void	SockInfo::readRequestFromClient(Client *clt)
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
-			std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << std::endl << clt->_messagebuffer << std::endl;
-
+			if (clt->_messagebuffer.find("WHO") == std::string::npos)
+				std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << std::endl << clt->_messagebuffer << std::endl;
 			std::stringstream	ss(clt->_messagebuffer);
 			std::string			cmd;
 
