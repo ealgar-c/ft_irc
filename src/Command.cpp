@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 16:20:43 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:52:55 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,9 +210,7 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), RPL_INVITING, "", "");
 		rpl.reply(rqt.getClient(), nick + " " + ch);
 	}
-	catch (const Command::CommandException &e)
-	{
-		// Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, "", ":Password incorrect");
+	catch (const Command::CommandException &e) {
 		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rtype, "", "");
 		rpl.reply(rqt.getClient(), e.what());
 	}

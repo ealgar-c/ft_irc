@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 16:41:25 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:58:22 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,4 @@ class Channel
 		bool	clientIsOperator(const Client *) const;
 		void	addOperator(Client *);
 		void	broadcastChannel(Client *, Response &, bool) const;
-		bool	getOpenTopic(void) const;
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:11:29 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 16:19:30 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/15 17:58:06 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class Response
 		void	setMsg(std::string);
 		//	void	setRtype();
 		void	reply(Client *clt);
-		void	reply(Client *clt, Channel &, std::string);
-		static void	reply(Client *, std::string);
+		// void	reply(Client *clt, Channel &, std::string);
+		void	reply(Client *, std::string);
 		//	void	generateResponse(std::string);
 };
