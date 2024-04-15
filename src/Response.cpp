@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 17:57:53 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 20:03:53 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 		case 482:
 			this->_to = "482 " + to;
 			break;
+		case 696:
+			this->_to = "696 " + to;
+			break;
 		default:
 			this->_to = "300 " + to;
 			break;
@@ -147,7 +150,7 @@ void	Response::reply(Client *clt)
 
 void	Response::reply(Client *clt, std::string msg)
 {
-	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg;
+	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg + this->_endmsg;
 	std::cout << "response to send: " << finalMsg << std::endl; // esto fuera
 	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
 }

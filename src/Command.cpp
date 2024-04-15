@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 18:10:50 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 20:22:52 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	forbiddenChar(std::string str)
 	return (false);
 }
 
-void	Command::execNick(Request &rqt, SockInfo &serv) // cosas de NICK(elodeon)
+void	Command::execNick(Request &rqt, SockInfo &serv)
 {
 	if (rqt.getMsg().empty())
 		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NONICKNAMEGIVEN, "", ":No nickname given");
@@ -110,14 +110,32 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	sockInfo.getChannelByName(dest)->broadcastChannel(rqt.getClient(), resp, false); */
 }
 
+bool	checkNumber(std::string str)
+{
+	size_t i = 0;
+	while (i != str.length())
+	{
+		if (std::isdigit(str[i]) == 0)
+		{
+			std::cout << "hello\n";
+			return (false);
+		}
+	}
+	return (true);
+}
+
 void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 {
-	std::cout << "Mensaje recibido por MODE: " << rqt.getMsg() << ".\n"; // esto fuera
-
-	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
-	std::string	flag = rqt.getMsg().substr(ch.size() - 1, rqt.getMsg().find(' '));
-	std::string	msg = rqt.getMsg().substr(ch.size() + flag.size() - 2, rqt.getMsg().size() - 1);
+ 	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
+	std::string	flag = rqt.getMsg().substr(ch.size() + 1, rqt.getMsg().size() - 1);
+	flag = flag.substr(0, flag.find(' '));
+	std::string	msg = rqt.getMsg().substr(ch.size() + flag.size() + 2, rqt.getMsg().size() - 1);
 	RESP_CODE	rcode;
+
+	std::cout << "Mensaje de MODE: ." << rqt.getMsg() << "." << std::endl;
+	std::cout << "ch: ." << ch << "." << std::endl;
+	std::cout << "flag: ." << flag << "." << std::endl;
+	std::cout << "msg: ." << msg << "." << std::endl;
 
 	try
 	{
@@ -139,16 +157,49 @@ void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 		}
 		else if (flag.size() == 2)
 		{
-			if (flag == "+i") {
-				if (serv.getChannelByName(ch)->getInviteMode() == false)
-					serv.getChannelByName(ch)->setInviteMode(true);
-				else
-					serv.getChannelByName(ch)->setInviteMode(false);
+			if (flag == "+i")
+				serv.getChannelByName(ch)->setInviteMode(true);
+			else if (flag == "-i")
+				serv.getChannelByName(ch)->setInviteMode(false);
+			else if (flag == "+t")
+				serv.getChannelByName(ch)->setOpenTopic(true);
+			else if (flag == "-t")
+				serv.getChannelByName(ch)->setOpenTopic(false);
+			else if (flag == "+k") {
+				if (msg.empty()) {
+					rcode = ERR_NEEDMOREPARAMS;
+					throw CommandException(" :Not enough parameters");
+				}
+				serv.getChannelByName(ch)->setPassword(msg);
+				serv.getChannelByName(ch)->setThereIsPasswd(true);
 			}
-			else if (flag == "+t") {} // Change topic
-			else if (flag == "+k") {} // Password
-			else if (flag == "+o") {} // Channel operator
-			else if (flag == "+l") {} // Users limit
+			else if (flag == "-k") {
+				serv.getChannelByName(ch)->setPassword("");
+				serv.getChannelByName(ch)->setThereIsPasswd(false);
+			}
+			else if (flag == "+o") {
+				if (!serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(msg))) {
+					rcode = ERR_NOSUCHNICK;
+					throw CommandException(" " + msg + " :No such nick/channel");
+				}
+				serv.getChannelByName(ch)->addOperator(serv.getClientByNick(msg));
+			}
+			else if (flag == "-o") {
+				if (!serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(msg))) {
+					rcode = ERR_NOSUCHNICK;
+					throw CommandException(" " + msg + " :No such nick/channel");
+				}
+				serv.getChannelByName(ch)->removeClientAsOperator(serv.getClientByNick(msg));
+			}
+			else if (flag == "+l") {
+				if (!checkNumber(msg)) {
+					rcode = ERR_INVALIDMODEPARAM;
+					throw CommandException("(+l) " + msg + " :invalid parameter");
+				}
+				serv.getChannelByName(ch)->setUserLimit(atoi(msg.c_str()));
+			}
+			else if (flag == "-l")
+				serv.getChannelByName(ch)->setUserLimit(-1);
 			else {
 				rcode = ERR_UNKNOWNMODE;
 				throw CommandException(" :is unknown mode char to me");
@@ -170,11 +221,6 @@ void	Command::execPart(Request &rqt, SockInfo &serv)
 
 void	Command::execInvite(Request &rqt, SockInfo &serv)
 {
-	(void)rqt;
-	(void)serv;
-	
-	std::cout << "Mensaje recibido por INVITE: " << rqt.getMsg() << ".\n";
-
 	RESP_CODE	rcode;
 
 	try

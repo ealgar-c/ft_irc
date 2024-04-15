@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 16:10:32 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/15 19:45:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <cstring>
 # include <iostream>
 # include <cstdlib>
+# include <cctype>
 # include <cerrno>
 # include <vector>
 # include <sstream>
@@ -93,7 +94,8 @@ enum RESP_CODE{
 	ERR_INVITEONLYCHAN = 473,
 	ERR_BADCHANNELKEY = 475,
 	ERR_NOPRIVILEGES = 481,
-	ERR_CHANOPRIVSNEEDED = 482
+	ERR_CHANOPRIVSNEEDED = 482,
+	ERR_INVALIDMODEPARAM = 696
 };
 
 enum RESP_TYPE{
