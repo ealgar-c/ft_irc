@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 15:50:00 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:10:17 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,5 @@ class Channel
 		void	removeClientFromChannel(const Client *);
 		bool	clientIsOperator(const Client *) const;
 		void	addOperator(Client *);
+		void	broadcastChannel(Client *, Response &, bool) const;
 };

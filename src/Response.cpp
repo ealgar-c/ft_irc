@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 15:14:17 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:16:30 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,27 @@ Response &Response::operator=(const Response &toEqual)
 	return (*this);
 }
 
+void	Response::setFrom(std::string from)
+{
+	this->_from = from;
+}
+
+void	Response::setTo(std::string to)
+{
+	this->_to = to;
+}
+
+void	Response::setCmd(std::string cmd)
+{
+	this->_cmd = cmd;
+}
+
+void	Response::setMsg(std::string msg)
+{
+	this->_msg = msg;
+}
+
+
 /* void	Response::generateResponse(std::string request)
 {
 	
@@ -112,8 +133,8 @@ void	Response::reply(Client *clt)
 	if (this->_rtype == SERVER)
 		this->_finalResponse = ":" + this->_from + " " + this->_to + " " + this->_cmd + this->_endmsg;
 	else
-		this->_finalResponse = ":" + this->_from + " " + this->_to + this->_cmd + this->_msg + this->_endmsg;
-	std::cout << "response to send: " << this->_finalResponse << std::endl; // esto fuera
+		this->_finalResponse = ":" + this->_from + " " + this->_to + " " + this->_cmd + this->_msg + this->_endmsg;
+	std::cout << "response to send: " << this->_finalResponse << std::endl;
 	send(clt->getClientFd(), this->_finalResponse.c_str(), this->_finalResponse.length(), 0);
 }
 
@@ -129,4 +150,24 @@ void	Response::reply(Client *clt, std::string msg)
 	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg;
 	std::cout << "response to send: " << finalMsg << std::endl; // esto fuera
 	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
+}
+
+void	Response::reply(Client *clt, Channel &ch, std::string msg)
+{
+	std::string	finalMsg = clt->getNickname() + " " + ch.getName() + " :" + msg;
+	std::cout << "response to send: " << this->_finalResponse << std::endl; // esto fuera
+	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
+}
+
+void	Response::reply(Client *clt, std::string msg)
+{
+	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg;
+	std::cout << "response to send: " << finalMsg << std::endl; // esto fuera
+	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
+}
+
+void	Response::reply(Client *clt, std::string msg)
+{
+	std::cout << "response to send: " << msg << std::endl;
+	send(clt->getClientFd(), msg.c_str(), msg.length(), 0);
 }
