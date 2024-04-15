@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 17:52:55 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/15 18:10:50 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,24 +117,24 @@ void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
 	std::string	flag = rqt.getMsg().substr(ch.size() - 1, rqt.getMsg().find(' '));
 	std::string	msg = rqt.getMsg().substr(ch.size() + flag.size() - 2, rqt.getMsg().size() - 1);
-	RESP_CODE	rtype;
+	RESP_CODE	rcode;
 
 	try
 	{
 		if (rqt.getMsg().empty() || flag.empty()) {
-			rtype = ERR_NEEDMOREPARAMS;
+			rcode = ERR_NEEDMOREPARAMS;
 			throw CommandException(" :Not enough parameters");
 		}
 		if (!serv.getChannelByName(ch)) {
-			rtype = ERR_NOSUCHCHANNEL;
+			rcode = ERR_NOSUCHCHANNEL;
 			throw CommandException(ch + " :No such channel");
 		}
 		if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient())) {
-			rtype = ERR_NOTONCHANNEL;
+			rcode = ERR_NOTONCHANNEL;
 			throw CommandException(" :You're not on that channel");
 		}
 		if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient())) {
-			rtype = ERR_CHANOPRIVSNEEDED;
+			rcode = ERR_CHANOPRIVSNEEDED;
 			throw CommandException(" :You're not channel operator");
 		}
 		else if (flag.size() == 2)
@@ -150,14 +150,14 @@ void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
 			else if (flag == "+o") {} // Channel operator
 			else if (flag == "+l") {} // Users limit
 			else {
-				rtype = ERR_UNKNOWNMODE;
+				rcode = ERR_UNKNOWNMODE;
 				throw CommandException(" :is unknown mode char to me");
 			}
 		}
 	}
 	catch (const std::exception &e)
 	{
-		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rtype, "", "");
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rcode, "", "");
 		rpl.reply(rqt.getClient(), e.what());
 	}
 }
@@ -175,7 +175,7 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 	
 	std::cout << "Mensaje recibido por INVITE: " << rqt.getMsg() << ".\n";
 
-	RESP_CODE	rtype;
+	RESP_CODE	rcode;
 
 	try
 	{
@@ -186,23 +186,23 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 		std::string	ch = rqt.getMsg().substr(nick.size() - 1, rqt.getMsg().size() - 1);
 
 		if (nick.empty() || ch.empty()) {
-			rtype = ERR_NEEDMOREPARAMS;
+			rcode = ERR_NEEDMOREPARAMS;
 			throw CommandException("INVITE :Not enough parameters.");
 		}
 		if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient())) {
-			rtype = ERR_NOTONCHANNEL;
+			rcode = ERR_NOTONCHANNEL;
 			throw CommandException(ch + " :You're not on that channel.");
 		}
 		if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient())) {
-			rtype = ERR_CHANOPRIVSNEEDED;
+			rcode = ERR_CHANOPRIVSNEEDED;
 			throw CommandException(ch + " :You're not channel operator.");
 		}
 		if (!serv.searchNick(nick)) {
-			rtype = ERR_NOSUCHNICK;
+			rcode = ERR_NOSUCHNICK;
 			throw CommandException(nick + " :No such nick/channel.");
 		}
 		if (serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(nick))) {
-			rtype = ERR_USERONCHANNEL;
+			rcode = ERR_USERONCHANNEL;
 			throw CommandException(nick + ch + " :is already on channel.");
 		}
 
@@ -211,7 +211,7 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 		rpl.reply(rqt.getClient(), nick + " " + ch);
 	}
 	catch (const Command::CommandException &e) {
-		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rtype, "", "");
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rcode, "", "");
 		rpl.reply(rqt.getClient(), e.what());
 	}
 }
