@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/16 08:00:36 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/16 08:28:37 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,12 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 {
 	std::cout << "cmd -> " << rqt.getCmd() << " mensaje-> " << rqt.getMsg() << std::endl;
 	(void)serv;
+	if (rqt.getMsg().find(" ") != std::string::npos)
+	{
+		std::string to(rqt.getMsg().substr(0, rqt.getMsg().find(" ")));
+		std::string msg(rqt.getMsg().substr(rqt.getMsg().find(" ") + 1, rqt.getMsg().length() - rqt.getMsg().find(" ") + 1));
+		std::cout << "se ha recibido el mensaje ->" << msg << "<- enviado para ->" << to << "<-" << std::endl;
+	}
 	//std::string dest = ;
 /* 	std::string dest;
 	if (rqt.getMsg().find("#") != std::string::npos)
@@ -218,6 +224,6 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 
 void	Command::execPing(Request &rqt, SockInfo &serv)
 {
-	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), "PONG ", rqt.getMsg());
+	Response reply(serv.getHostname(), "PONG", rqt.getClient()->getNickname() + " ", rqt.getMsg());
 	reply.reply(rqt.getClient());
 }
