@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/16 08:28:37 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/16 09:46:43 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,18 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 		std::string msg(rqt.getMsg().substr(rqt.getMsg().find(" ") + 1, rqt.getMsg().length() - rqt.getMsg().find(" ") + 1));
 		std::cout << "se ha recibido el mensaje ->" << msg << "<- enviado para ->" << to << "<-" << std::endl;
 	}
-	//std::string dest = ;
-/* 	std::string dest;
+	/*
+	
+		RESPUESTAS QUE DAR ->
+			ERR_NORECIPIENT                 ERR_NOTEXTTOSEND (no hay msg)
+        	ERR_CANNOTSENDTOCHAN            ERR_NOTOPLEVEL (no tienes permisos para mandar msgs?)
+        	ERR_WILDTOPLEVEL                ERR_TOOMANYTARGETS
+        	ERR_NOSUCHNICK (esa persona no existe)
+        	RPL_AWAY (Esta persona se ha ido (creo) pero eso no tenemos q hacerlo)
+
+	*/
+	/* 
+	std::string dest;
 	if (rqt.getMsg().find("#") != std::string::npos)
 		dest = rqt.getMsg().substr(rqt.getMsg().find("#"), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
 	else
@@ -113,7 +123,8 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	std::cout << "dest -> (" << dest << ")" << std::endl;
 	std::cout << "final -> (" << finalMsg << ")" << std::endl;
 	Response resp(rqt.getClient()->getNickname(), rqt.getCmd(), dest + " ", finalMsg);
-	sockInfo.getChannelByName(dest)->broadcastChannel(rqt.getClient(), resp, false); */
+	sockInfo.getChannelByName(dest)->broadcastChannel(rqt.getClient(), resp, false);
+	*/
 }
 
 void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
@@ -226,4 +237,29 @@ void	Command::execPing(Request &rqt, SockInfo &serv)
 {
 	Response reply(serv.getHostname(), "PONG", rqt.getClient()->getNickname() + " ", rqt.getMsg());
 	reply.reply(rqt.getClient());
+}
+
+void Command::execTopic(Request &rqt, SockInfo &serv)
+{
+	// Si no hay msg -> ERR_NEEDMOREPARAMS
+	std::string channelName();
+	if (/*queda algo aparte del channel*/)
+	{
+		//	Cambia el topic del canal
+
+		//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
+		//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
+		//	Si el canal requiere permisos para que se cambie el topic -> ERR_CHANOPRIVSNEEDED
+		//	Cambia el topic del canal
+		//	?? Devuelve un broadcast en el canal con el nuevo topico ??
+	}
+	else
+	{
+		//	Devuelve el topic que tiene ese canal
+
+		//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
+		// Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
+		// Si no tiene topic el canal -> RPL_NOTOPIC
+		// Si tiene topic el canal -> RPL_TOPIC
+	}
 }

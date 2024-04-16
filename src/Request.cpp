@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/14 19:19:15 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/16 09:30:01 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ Request::Request(std::string cmd, Client *clt)
 	{
 		this->_cmd = "PING";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
+	}
+	else if (cmd.find("TOPIC") != std::string::npos)
+	{
+		this->_cmd = "TOPIC";
+		this->_msg = cmd.substr(6, cmd.size() - 1);
 	}
 }
 
