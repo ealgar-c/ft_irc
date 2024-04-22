@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/17 14:16:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:28:42 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ Request::Request(std::string cmd, Client *clt)
 	{
 		this->_cmd = "PART";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
+	}
+	else if (cmd.find("TOPIC") != std::string::npos)
+	{
+		this->_cmd = "TOPIC";
+		this->_msg = cmd.substr(6, cmd.size() - 1);
 	}
 	else if (cmd.find("PING") != std::string::npos)
 	{
