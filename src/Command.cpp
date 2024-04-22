@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/16 09:46:43 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:19:11 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,25 +241,62 @@ void	Command::execPing(Request &rqt, SockInfo &serv)
 
 void Command::execTopic(Request &rqt, SockInfo &serv)
 {
-	// Si no hay msg -> ERR_NEEDMOREPARAMS
-	std::string channelName();
-	if (/*queda algo aparte del channel*/)
+	(void)rqt;
+	(void)serv;
+	std::cout << "msg received ->" << rqt.getMsg() << "<- en la pos " << rqt.getMsg().find("#") << std::endl;
+	if (rqt.getMsg().empty())
+	{
+		// Si no hay msg -> ERR_NEEDMOREPARAMS
+				
+	}
+	std::string channelName;
+	if (rqt.getMsg().find("#") == 0)
+		channelName = rqt.getMsg().substr(rqt.getMsg().find("#"), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
+	else{
+		// Error (no se cual)
+		return ;
+	}
+	std::cout << "el channel name es ->" << channelName << std::endl;
+	std::string restOfMsg = rqt.getMsg().substr(channelName.length(), std::string::npos);
+	Channel	*ch = serv.getChannelByName(channelName);
+	if (!restOfMsg.empty())
 	{
 		//	Cambia el topic del canal
-
-		//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
-		//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
-		//	Si el canal requiere permisos para que se cambie el topic -> ERR_CHANOPRIVSNEEDED
+		if (ch == NULL)
+		{
+			//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
+			return ;
+		}
+		if (!ch->clientIsInChannel(rqt.getClient()))
+		{
+			//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
+			return ;
+		}
+		if (!ch->getOpenTopic() && !ch->clientIsOperator(rqt.getClient()))
+		{
+			//	Si el canal requiere permisos para que se cambie el topic -> ERR_CHANOPRIVSNEEDED
+			return ;
+		}
 		//	Cambia el topic del canal
-		//	?? Devuelve un broadcast en el canal con el nuevo topico ??
+		//	?? Devuelve un broadcast en el canal con el nuevo topic ??
 	}
 	else
 	{
 		//	Devuelve el topic que tiene ese canal
-
-		//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
-		// Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
-		// Si no tiene topic el canal -> RPL_NOTOPIC
-		// Si tiene topic el canal -> RPL_TOPIC
+		if (ch == NULL)
+		{
+			//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
+			return ;
+		}
+		if (!ch->clientIsInChannel(rqt.getClient()))
+		{
+			//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
+			return ;
+		}
+		if (!ch->getTopic().empty()){
+			// Si tiene topic el canal -> RPL_TOPIC	
+		}else{
+			// Si no tiene topic el canal -> RPL_NOTOPIC
+		}
 	}
 }

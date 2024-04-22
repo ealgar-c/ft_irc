@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/16 09:30:01 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/17 14:16:49 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	Request::reply(SockInfo &sockInfo)
 		Command::execInvite(*this, sockInfo);
 	else if (this->_cmd == "PING")
 		Command::execPing(*this, sockInfo);
+	else if (this->_cmd == "TOPIC")
+		Command::execTopic(*this, sockInfo);
 }
 
 std::string	Request::getCmd(void) const
