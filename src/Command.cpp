@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 20:28:54 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:30:42 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,23 @@ bool	forbiddenChar(std::string str)
 
 void	Command::execNick(Request &rqt, SockInfo &serv)
 {
-	if (rqt.getMsg().empty())
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NONICKNAMEGIVEN, "", ":No nickname given");
-	else if (serv.searchNick(rqt.getMsg()) == true)
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NICKNAMEINUSE, "", ":Nickname is already in use");
-	else if (forbiddenChar(rqt.getMsg()) == true)
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_ERRONEUSNICKNAME, "", ":Erroneus nickname");
+	if (rqt.getMsg().empty()) {
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NONICKNAMEGIVEN, "", "");
+		reply.reply(rqt.getClient(), ":No nickname given");
+	}
+	else if (serv.searchNick(rqt.getMsg()) == true) {
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NICKNAMEINUSE, "", "");
+		reply.reply(rqt.getClient(), ":Nickname is already in use");
+	}
+	else if (forbiddenChar(rqt.getMsg()) == true) {
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_ERRONEUSNICKNAME, "", "");
+		reply.reply(rqt.getClient(), ":Erroneus nickname");
+	}
 	else
 		rqt.getClient()->setNickname(rqt.getMsg());
 }
 
-void	Command::execUser(Request &rqt, SockInfo &serv) // ✓
+void	Command::execUser(Request &rqt, SockInfo &serv)
 {
 	(void)serv;
 	rqt.getClient()->setUsername(rqt.getMsg().substr(0, rqt.getMsg().find(' ')));
@@ -124,7 +130,7 @@ bool	checkNumber(std::string str)
 	return (true);
 }
 
-void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
+void	Command::execMode(Request &rqt, SockInfo &serv)
 {
  	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
 	std::string	flag = rqt.getMsg().substr(ch.size() + 1, rqt.getMsg().size() - 1);
