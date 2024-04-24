@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 16:17:02 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:27:15 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ std::string	SockInfo::getHostname(void) const
 /**
  * @brief Creates the socket
  */
-void	SockInfo::createSocket(void) // tenemos un super socket
+void	SockInfo::createSocket(void)
 {
 	sockaddr_in	sockAddrConf;
 	int	opt = 1;
@@ -106,9 +106,13 @@ void	SockInfo::joinChannel(std::string newChannelName, std::string key, Client *
 	{
 		if ((*v_it)->getName() == newChannelName)
 		{
-			if (key == (*v_it)->getPassword())
+			if ((*v_it)->getThereIsPasswd() && key != (*v_it)->getPassword())
+			{
+				Response	reply(this->getHostname(), clt->getNickname(), ERR_BADCHANNELKEY, "", "");
+				reply.reply(clt, newChannelName + " :Cannot join channel (+k)");
+			}
+			else
 				(*v_it)->addClientToChannel(clt, *this);
-			// TODO: else: ERROR 475				--------------------
 			return ;
 		}
 	}
