@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/23 17:37:36 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:45:09 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,9 +176,9 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 			else if (flag == "-i")
 				serv.getChannelByName(ch)->setInviteMode(false);
 			else if (flag == "+t")
-				serv.getChannelByName(ch)->setOpenTopic(true);
-			else if (flag == "-t")
 				serv.getChannelByName(ch)->setOpenTopic(false);
+			else if (flag == "-t")
+				serv.getChannelByName(ch)->setOpenTopic(true);
 			else if (flag == "+k") {
 				if (msg.empty()) {
 					rcode = ERR_NEEDMOREPARAMS;
@@ -333,8 +333,8 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 			return ;
 		}
 		ch->setTopic(restOfMsg);
-		Response JoinReply(serv.getHostname(), "", "TOPIC " + ch->getName(), restOfMsg);
-		ch->broadcastChannel(rqt.getClient(), JoinReply, true);
+		Response JoinReply(rqt.getClient()->getNickname(), "", "TOPIC " + ch->getName(), restOfMsg);
+		ch->broadcastChannel(rqt.getClient(), JoinReply, false);
 		//	?? Devuelve un broadcast en el canal con el nuevo topic ??
 	}
 	else

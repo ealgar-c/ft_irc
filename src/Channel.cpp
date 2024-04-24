@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/23 17:30:04 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:31:38 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Channel::Channel(): _name("Default"), _thereIsPasswd(false), _passwd(""), _openTopic(false), _topic(""), _inviteMode(false), _userLimit(-1)
 {}
 
-Channel::Channel(std::string name, std::string password): _name(name), _thereIsPasswd(false), _passwd(password), _openTopic(false), _topic(""), _inviteMode(false), _userLimit(-1)
+Channel::Channel(std::string name, std::string password): _name(name), _thereIsPasswd(false), _passwd(password), _openTopic(true), _topic(""), _inviteMode(false), _userLimit(-1)
 {}
 
 Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _thereIsPasswd(toCopy._thereIsPasswd), _passwd(toCopy.getPassword()), _openTopic(toCopy._openTopic), _topic(toCopy.getTopic()), _inviteMode(toCopy.getInviteMode()), _userLimit(toCopy._userLimit), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
