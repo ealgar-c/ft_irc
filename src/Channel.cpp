@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 19:54:34 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:30:04 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	Channel::setOpenTopic(bool toSet)
 std::string	Channel::getTopic() const
 {
 	return (this->_topic);
+}
+
+void	Channel::setTopic(std::string newTopic)
+{
+	this->_topic = newTopic;
 }
 
 std::string	Channel::getName() const
@@ -136,7 +141,6 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	Response namelist(serv.getHostname(), newClient->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected), "");
 	Response endname(serv.getHostname(), newClient->getNickname(), RPL_ENDOFNAMES, "end of the list", "");
 	// enviar RPL_TOPIC o RPLY_NOTOPIC
-	// enviar RPL_NAMEREPLY
 	JoinReply.reply(newClient);
 	this->broadcastChannel(newClient, JoinReply, false);
 	namelist.reply(newClient);

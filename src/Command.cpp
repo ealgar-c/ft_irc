@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/22 15:27:18 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:37:36 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,29 +133,12 @@ bool	checkNumber(std::string str)
 	while (i != str.length())
 	{
 		if (std::isdigit(str[i]) == 0)
-		{
-			std::cout << "hello\n";
 			return (false);
-		}
 	}
 	return (true);
 }
 
-bool	checkNumber(std::string str)
-{
-	size_t i = 0;
-	while (i != str.length())
-	{
-		if (std::isdigit(str[i]) == 0)
-		{
-			std::cout << "hello\n";
-			return (false);
-		}
-	}
-	return (true);
-}
-
-void	Command::execMode(Request &rqt, SockInfo &serv) // TODO: ahora esto
+void	Command::execMode(Request &rqt, SockInfo &serv)
 {
  	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
 	std::string	flag = rqt.getMsg().substr(ch.size() + 1, rqt.getMsg().size() - 1);
@@ -331,19 +314,27 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 		if (ch == NULL)
 		{
 			//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
+			reply.reply(rqt.getClient());
 			return ;
 		}
 		if (!ch->clientIsInChannel(rqt.getClient()))
 		{
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, "", "");
+			reply.reply(rqt.getClient());
 			//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
 			return ;
 		}
 		if (!ch->getOpenTopic() && !ch->clientIsOperator(rqt.getClient()))
 		{
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_CHANOPRIVSNEEDED, "", "");
+			reply.reply(rqt.getClient());
 			//	Si el canal requiere permisos para que se cambie el topic -> ERR_CHANOPRIVSNEEDED
 			return ;
 		}
-		//	Cambia el topic del canal
+		ch->setTopic(restOfMsg);
+		Response JoinReply(serv.getHostname(), "", "TOPIC " + ch->getName(), restOfMsg);
+		ch->broadcastChannel(rqt.getClient(), JoinReply, true);
 		//	?? Devuelve un broadcast en el canal con el nuevo topic ??
 	}
 	else
@@ -352,15 +343,19 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 		if (ch == NULL)
 		{
 			//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
+			reply.reply(rqt.getClient());
 			return ;
 		}
 		if (!ch->clientIsInChannel(rqt.getClient()))
 		{
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, "", "");
+			reply.reply(rqt.getClient());
 			//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
 			return ;
 		}
 		if (!ch->getTopic().empty()){
-			// Si tiene topic el canal -> RPL_TOPIC	
+			// Si tiene topic el canal -> RPL_TOPIC
 		}else{
 			// Si no tiene topic el canal -> RPL_NOTOPIC
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 18:59:28 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:13:16 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class Channel
 		bool		getOpenTopic() const;
 		void		setOpenTopic(bool);
 		std::string	getTopic() const;
+		void		setTopic(std::string);
 		bool		getInviteMode() const;
 		void		setInviteMode(bool);
 		int			getUserLimit() const;
