@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/24 17:45:09 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:45:47 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	Command::execPass(Request &rqt, SockInfo &serv)
 	else
 	{
 		rqt.getClient()->changeStatus(DISCONNECTED);
-		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, "", ":Password incorrect");
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_PASSWDMISMATCH, ":Password incorrect", "");
 		reply.reply(rqt.getClient());
 	}
 }
@@ -97,19 +97,57 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 {
 	std::cout << "cmd -> " << rqt.getCmd() << " mensaje-> " << rqt.getMsg() << std::endl;
 	(void)serv;
+	if (rqt.getMsg().empty())
+	{
+		//	ERR_NORECIPIENT
+		return ;
+	}
 	if (rqt.getMsg().find(" ") != std::string::npos)
 	{
 		std::string to(rqt.getMsg().substr(0, rqt.getMsg().find(" ")));
 		std::string msg(rqt.getMsg().substr(rqt.getMsg().find(" ") + 1, rqt.getMsg().length() - rqt.getMsg().find(" ") + 1));
 		std::cout << "se ha recibido el mensaje ->" << msg << "<- enviado para ->" << to << "<-" << std::endl;
+		if (msg.empty())
+		{
+			//	ERR_NOTEXTTOSESND
+			return ;
+		}
+		if (to[0] == '#')
+		{
+			// va a un canal
+			if (serv.getChannelByName(to) != NULL)
+			{
+				Channel *chnl = serv.getChannelByName(to);
+				if (chnl->clientIsInChannel(rqt.getClient())){
+						Response resp(rqt.getClient()->getNickname(), rqt.getCmd(), to + " ", msg);
+						chnl->broadcastChannel(rqt.getClient(), resp, false);
+				} else{
+					//	ERR_NOTONCHANNEL
+				}
+			}
+		}
+		else
+		{
+			// va a una persona	
+			if (serv.searchNick(to)){
+					Response resp(rqt.getClient()->getNickname(), rqt.getCmd(), to + " ", msg);
+					resp.reply(serv.getClientByNick(to));
+			} else{
+				//	ERR_NOSUCHNICK
+			}
+		}
+	}
+	else
+	{
+		//	ERR_NOTEXTTOSEND
 	}
 	/*
 	
 		RESPUESTAS QUE DAR ->
-			ERR_NORECIPIENT                 ERR_NOTEXTTOSEND (no hay msg)
-        	ERR_CANNOTSENDTOCHAN            ERR_NOTOPLEVEL (no tienes permisos para mandar msgs?)
+			ERR_NORECIPIENT*                 ERR_NOTEXTTOSEND *(no hay msg)
+        	ERR_CANNOTSENDTOCHAN             ERR_NOTOPLEVEL (no tienes permisos para mandar msgs?)
         	ERR_WILDTOPLEVEL                ERR_TOOMANYTARGETS
-        	ERR_NOSUCHNICK (esa persona no existe)
+        	ERR_NOSUCHNICK *(esa persona no existe)
         	RPL_AWAY (Esta persona se ha ido (creo) pero eso no tenemos q hacerlo)
 
 	*/
@@ -140,6 +178,8 @@ bool	checkNumber(std::string str)
 
 void	Command::execMode(Request &rqt, SockInfo &serv)
 {
+	if (rqt.getMsg().find(' ') == std::string::npos)
+		return ;
  	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
 	std::string	flag = rqt.getMsg().substr(ch.size() + 1, rqt.getMsg().size() - 1);
 	flag = flag.substr(0, flag.find(' '));
