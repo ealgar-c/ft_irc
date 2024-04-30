@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/30 16:51:39 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:34:29 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,8 +205,6 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 		std::cout << "flag: ." << flag << "." << std::endl;
 		if (!msg.empty())
 			std::cout << "msg: ." << msg << "." << std::endl;
-		else
-			
 
 	try
 	{
@@ -232,6 +230,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 		}
 		else if (flag.size() == 2)
 		{
+			std::cout << "!\n";
 			if (flag == "+i") // Set Invite-only channel
 			{
 				if (!msg.empty())
@@ -270,12 +269,14 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 			}
 			else if (flag == "+k") // Set the channel key (password)
 			{
+				std::cout << "!!\n";
 				if (msg.empty())
 				{
 					rcode = ERR_NEEDMOREPARAMS;
 					throw CommandException(" :Not enough parameters");
 				}
 				serv.getChannelByName(ch)->setPassword(msg);
+				std::cout << "contraseña aplicada : '" << serv.getChannelByName(ch)->getPassword() << "'\n";
 				serv.getChannelByName(ch)->setThereIsPasswd(true);
 			}
 			else if (flag == "-k") // Remove the channel key (password)
