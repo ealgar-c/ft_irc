@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 20:03:53 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:58:41 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 	{
 		case 315:
 			this->_to = "315 " + to;
+			break;
+		case 331:
+			this->_to = "331 " + to;
 			break;
 		case 332:
 			this->_to = "332 " + to;

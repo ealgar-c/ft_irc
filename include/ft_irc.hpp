@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/15 19:45:37 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:59:24 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ enum C_STATUS{
 
 enum RESP_CODE{
 	RPL_ENDOFWHO = 315,
+	RPL_NOTOPIC = 331,
 	RPL_TOPIC = 332,
 	RPL_INVITING = 341,
 	RPL_WHOREPLY = 352,

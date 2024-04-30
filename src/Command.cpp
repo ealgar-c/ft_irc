@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/30 14:10:05 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:51:39 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 				if (!msg.empty())
 				{
 					rcode = ERR_INVALIDMODEPARAM;
-					throw CommandException("(+l) " + msg + " :invalid parameter");
+					throw CommandException("(+i) " + msg + " :invalid parameter");
 				}
 				serv.getChannelByName(ch)->setInviteMode(true);
 			}
@@ -246,7 +246,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 				if (!msg.empty())
 				{
 					rcode = ERR_INVALIDMODEPARAM;
-					throw CommandException("(+l) " + msg + " :invalid parameter");
+					throw CommandException("(-i) " + msg + " :invalid parameter");
 				}
 				serv.getChannelByName(ch)->setInviteMode(false);
 			}
@@ -255,18 +255,18 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 				if (!msg.empty())
 				{
 					rcode = ERR_INVALIDMODEPARAM;
-					throw CommandException("(+l) " + msg + " :invalid parameter");
+					throw CommandException("(+t) " + msg + " :invalid parameter");
 				}
-				serv.getChannelByName(ch)->setOpenTopic(true);
+				serv.getChannelByName(ch)->setOpenTopic(false);
 			}
 			else if (flag == "-t") // Remove the restrictions of the TOPIC command to channel operators
 			{
 				if (!msg.empty())
 				{
 					rcode = ERR_INVALIDMODEPARAM;
-					throw CommandException("(+l) " + msg + " :invalid parameter");
+					throw CommandException("(-t) " + msg + " :invalid parameter");
 				}
-				serv.getChannelByName(ch)->setOpenTopic(false);
+				serv.getChannelByName(ch)->setOpenTopic(true);
 			}
 			else if (flag == "+k") // Set the channel key (password)
 			{
@@ -283,7 +283,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 				if (!msg.empty())
 				{
 					rcode = ERR_INVALIDMODEPARAM;
-					throw CommandException("(+l) " + msg + " :invalid parameter");
+					throw CommandException("(-k) " + msg + " :invalid parameter");
 				}
 				serv.getChannelByName(ch)->setPassword("");
 				serv.getChannelByName(ch)->setThereIsPasswd(false);
@@ -328,7 +328,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 				if (!msg.empty())
 				{
 					rcode = ERR_INVALIDMODEPARAM;
-					throw CommandException("(+l) " + msg + " :invalid parameter");
+					throw CommandException("(-l) " + msg + " :invalid parameter");
 				}
 				serv.getChannelByName(ch)->setUserLimit(-1);
 			}
@@ -438,20 +438,20 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 		if (ch == NULL)
 		{
 			//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
-			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, ":" + channelName + " no such channel", "");
 			reply.reply(rqt.getClient());
 			return ;
 		}
 		if (!ch->clientIsInChannel(rqt.getClient()))
 		{
-			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, "", "");
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, ":You are not on that channel", "");
 			reply.reply(rqt.getClient());
 			//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
 			return ;
 		}
 		if (!ch->getOpenTopic() && !ch->clientIsOperator(rqt.getClient()))
 		{
-			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_CHANOPRIVSNEEDED, "", "");
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_CHANOPRIVSNEEDED, ch->getName() + " :You are not channel operator", "");
 			reply.reply(rqt.getClient());
 			//	Si el canal requiere permisos para que se cambie el topic -> ERR_CHANOPRIVSNEEDED
 			return ;
@@ -460,6 +460,9 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 		Response JoinReply(rqt.getClient()->getNickname(), "", "TOPIC " + ch->getName(), restOfMsg);
 		ch->broadcastChannel(rqt.getClient(), JoinReply, false);
 		//	?? Devuelve un broadcast en el canal con el nuevo topic ??
+		Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_TOPIC, ch->getName() + ch->getTopic(), "");
+		reply.reply(rqt.getClient());
+		return ;
 	}
 	else
 	{
@@ -467,21 +470,27 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 		if (ch == NULL)
 		{
 			//	Si no encuentra el canal -> ERR_NOSUCHCHANNEL
-			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL,  ":" + channelName + " no such channel", "");
 			reply.reply(rqt.getClient());
 			return ;
 		}
 		if (!ch->clientIsInChannel(rqt.getClient()))
 		{
-			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, "", "");
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, ":You are not on that channel", "");
 			reply.reply(rqt.getClient());
 			//	Si lo encuentra paro el cliente no esta en el canal -> ERR_NOTONCHANNEL
 			return ;
 		}
 		if (!ch->getTopic().empty()){
 			// Si tiene topic el canal -> RPL_TOPIC
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_TOPIC, ch->getName() + ch->getTopic(), "");
+			reply.reply(rqt.getClient());
+			return ;
 		}else{
 			// Si no tiene topic el canal -> RPL_NOTOPIC
+			Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), RPL_NOTOPIC, ch->getName() + " :no topic is set", "");
+			reply.reply(rqt.getClient());
+			return ;
 		}
 	}
 }
