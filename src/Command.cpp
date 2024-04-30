@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/26 16:56:43 by palucena         ###   ########.fr       */
+/*   Updated: 2024/04/29 14:46:47 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,6 +356,6 @@ void	execTopic(Request &rqt, SockInfo &serv)
 
 void	Command::execPing(Request &rqt, SockInfo &serv)
 {
-	Response reply(serv.getHostname(), rqt.getClient()->getNickname(), "PONG ", rqt.getMsg());
+	Response reply(serv.getHostname(), "PONG", rqt.getClient()->getNickname() + " ", rqt.getMsg());
 	reply.reply(rqt.getClient());
 }
