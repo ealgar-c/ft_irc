@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/14 19:59:32 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 18:29:15 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,5 @@ class	SockInfo
 			bool	searchNick(const std::string);
 			Client	*getClientByNick(std::string) const;
 			Channel	*getChannelByName(std::string) const;
+			void	setBot(void);
 };

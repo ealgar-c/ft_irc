@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/24 17:31:38 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:11:00 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,26 @@ std::vector<Client *>	Channel::getClientsConnected(void) const
 	return (this->_clientsConnected);
 }
 
-static std::string getNameList(std::vector<Client *> cltList)
+static bool vectorFind(std::vector<Client *> opList, Client * clt)
+{
+	for (std::vector<Client *>::iterator v_it = opList.begin(); v_it != opList.end(); v_it++)
+	{
+		if ((*v_it) == clt)
+			return true;
+	}
+	return false;
+}
+
+static std::string getNameList(std::vector<Client *> cltList, std::vector<Client *> opList)
 {
 	std::string list = ":";
 
 	for (std::vector<Client *>::const_iterator v_it = cltList.begin(); v_it != cltList.end(); v_it++)
 	{
-		list.append((*v_it)->getNickname() + " ");
+		if (!vectorFind(opList, (*v_it)))
+			list.append((*v_it)->getNickname() + " ");
+		else
+			list.append("@" + (*v_it)->getNickname() + " ");
 	}
 	return list;
 }
@@ -138,13 +151,19 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 		this->_operatorClients.push_back(newClient);
 	this->_clientsConnected.push_back(newClient);
 	Response JoinReply(newClient->getNickname(), "", "JOIN ", this->getName());
-	Response namelist(serv.getHostname(), newClient->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected), "");
-	Response endname(serv.getHostname(), newClient->getNickname(), RPL_ENDOFNAMES, "end of the list", "");
-	// enviar RPL_TOPIC o RPLY_NOTOPIC
 	JoinReply.reply(newClient);
+	// enviar RPL_TOPIC o RPLY_NOTOPIC
+	if (!this->getTopic().empty()){
+		// Si tiene topic el canal -> RPL_TOPIC
+		Response	reply(serv.getHostname(), newClient->getNickname(), RPL_TOPIC, this->getName() + this->getTopic(), "");
+		reply.reply(newClient);
+	}else{
+		// Si no tiene topic el canal -> RPL_NOTOPIC
+		Response	reply(serv.getHostname(), newClient->getNickname(), RPL_NOTOPIC, this->getName() + " :no topic is set", "");
+		reply.reply(newClient);
+	}
 	this->broadcastChannel(newClient, JoinReply, false);
-	namelist.reply(newClient);
-	endname.reply(newClient);
+	this->broadcastNamelist(newClient, serv);
 }
 
 bool	Channel::clientIsInChannel(const Client *clt) const
@@ -204,5 +223,17 @@ void	Channel::broadcastChannel(Client *newClt, Response &resp, bool itself) cons
 		if ((*v_it) == newClt && !itself)
 			continue ;
 		resp.reply((*v_it));
+	}
+}
+
+void	Channel::broadcastNamelist(Client *clt, SockInfo &serv) const
+{
+	(void)clt;
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
+		Response namelist(serv.getHostname(), (*v_it)->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected, this->_operatorClients), "");
+		Response endname(serv.getHostname(), (*v_it)->getNickname(), RPL_ENDOFNAMES, "end of the list", "");
+		namelist.reply((*v_it));
+		endname.reply((*v_it));
 	}
 }

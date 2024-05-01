@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/30 16:51:39 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:13:33 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,28 +151,6 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	{
 		//	ERR_NOTEXTTOSEND
 	}
-	/*
-	
-		RESPUESTAS QUE DAR ->
-			ERR_NORECIPIENT*                 ERR_NOTEXTTOSEND *(no hay msg)
-        	ERR_CANNOTSENDTOCHAN             ERR_NOTOPLEVEL (no tienes permisos para mandar msgs?)
-        	ERR_WILDTOPLEVEL                ERR_TOOMANYTARGETS
-        	ERR_NOSUCHNICK *(esa persona no existe)
-        	RPL_AWAY (Esta persona se ha ido (creo) pero eso no tenemos q hacerlo)
-
-	*/
-	/* 
-	std::string dest;
-	if (rqt.getMsg().find("#") != std::string::npos)
-		dest = rqt.getMsg().substr(rqt.getMsg().find("#"), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
-	else
-		dest = rqt.getMsg().substr(rqt.getMsg().find(" " + 1), rqt.getMsg().find(" ") - rqt.getMsg().find("#"));
-	std::string finalMsg = rqt.getMsg().erase(0, dest.length() + 1);
-	std::cout << "dest -> (" << dest << ")" << std::endl;
-	std::cout << "final -> (" << finalMsg << ")" << std::endl;
-	Response resp(rqt.getClient()->getNickname(), rqt.getCmd(), dest + " ", finalMsg);
-	sockInfo.getChannelByName(dest)->broadcastChannel(rqt.getClient(), resp, false);
-	*/
 }
 
 bool	checkNumber(std::string str)
@@ -205,9 +183,6 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 		std::cout << "flag: ." << flag << "." << std::endl;
 		if (!msg.empty())
 			std::cout << "msg: ." << msg << "." << std::endl;
-		else
-			
-
 	try
 	{
 		if (rqt.getMsg().empty() || flag.empty())
@@ -290,7 +265,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 			}
 			else if (flag == "+o") // Give channel operator privilege
 			{
-				if (!msg.empty())
+				if (msg.empty())
 				{
 					rcode = ERR_NEEDMOREPARAMS;
 					throw CommandException(" :Not enough parameters");
@@ -400,12 +375,6 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 	}
 }
 
-void	execTopic(Request &rqt, SockInfo &serv)
-{
-	(void)rqt;
-	(void)serv;
-}
-
 void	Command::execPing(Request &rqt, SockInfo &serv)
 {
 	Response reply(serv.getHostname(), "PONG", rqt.getClient()->getNickname() + " ", rqt.getMsg());
@@ -414,8 +383,6 @@ void	Command::execPing(Request &rqt, SockInfo &serv)
 
 void Command::execTopic(Request &rqt, SockInfo &serv)
 {
-	(void)rqt;
-	(void)serv;
 	std::cout << "msg received ->" << rqt.getMsg() << "<- en la pos " << rqt.getMsg().find("#") << std::endl;
 	if (rqt.getMsg().empty())
 	{
