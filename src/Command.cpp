@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:29:13 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:30:55 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,29 +125,6 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 			key = rqt.getMsg().substr(newChannelName.size() + 1, rqt.getMsg().size() - 1);
 		serv.joinChannel(newChannelName, key, rqt.getClient());
 	}
-}
-
-std::string	getRdnBotMsg(Client *clt)
-{
-	switch (std::rand() % 5)
-	{
-		case 0:
-			return (":Hola " + clt->getNickname() + " soy un bot");
-			break ;
-		case 1:
-			return (":Has perdido");
-			break ;
-		case 2:
-			return (":Sabias que la superficie de Kazajistan es de 2,725 millones de km cuadrados?");
-			break ;
-		case 3:
-			return (":En un futuro podré mantener conversaciones reales, de momento te conformas con esto");
-			break ;
-		case 4:
-			return (":Mi creador tiene poca originalidad lo siento pero no hay mucha variedad");
-			break ;
-	}
-	return ("");
 }
 
 std::string	getRdnBotMsg(Client *clt)
