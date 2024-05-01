@@ -6,13 +6,14 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:43:02 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:55:05 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
-SockInfo::SockInfo(char **av): _hostname(HOST){
+SockInfo::SockInfo(char **av): _hostname(HOST)
+{
 	std::string	passwd_str(av[2]);
 	this->_port = atoi(av[1]);
 	this->_passwd = av[2];
@@ -47,15 +48,18 @@ void	SockInfo::createSocket(void)
 	sockAddrConf.sin_port = htons(this->_port);
 	sockAddrConf.sin_addr.s_addr = INADDR_ANY;
 	sockAddrConf.sin_family = AF_INET;
-	if (setsockopt(this->_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1){
+	if (setsockopt(this->_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	{
 		close(this->_sockfd);
 		printError(ERR_SETSOCKOPT);
 	}
-	if (bind(this->_sockfd, (sockaddr *)&sockAddrConf, sizeof(sockAddrConf)) == -1){
+	if (bind(this->_sockfd, (sockaddr *)&sockAddrConf, sizeof(sockAddrConf)) == -1)
+	{
 		close(this->_sockfd);
 		printError(ERR_BINDSOCK);
 	}
-	if (listen(this->_sockfd, CONST_MAXSCONN) == -1){
+	if (listen(this->_sockfd, CONST_MAXSCONN) == -1)
+	{
 		close(this->_sockfd);
 		printError(ERR_SOCKLISTEN);
 	}
@@ -96,16 +100,21 @@ void	SockInfo::readClientInfo(void)
 void	SockInfo::joinChannel(std::string newChannelName, std::string key, Client *clt)
 {
 	std::cout << "name of the channel to join: " << newChannelName << std::endl;
-	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++){
-		if ((*v_it)->getName() == newChannelName){
+	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+	{
+		if ((*v_it)->getName() == newChannelName)
+		{
 			if ((*v_it)->getThereIsPasswd() && (key.empty() || key != (*v_it)->getPassword())){
 				Response	reply(this->getHostname(), clt->getNickname(), ERR_BADCHANNELKEY, "", "");
 				reply.reply(clt, newChannelName + " :Cannot join channel (+k)");
-			}else if ((*v_it)->getUserLimit() >= 0 && (*v_it)->getClientsConnected().size() ==  static_cast<size_t>((*v_it)->getUserLimit())){
+			}
+			else if ((*v_it)->getUserLimit() >= 0 && (*v_it)->getClientsConnected().size() ==  static_cast<size_t>((*v_it)->getUserLimit()))
+			{
 				std::cout << "Entra\n";
 				Response	reply(this->getHostname(), clt->getNickname(), ERR_CHANNELISFULL, "", "");
 				reply.reply(clt, newChannelName + " :Cannot join channel (+l)");
-			}else
+			}
+			else
 				(*v_it)->addClientToChannel(clt, *this);
 			return ;
 		}
@@ -122,20 +131,25 @@ void	SockInfo::readRequestFromClient(Client *clt)
 	char	buf[1024];
 
 	memset(buf, 0, 1024);
-	while (1){
+	while (1)
+	{
 		readfd = recv(clt->getClientFd(), buf, 1024, 0);
-		if (!readfd){
+		if (!readfd)
+		{
 			clt->changeStatus(DISCONNECTED);
 			return ;
-		}else if (readfd < 0)
+		}
+		else if (readfd < 0)
 			printError("");
 		clt->_messagebuffer.append(buf);
-		if(clt->_messagebuffer.find("\n") != std::string::npos){
+		if(clt->_messagebuffer.find("\n") != std::string::npos)
+		{
 			if (clt->_messagebuffer.find("WHO") == std::string::npos)
 				std::cout << "[DEBUG] message read from client " << clt->getClientFd() << ": " << std::endl << clt->_messagebuffer << std::endl;
 			std::stringstream	ss(clt->_messagebuffer);
 			std::string			cmd;
-			while (std::getline(ss, cmd, '\n')){
+			while (std::getline(ss, cmd, '\n'))
+			{
 				Request	rqt(cmd.substr(0, cmd.length() - 1), clt);
 				rqt.reply(*this);
 			}
@@ -147,7 +161,8 @@ void	SockInfo::readRequestFromClient(Client *clt)
 
 static Client	*searchClient(std::vector<Client *>clients, int fd)
 {
-	for(std::vector<Client *>::const_iterator v_it= clients.begin(); v_it != clients.end(); v_it++){
+	for(std::vector<Client *>::const_iterator v_it= clients.begin(); v_it != clients.end(); v_it++)
+	{
 		if ((*v_it)->getClientFd() == fd)
 			return (*v_it);
 	}
@@ -157,19 +172,22 @@ static Client	*searchClient(std::vector<Client *>clients, int fd)
 void	SockInfo::deleteClient(Client *clt)
 {
 	int i = 0;
-	for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin();v_it != this->_fds.end(); v_it++){
+	for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin();v_it != this->_fds.end(); v_it++)
+	{
 		if ((*v_it).fd == clt->getClientFd())
 			break;
 		i++;
 	}
 	this->_fds.erase(this->_fds.begin() + i);
 	i = 0;
-	for (std::vector<Client *>::const_iterator v_it = this->_clients.begin();v_it != this->_clients.end(); v_it++){
+	for (std::vector<Client *>::const_iterator v_it = this->_clients.begin();v_it != this->_clients.end(); v_it++)
+	{
 		if (*v_it == clt)
 			break;
 		i++;
 	}
-	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++){
+	for (std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+	{
 		if ((*v_it)->clientIsInChannel(clt))
 			(*v_it)->removeClientFromChannel(clt);
 	}
@@ -186,16 +204,22 @@ void	SockInfo::deleteClient(Client *clt)
 void	SockInfo::runServ(void)
 {
 	this->_fds.push_back((struct pollfd){this->_sockfd, POLLIN, 0});
-	while (poll(&this->_fds[0], this->_fds.size(), -1) > 0){
-		for (size_t i = 0; i != this->_fds.size(); i++){
-			if (this->_fds[i].fd == this->_sockfd && this->_fds[i].revents & POLLIN){
+	while (poll(&this->_fds[0], this->_fds.size(), -1) > 0)
+	{
+		for (size_t i = 0; i != this->_fds.size(); i++)
+		{
+			if (this->_fds[i].fd == this->_sockfd && this->_fds[i].revents & POLLIN)
+			{
 				this->createClient();
 				this->readClientInfo();
-			}else if (this->_fds[i].revents & POLLIN)
+			}
+			else if (this->_fds[i].revents & POLLIN)
 				this->readRequestFromClient(searchClient(this->_clients, this->_fds[i].fd));
 		}
-		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++){
-			if (searchClient(this->_clients, v_it->fd) && searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED){
+		for (std::vector<struct pollfd>::const_iterator v_it = this->_fds.begin(); v_it != this->_fds.end(); v_it++)
+		{
+			if (searchClient(this->_clients, v_it->fd) && searchClient(this->_clients, v_it->fd)->getStatus() == DISCONNECTED)
+			{
 				this->deleteClient(searchClient(this->_clients, v_it->fd));
 				v_it = this->_fds.begin();
 			}
@@ -219,7 +243,8 @@ bool	SockInfo::authenticate(const std::string toCheck)
  */
 bool	SockInfo::searchNick(const std::string str)
 {
-	for (size_t i = 0; i < this->_clients.size(); i++){
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
 		if (this->_clients[i]->getNickname() == str)
 			return (true);
 	}
@@ -228,7 +253,8 @@ bool	SockInfo::searchNick(const std::string str)
 
 Client	*SockInfo::getClientByNick(std::string clientNick) const
 {
-	for(std::vector<Client *>::const_iterator v_it = this->_clients.begin(); v_it != this->_clients.end(); v_it++){
+	for(std::vector<Client *>::const_iterator v_it = this->_clients.begin(); v_it != this->_clients.end(); v_it++)
+	{
 		if ((*v_it)->getNickname() == clientNick)
 			return (*v_it);
 	}
@@ -237,7 +263,8 @@ Client	*SockInfo::getClientByNick(std::string clientNick) const
 
 Channel	*SockInfo::getChannelByName(std::string ChannelName) const
 {
-	for(std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++){
+	for(std::vector<Channel *>::const_iterator v_it = this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+	{
 		if ((*v_it)->getName() == ChannelName)
 			return (*v_it);
 	}

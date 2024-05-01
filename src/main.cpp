@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:39:14 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:52:25 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@ void	printError(std::string err)
 {
 	std::cerr << "Error:\n\t" << err << std::endl;
 	if (errno != 0)
-		std::cout << " errno: " << errno << ", "<< strerror(errno) << std::endl;
+		std::cout << " errno: " << errno << ", " << strerror(errno) << std::endl;
 	exit(1);
 }
 
 void	signalOverride(int receivedsig)
 {
-	if (receivedsig == SIGINT){
+	if (receivedsig == SIGINT)
+	{
 		std::cout << "server closed" << std::endl;
-		exit (0);
-	}	
+		exit(0);
+	}
 }
 
 void	leakschecker(void)
@@ -42,7 +43,7 @@ int	main(int ac, char **av)
 		printError(ERR_PORTARG);
 	if (strcmp(av[2], "") == 0)
 		printError(ERR_EMPTYPWD);
-	SockInfo	sock(av);
+	SockInfo sock(av);
 	signal(SIGINT, signalOverride);
 	std::srand(std::time(NULL));
 	sock.createSocket();

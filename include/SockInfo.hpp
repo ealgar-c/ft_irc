@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:42 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 19:22:40 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:57:12 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,9 @@ class	SockInfo
 		std::vector<Channel *>		_channels;
 		std::string					_hostname;
 	public:
-		// Constructor
 			SockInfo(char **);
-		// Destructor
 			~SockInfo();
-		//	overloads
-		//	getters
 		std::string	getHostname(void) const;
-		//	methods
 			void	createSocket();
 			void	runServ();
 			void	createClient();

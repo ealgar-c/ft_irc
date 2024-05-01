@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:40:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:53:26 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ Response::Response(std::string from, std::string to, std::string cmd, std::strin
 
 Response::Response(std::string from, std::string to, RESP_CODE rcode, std::string cmd, std::string msg):_from(from), _cmd(cmd), _msg(msg)
 {
-	switch (rcode){
+	switch (rcode)
+	{
 		case 001:
 			this->_to = "001 " + to;
 			break;
@@ -101,7 +102,7 @@ Response::Response(const Response &toCopy)
 	(void)toCopy;
 }
 
-Response::~Response(){}
+Response::~Response() {}
 
 Response &Response::operator=(const Response &toEqual)
 {

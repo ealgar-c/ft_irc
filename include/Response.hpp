@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:11:29 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/15 17:58:06 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:57:04 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ class Response
 		std::string	_finalResponse;
 		RESP_TYPE	_rtype;
 	public:
-		//	STANDARD RESPONSE CONSTRUCTOR
 		Response(std::string from, std::string to, std::string cmd, std::string msg);
-		//	SERVER RESPONSE CONSTRUCTOR
 		Response(std::string from, std::string to, RESP_CODE rcode, std::string cmd, std::string msg);
 		Response(const Response &);
 		~Response();
@@ -42,9 +40,6 @@ class Response
 		void	setTo(std::string);
 		void	setCmd(std::string);
 		void	setMsg(std::string);
-		//	void	setRtype();
 		void	reply(Client *clt);
-		// void	reply(Client *clt, Channel &, std::string);
 		void	reply(Client *, std::string);
-		//	void	generateResponse(std::string);
 };

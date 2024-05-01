@@ -6,27 +6,32 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:32:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:50:30 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
 Channel::Channel(): _name("Default"), _thereIsPasswd(false), _passwd(""), _openTopic(false), _topic(""), _inviteMode(false), _userLimit(-1)
-{}
+{
+}
 
 Channel::Channel(std::string name, std::string password): _name(name), _thereIsPasswd(false), _passwd(password), _openTopic(true), _topic(""), _inviteMode(false), _userLimit(-1)
-{}
+{
+}
 
 Channel::Channel(const Channel &toCopy): _name(toCopy.getName()), _thereIsPasswd(toCopy._thereIsPasswd), _passwd(toCopy.getPassword()), _openTopic(toCopy._openTopic), _topic(toCopy.getTopic()), _inviteMode(toCopy.getInviteMode()), _userLimit(toCopy._userLimit), _operatorClients(toCopy._operatorClients), _clientsConnected(toCopy._clientsConnected)
-{}
+{
+}
 
 Channel::~Channel()
-{}
-
-Channel &Channel::operator=(const Channel &toEqual)
 {
-	if (this != &toEqual){
+}
+
+Channel	&Channel::operator=(const Channel &toEqual)
+{
+	if (this != &toEqual)
+	{
 		this->_name = toEqual.getName();
 		this->_thereIsPasswd = toEqual.getThereIsPasswd();
 		this->_clientsConnected = toEqual._clientsConnected;
@@ -110,20 +115,22 @@ std::vector<Client *>	Channel::getClientsConnected(void) const
 	return (this->_clientsConnected);
 }
 
-static bool vectorFind(std::vector<Client *> opList, Client * clt)
+static bool	vectorFind(std::vector<Client *> opList, Client *clt)
 {
-	for (std::vector<Client *>::iterator v_it = opList.begin(); v_it != opList.end(); v_it++){
+	for (std::vector<Client *>::iterator v_it = opList.begin(); v_it != opList.end(); v_it++)
+	{
 		if ((*v_it) == clt)
 			return true;
 	}
 	return false;
 }
 
-static std::string getNameList(std::vector<Client *> cltList, std::vector<Client *> opList)
+static std::string	getNameList(std::vector<Client *> cltList, std::vector<Client *> opList)
 {
 	std::string list = ":";
 
-	for (std::vector<Client *>::const_iterator v_it = cltList.begin(); v_it != cltList.end(); v_it++){
+	for (std::vector<Client *>::const_iterator v_it = cltList.begin(); v_it != cltList.end(); v_it++)
+	{
 		if (!vectorFind(opList, (*v_it)))
 			list.append((*v_it)->getNickname() + " ");
 		else
@@ -134,11 +141,13 @@ static std::string getNameList(std::vector<Client *> cltList, std::vector<Client
 
 void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 {
-	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++){
-		if (*v_it == newClient){
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
+		if (*v_it == newClient)
+		{
 			Response reply(serv.getHostname(), newClient->getNickname(), ERR_USERONCHANNEL, "", ":is already on channel");
 			reply.reply(newClient);
-			return ;
+			return;
 		}
 	}
 	// comprobar contraseña
@@ -148,13 +157,16 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 	Response JoinReply(newClient->getNickname(), "", "JOIN ", this->getName());
 	JoinReply.reply(newClient);
 	// enviar RPL_TOPIC o RPLY_NOTOPIC
-	if (!this->getTopic().empty()){
+	if (!this->getTopic().empty())
+	{
 		// Si tiene topic el canal -> RPL_TOPIC
-		Response	reply(serv.getHostname(), newClient->getNickname(), RPL_TOPIC, this->getName() + this->getTopic(), "");
+		Response reply(serv.getHostname(), newClient->getNickname(), RPL_TOPIC, this->getName() + this->getTopic(), "");
 		reply.reply(newClient);
-	}else{
+	}
+	else
+	{
 		// Si no tiene topic el canal -> RPL_NOTOPIC
-		Response	reply(serv.getHostname(), newClient->getNickname(), RPL_NOTOPIC, this->getName() + " :no topic is set", "");
+		Response reply(serv.getHostname(), newClient->getNickname(), RPL_NOTOPIC, this->getName() + " :no topic is set", "");
 		reply.reply(newClient);
 	}
 	this->broadcastChannel(newClient, JoinReply, false);
@@ -163,7 +175,8 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 
 bool	Channel::clientIsInChannel(const Client *clt) const
 {
-	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end();v_it++){
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
 		if ((*v_it) == clt)
 			return true;
 	}
@@ -172,10 +185,11 @@ bool	Channel::clientIsInChannel(const Client *clt) const
 
 void	Channel::removeClientFromChannel(const Client *clt)
 {
-	int	i = 0;
-	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end();v_it++){
+	int i = 0;
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
 		if ((*v_it) == clt)
-			break ;
+			break;
 		i++;
 	}
 	this->_clientsConnected.erase(this->_clientsConnected.begin() + i);
@@ -183,7 +197,8 @@ void	Channel::removeClientFromChannel(const Client *clt)
 
 bool	Channel::clientIsOperator(const Client *clt) const
 {
-	for(std::vector<Client *>::const_iterator v_it = this->_operatorClients.begin(); v_it != this->_operatorClients.end(); v_it++){
+	for (std::vector<Client *>::const_iterator v_it = this->_operatorClients.begin(); v_it != this->_operatorClients.end(); v_it++)
+	{
 		if (*v_it == clt)
 			return true;
 	}
@@ -192,10 +207,11 @@ bool	Channel::clientIsOperator(const Client *clt) const
 
 void	Channel::removeClientAsOperator(const Client *clt)
 {
-	int	i = 0;
-	for (std::vector<Client *>::const_iterator v_it = this->_operatorClients.begin(); v_it != this->_operatorClients.end();v_it++){
+	int i = 0;
+	for (std::vector<Client *>::const_iterator v_it = this->_operatorClients.begin(); v_it != this->_operatorClients.end(); v_it++)
+	{
 		if ((*v_it) == clt)
-			break ;
+			break;
 		i++;
 	}
 	this->_operatorClients.erase(this->_operatorClients.begin() + i);
@@ -209,9 +225,10 @@ void	Channel::addOperator(Client *clt)
 
 void	Channel::broadcastChannel(Client *newClt, Response &resp, bool itself) const
 {
-	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++){
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
 		if ((*v_it) == newClt && !itself)
-			continue ;
+			continue;
 		if ((*v_it)->getNickname() != "Kaladin")
 			resp.reply((*v_it));
 	}
@@ -220,10 +237,12 @@ void	Channel::broadcastChannel(Client *newClt, Response &resp, bool itself) cons
 void	Channel::broadcastNamelist(Client *clt, SockInfo &serv) const
 {
 	(void)clt;
-	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++){
+	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
+	{
 		Response namelist(serv.getHostname(), (*v_it)->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected, this->_operatorClients), "");
 		Response endname(serv.getHostname(), (*v_it)->getNickname() + " " + this->getName(), RPL_ENDOFNAMES, "end of the list", "");
-		if ((*v_it)->getNickname() != "Kaladin"){
+		if ((*v_it)->getNickname() != "Kaladin")
+		{
 			namelist.reply((*v_it));
 			endname.reply((*v_it));
 		}

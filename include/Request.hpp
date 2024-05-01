@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 16:38:51 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/09 19:00:39 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:56:36 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,16 @@ class Request {
 		std::string	_msg;
 		Client		*_client;
 	public:
-		// Constructors
 			Request();
 			Request(const Request &);
 			Request(std::string, Client *);
-
-		// Destructor
 			~Request();
-
-		// Operator overload
 			Request	&operator=(const Request &);
-
-		// Members
-			void		reply(SockInfo &);
 			std::string	getCmd(void) const;
 			std::string	getMsg(void) const;
 			Client		*getClient(void) const;
 			void		setCmd(const std::string);
 			void		setMsg(const std::string);
 			void		setClient(Client *);
+			void		reply(SockInfo &);
 };
