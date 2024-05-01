@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:23:52 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:30:02 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 		case 464:
 			this->_to = "464 " + to;
 			break;
+		case 471:
+			this->_to = "471 " + to;
 		case 472:
 			this->_to = "472 " + to;
 			break;

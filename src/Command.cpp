@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:23:07 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:29:13 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,35 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 		Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_INVITEONLYCHAN, "", "");
 		reply.reply(rqt.getClient(), newChannelName + " :Cannot join channel (+i)");
 	}
-	else
-		serv.joinChannel(newChannelName, rqt.getMsg().substr(newChannelName.size() - 1, rqt.getMsg().size() - 1), rqt.getClient());
+	else {
+		std::string	key;
+		if (rqt.getMsg().find(' ') != std::string::npos)
+			key = rqt.getMsg().substr(newChannelName.size() + 1, rqt.getMsg().size() - 1);
+		serv.joinChannel(newChannelName, key, rqt.getClient());
+	}
+}
+
+std::string	getRdnBotMsg(Client *clt)
+{
+	switch (std::rand() % 5)
+	{
+		case 0:
+			return (":Hola " + clt->getNickname() + " soy un bot");
+			break ;
+		case 1:
+			return (":Has perdido");
+			break ;
+		case 2:
+			return (":Sabias que la superficie de Kazajistan es de 2,725 millones de km cuadrados?");
+			break ;
+		case 3:
+			return (":En un futuro podré mantener conversaciones reales, de momento te conformas con esto");
+			break ;
+		case 4:
+			return (":Mi creador tiene poca originalidad lo siento pero no hay mucha variedad");
+			break ;
+	}
+	return ("");
 }
 
 std::string	getRdnBotMsg(Client *clt)
@@ -159,6 +186,7 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	{
 		std::string to(rqt.getMsg().substr(0, rqt.getMsg().find(" ")));
 		std::string msg(rqt.getMsg().substr(rqt.getMsg().find(" ") + 1, rqt.getMsg().length() - rqt.getMsg().find(" ") + 1));
+
 		if (msg.empty())
 		{
 			//	ERR_NOTEXTTOSESND
@@ -208,7 +236,7 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 bool	checkNumber(std::string str)
 {
 	size_t i = 0;
-	while (i != str.length())
+	while (i != str.size() - 1)
 	{
 		if (std::isdigit(str[i]) == 0)
 			return (false);
@@ -231,6 +259,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 		msg = rqt.getMsg().substr(ch.size() + flag.size() + 2, rqt.getMsg().size() - 1);
 	}
 	RESP_CODE	rcode;
+
 	try
 	{
 		if (rqt.getMsg().empty() || flag.empty())
@@ -398,6 +427,7 @@ void	Command::execPart(Request &rqt, SockInfo &serv)
 		serv.getChannelByName(ch)->removeClientFromChannel(rqt.getClient());
 		Response partReply(rqt.getClient()->getNickname(), "", "PART ", serv.getChannelByName(ch)->getName() + reason);
 		partReply.reply(rqt.getClient());
+		serv.getChannelByName(ch)->broadcastChannel(rqt.getClient(), partReply, false);
 	}
 }
 
@@ -409,11 +439,11 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 
 	try
 	{
-		if (rqt.getMsg().empty())
+		if (rqt.getMsg().empty() || rqt.getMsg().find(' ') == std::string::npos)
 			throw CommandException("INVITE :Not enough parameters.");
 
 		std::string	nick = rqt.getMsg().substr(0, rqt.getMsg().find(" "));
-		std::string	ch = rqt.getMsg().substr(nick.size() - 1, rqt.getMsg().size() - 1);
+		std::string	ch = rqt.getMsg().substr(nick.size() + 1, rqt.getMsg().size() - 1);
 
 		if (nick.empty() || ch.empty())
 		{
