@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 19:20:03 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:37:50 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,7 @@ void	SockInfo::setBot(void)
 	this->_clients.push_back(newClient);
 	joinChannel("#bot", "", newClient);
 	Channel *botch = this->getChannelByName("#bot");
-	botch->setTopic(":Vida antes que muerte, fuerza antes que debilidad, viaje antes que destino");
+	botch->setTopic(" :Vida antes que muerte, fuerza antes que debilidad, viaje antes que destino");
 	botch->setOpenTopic(false);
 	
 }

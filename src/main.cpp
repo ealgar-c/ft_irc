@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/01 16:50:27 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 20:45:24 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int ac, char **av)
 		printError(ERR_EMPTYPWD);
 	SockInfo	sock(av);
 	signal(SIGINT, signalOverride);
+	std::srand(std::time(NULL));
 	sock.createSocket();
 	std::cout << "[INFO] socket created" << std::endl;
 	sock.runServ();

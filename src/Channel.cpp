@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 19:22:45 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:01:34 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,8 @@ void	Channel::broadcastChannel(Client *newClt, Response &resp, bool itself) cons
 	{
 		if ((*v_it) == newClt && !itself)
 			continue ;
-		resp.reply((*v_it));
+		if ((*v_it)->getNickname() != "Kaladin")
+			resp.reply((*v_it));
 	}
 }
 
@@ -232,8 +233,11 @@ void	Channel::broadcastNamelist(Client *clt, SockInfo &serv) const
 	for (std::vector<Client *>::const_iterator v_it = this->_clientsConnected.begin(); v_it != this->_clientsConnected.end(); v_it++)
 	{
 		Response namelist(serv.getHostname(), (*v_it)->getNickname() + " = " + this->getName(), RPL_NAMREPLY, getNameList(this->_clientsConnected, this->_operatorClients), "");
-		Response endname(serv.getHostname(), (*v_it)->getNickname(), RPL_ENDOFNAMES, "end of the list", "");
-		namelist.reply((*v_it));
-		endname.reply((*v_it));
+		Response endname(serv.getHostname(), (*v_it)->getNickname() + " " + this->getName(), RPL_ENDOFNAMES, "end of the list", "");
+		if ((*v_it)->getNickname() != "Kaladin")
+		{
+			namelist.reply((*v_it));
+			endname.reply((*v_it));
+		}
 	}
 }

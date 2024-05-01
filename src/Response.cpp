@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/30 15:58:41 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:23:52 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 {
 	switch (rcode)
 	{
+		case 001:
+			this->_to = "001 " + to;
+			break;
 		case 315:
 			this->_to = "315 " + to;
 			break;
@@ -127,12 +130,6 @@ void	Response::setMsg(std::string msg)
 {
 	this->_msg = msg;
 }
-
-
-/* void	Response::generateResponse(std::string request)
-{
-	
-} */
 
 void	Response::reply(Client *clt)
 {

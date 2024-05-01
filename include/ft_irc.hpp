@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:27:15 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/30 15:59:24 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 20:45:02 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # include <vector>
 # include <sstream>
 # include <exception>
+# include <ctime>
 
 /************************************
  _____ _____ _   _ _____ _____ _____ 
@@ -75,6 +76,7 @@ enum C_STATUS{
 };
 
 enum RESP_CODE{
+	RPL_WELCOME = 001,
 	RPL_ENDOFWHO = 315,
 	RPL_NOTOPIC = 331,
 	RPL_TOPIC = 332,
