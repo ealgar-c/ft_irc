@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SockInfo.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 19:20:03 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 20:32:03 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,16 @@ void	SockInfo::joinChannel(std::string newChannelName, std::string key, Client *
 	{
 		if ((*v_it)->getName() == newChannelName)
 		{
-			if ((*v_it)->getThereIsPasswd() && key != (*v_it)->getPassword())
+			if ((*v_it)->getThereIsPasswd() && (key.empty() || key != (*v_it)->getPassword()))
 			{
 				Response	reply(this->getHostname(), clt->getNickname(), ERR_BADCHANNELKEY, "", "");
 				reply.reply(clt, newChannelName + " :Cannot join channel (+k)");
+			}
+			else if ((*v_it)->getUserLimit() >= 0 && (*v_it)->getClientsConnected().size() ==  static_cast<size_t>((*v_it)->getUserLimit()))
+			{
+				std::cout << "Entra\n";
+				Response	reply(this->getHostname(), clt->getNickname(), ERR_CHANNELISFULL, "", "");
+				reply.reply(clt, newChannelName + " :Cannot join channel (+l)");
 			}
 			else
 				(*v_it)->addClientToChannel(clt, *this);

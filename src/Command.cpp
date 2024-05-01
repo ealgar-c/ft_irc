@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 19:23:38 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:23:14 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,16 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 		Response	reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_INVITEONLYCHAN, "", "");
 		reply.reply(rqt.getClient(), newChannelName + " :Cannot join channel (+i)");
 	}
-	else
-		serv.joinChannel(newChannelName, rqt.getMsg().substr(newChannelName.size() - 1, rqt.getMsg().size() - 1), rqt.getClient());
+	else {
+		std::string	key;
+		if (rqt.getMsg().find(' ') != std::string::npos)
+			key = rqt.getMsg().substr(newChannelName.size() + 1, rqt.getMsg().size() - 1);
+		serv.joinChannel(newChannelName, key, rqt.getClient());
+	}
 }
 
 void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 {
-	std::cout << "cmd -> " << rqt.getCmd() << " mensaje-> " << rqt.getMsg() << std::endl;
 	(void)serv;
 	if (rqt.getMsg().empty())
 	{
@@ -116,7 +119,7 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	{
 		std::string to(rqt.getMsg().substr(0, rqt.getMsg().find(" ")));
 		std::string msg(rqt.getMsg().substr(rqt.getMsg().find(" ") + 1, rqt.getMsg().length() - rqt.getMsg().find(" ") + 1));
-		std::cout << "se ha recibido el mensaje ->" << msg << "<- enviado para ->" << to << "<-" << std::endl;
+
 		if (msg.empty())
 		{
 			//	ERR_NOTEXTTOSESND
@@ -156,7 +159,7 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 bool	checkNumber(std::string str)
 {
 	size_t i = 0;
-	while (i != str.length())
+	while (i != str.size() - 1)
 	{
 		if (std::isdigit(str[i]) == 0)
 			return (false);
@@ -177,12 +180,6 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 		msg = rqt.getMsg().substr(ch.size() + flag.size() + 2, rqt.getMsg().size() - 1);
 	}
 	RESP_CODE	rcode;
-
-		std::cout << "Mensaje de MODE: ." << rqt.getMsg() << "." << std::endl;
-		std::cout << "ch: ." << ch << "." << std::endl;
-		std::cout << "flag: ." << flag << "." << std::endl;
-		if (!msg.empty())
-			std::cout << "msg: ." << msg << "." << std::endl;
 
 	try
 	{
@@ -246,14 +243,12 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 			}
 			else if (flag == "+k") // Set the channel key (password)
 			{
-				std::cout << "!!\n";
 				if (msg.empty())
 				{
 					rcode = ERR_NEEDMOREPARAMS;
 					throw CommandException(" :Not enough parameters");
 				}
 				serv.getChannelByName(ch)->setPassword(msg);
-				std::cout << "contraseña aplicada : '" << serv.getChannelByName(ch)->getPassword() << "'\n";
 				serv.getChannelByName(ch)->setThereIsPasswd(true);
 			}
 			else if (flag == "-k") // Remove the channel key (password)
@@ -277,7 +272,6 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 					rcode = ERR_NOSUCHNICK;
 					throw CommandException(" " + msg + " :No such nick/channel");
 				}
-				std::cout << "Cliente a ser operador: '" << msg << "'\n";
 				serv.getChannelByName(ch)->addOperator(serv.getClientByNick(msg));
 			}
 			else if (flag == "-o") // Take channel operator privilege
@@ -329,7 +323,6 @@ void	Command::execPart(Request &rqt, SockInfo &serv)
 {
 	if (rqt.getMsg().empty() || rqt.getMsg().find(' ') == std::string::npos || rqt.getMsg().find(':') == std::string::npos)
 	{
-		std::cout << "AV '" << rqt.getMsg() << "'\n";
 		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NEEDMOREPARAMS, "", "");
 		rpl.reply(rqt.getClient(), " :Not enough parameters");
 		return ;
@@ -353,7 +346,7 @@ void	Command::execPart(Request &rqt, SockInfo &serv)
 		serv.getChannelByName(ch)->removeClientFromChannel(rqt.getClient());
 		Response partReply(rqt.getClient()->getNickname(), "", "PART ", serv.getChannelByName(ch)->getName() + reason);
 		partReply.reply(rqt.getClient());
-		std::cout << "Funciona\n";
+		serv.getChannelByName(ch)->broadcastChannel(rqt.getClient(), partReply, false);
 	}
 }
 
@@ -363,11 +356,11 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 
 	try
 	{
-		if (rqt.getMsg().empty())
+		if (rqt.getMsg().empty() || rqt.getMsg().find(' ') == std::string::npos)
 			throw CommandException("INVITE :Not enough parameters.");
 
 		std::string	nick = rqt.getMsg().substr(0, rqt.getMsg().find(" "));
-		std::string	ch = rqt.getMsg().substr(nick.size() - 1, rqt.getMsg().size() - 1);
+		std::string	ch = rqt.getMsg().substr(nick.size() + 1, rqt.getMsg().size() - 1);
 
 		if (nick.empty() || ch.empty())
 		{
@@ -413,7 +406,6 @@ void	Command::execPing(Request &rqt, SockInfo &serv)
 
 void Command::execTopic(Request &rqt, SockInfo &serv)
 {
-	std::cout << "msg received ->" << rqt.getMsg() << "<- en la pos " << rqt.getMsg().find("#") << std::endl;
 	if (rqt.getMsg().empty())
 	{
 		// Si no hay msg -> ERR_NEEDMOREPARAMS
@@ -426,7 +418,6 @@ void Command::execTopic(Request &rqt, SockInfo &serv)
 		// Error (no se cual)
 		return ;
 	}
-	std::cout << "el channel name es ->" << channelName << std::endl;
 	std::string restOfMsg = rqt.getMsg().substr(channelName.length(), std::string::npos);
 	Channel	*ch = serv.getChannelByName(channelName);
 	if (!restOfMsg.empty())
