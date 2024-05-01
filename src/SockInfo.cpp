@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:55:05 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 23:21:12 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,6 @@ std::string	SockInfo::getHostname(void) const
 	return (this->_hostname);
 }
 
-/**
- * @brief Creates the socket
- */
 void	SockInfo::createSocket(void)
 {
 	sockaddr_in	sockAddrConf;
@@ -66,9 +63,6 @@ void	SockInfo::createSocket(void)
 	this->setBot();
 }
 
-/**
- * @brief accepts the connection of new clients
- */
 void	SockInfo::createClient()
 {
 	sockaddr_in	clientAddr;
@@ -134,13 +128,13 @@ void	SockInfo::readRequestFromClient(Client *clt)
 	while (1)
 	{
 		readfd = recv(clt->getClientFd(), buf, 1024, 0);
-		if (!readfd)
+		if (!readfd || clt->getStatus() == DISCONNECTED)
 		{
 			clt->changeStatus(DISCONNECTED);
 			return ;
 		}
-		else if (readfd < 0)
-			printError("");
+		else if (readfd == -1)
+			return ;
 		clt->_messagebuffer.append(buf);
 		if(clt->_messagebuffer.find("\n") != std::string::npos)
 		{
@@ -150,8 +144,16 @@ void	SockInfo::readRequestFromClient(Client *clt)
 			std::string			cmd;
 			while (std::getline(ss, cmd, '\n'))
 			{
-				Request	rqt(cmd.substr(0, cmd.length() - 1), clt);
-				rqt.reply(*this);
+				if (cmd[cmd.size() - 1] == 13) // nc
+				{
+					Request	rqt(cmd.substr(0, cmd.length() - 1), clt);
+					rqt.reply(*this);
+				}
+				else
+				{
+					Request	rqt(cmd, clt);
+					rqt.reply(*this);
+				}
 			}
 			clt->_messagebuffer.clear();
 			return ;
@@ -197,10 +199,6 @@ void	SockInfo::deleteClient(Client *clt)
 	std::cout << "[-] Client disconnected" << std::endl;
 }
 
-/**
- * @brief it executes a loop that is using poll (in a non-blocking way)
- * 			to read from the socket fd any POLLIN event
- */
 void	SockInfo::runServ(void)
 {
 	this->_fds.push_back((struct pollfd){this->_sockfd, POLLIN, 0});
@@ -234,13 +232,6 @@ bool	SockInfo::authenticate(const std::string toCheck)
 	return (false);
 }
 
-/**
- * @brief Returns true if the Nickname already exists
- * 
- * @param str 
- * @return true 
- * @return false 
- */
 bool	SockInfo::searchNick(const std::string str)
 {
 	for (size_t i = 0; i < this->_clients.size(); i++)

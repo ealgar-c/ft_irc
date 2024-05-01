@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 22:21:03 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 23:22:46 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 	}
 }
 
-std::string	getRdnBotMsg(Client *clt)
+static std::string	getRdnBotMsg(Client *clt)
 {
 	switch (std::rand() % 5)
 	{
@@ -171,7 +171,6 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 		}
 		if (to[0] == '#')
 		{
-			// va a un canal
 			if (serv.getChannelByName(to) != NULL)
 			{
 				Channel *chnl = serv.getChannelByName(to);
@@ -209,18 +208,19 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 			}
 			else
 			{
-				Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHNICK, to + " :No text to send", "");
+				Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHNICK, to + " :No such nick", "");
 				reply.reply(rqt.getClient());
 			}
 		}
 	}
 	else
 	{
-		//	ERR_NOTEXTTOSEND
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTEXTTOSEND, ":No text to send", "");
+		reply.reply(rqt.getClient());
 	}
 }
 
-bool	checkNumber(std::string str)
+static bool	checkNumber(std::string str)
 {
 	size_t i = 0;
 	while (i != str.size() - 1)
@@ -229,6 +229,13 @@ bool	checkNumber(std::string str)
 			return (false);
 	}
 	return (true);
+}
+
+static void	resendChannelNameList(Channel *chnl, Client *clt, SockInfo &serv)
+{
+	Response partReply(clt->getNickname(), "", "PART ", chnl->getName());
+	chnl->broadcastChannel(clt, partReply, false);
+	chnl->broadcastNamelist(clt, serv);
 }
 
 void	Command::execMode(Request &rqt, SockInfo &serv)
@@ -340,6 +347,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 					throw CommandException(" " + msg + " :No such nick/channel");
 				}
 				serv.getChannelByName(ch)->addOperator(serv.getClientByNick(msg));
+				resendChannelNameList(serv.getChannelByName(ch), serv.getClientByNick(msg), serv);
 			}
 			else if (flag == "-o")
 			{ // Take channel operator privilege
@@ -354,6 +362,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 					throw CommandException(" " + msg + " :No such nick/channel");
 				}
 				serv.getChannelByName(ch)->removeClientAsOperator(serv.getClientByNick(msg));
+				resendChannelNameList(serv.getChannelByName(ch), serv.getClientByNick(msg), serv);
 			}
 			else if (flag == "+l")
 			{ // Set the user limit to channel
@@ -479,7 +488,9 @@ void	Command::execTopic(Request &rqt, SockInfo &serv)
 		return;
 	if (rqt.getMsg().empty())
 	{
-		// Si no hay msg -> ERR_NEEDMOREPARAMS
+		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NEEDMOREPARAMS, ":Not enough parameters.", "");
+		reply.reply(rqt.getClient());
+		return;
 	}
 	std::string channelName;
 	if (rqt.getMsg().find("#") == 0)
