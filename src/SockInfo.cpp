@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/24 17:09:49 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:20:03 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	SockInfo::createSocket(void)
 		close(this->_sockfd);
 		printError(ERR_SOCKLISTEN);
 	}
+	this->setBot();
 }
 
 /**
@@ -270,4 +271,16 @@ Channel	*SockInfo::getChannelByName(std::string ChannelName) const
 			return (*v_it);
 	}
 	return (NULL);
+}
+
+void	SockInfo::setBot(void)
+{
+	Client *newClient = new Client(CONNECTED, "", 1);
+	newClient->setNickname("Kaladin");
+	this->_clients.push_back(newClient);
+	joinChannel("#bot", "", newClient);
+	Channel *botch = this->getChannelByName("#bot");
+	botch->setTopic(":Vida antes que muerte, fuerza antes que debilidad, viaje antes que destino");
+	botch->setOpenTopic(false);
+	
 }

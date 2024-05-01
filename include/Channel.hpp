@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:13:59 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 18:49:35 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:22:30 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,5 @@ class Channel
 		void	removeClientAsOperator(const Client *);
 		void	addOperator(Client *);
 		void	broadcastChannel(Client *, Response &, bool) const;
+		void	broadcastNamelist(Client *, SockInfo &) const;
 };
