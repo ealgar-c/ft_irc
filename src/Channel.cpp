@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:21:17 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:50:30 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:01:17 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,22 +150,18 @@ void	Channel::addClientToChannel(Client *newClient, SockInfo &serv)
 			return;
 		}
 	}
-	// comprobar contraseña
 	if (this->_operatorClients.size() == 0)
 		this->_operatorClients.push_back(newClient);
 	this->_clientsConnected.push_back(newClient);
 	Response JoinReply(newClient->getNickname(), "", "JOIN ", this->getName());
 	JoinReply.reply(newClient);
-	// enviar RPL_TOPIC o RPLY_NOTOPIC
 	if (!this->getTopic().empty())
 	{
-		// Si tiene topic el canal -> RPL_TOPIC
 		Response reply(serv.getHostname(), newClient->getNickname(), RPL_TOPIC, this->getName() + this->getTopic(), "");
 		reply.reply(newClient);
 	}
 	else
 	{
-		// Si no tiene topic el canal -> RPL_NOTOPIC
 		Response reply(serv.getHostname(), newClient->getNickname(), RPL_NOTOPIC, this->getName() + " :no topic is set", "");
 		reply.reply(newClient);
 	}

@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:53:26 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:06:59 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ Response::Response(std::string from, std::string to, RESP_CODE rcode, std::strin
 			break;
 		case 403:
 			this->_to = "403 " + to;
+			break;
+		case 411:
+			this->_to = "411 " + to;
+			break;
+		case 412:
+			this->_to = "412 " + to;
 			break;
 		case 431:
 			this->_to = "431 " + to;
