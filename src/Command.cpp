@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:39:05 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:45:39 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,9 +180,7 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 				//	ERR_NOSUCHNICK
 			}
 		}
-	}
-	else
-	{
+	}else{
 		//	ERR_NOTEXTTOSEND
 	}
 }
