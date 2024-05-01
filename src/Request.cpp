@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/22 15:28:42 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:40:22 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,65 +29,43 @@ Request::Request(std::string cmd, Client *clt)
 {
 	this->_client = clt;
 
-	if (cmd.find("PASS") != std::string::npos)
-	{
+	if (cmd.find("PASS") != std::string::npos){
 		this->_cmd = "PASS";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("NICK") != std::string::npos)
-	{
+	}else if (cmd.find("NICK") != std::string::npos){
 		this->_cmd = "NICK";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("USER") != std::string::npos)
-	{
+	}else if (cmd.find("USER") != std::string::npos){
 		this->_cmd = "USER";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("JOIN") != std::string::npos)
-	{
+	}else if (cmd.find("JOIN") != std::string::npos){
 		this->_cmd = "JOIN";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("PRIVMSG") != std::string::npos)
-	{
+	}else if (cmd.find("PRIVMSG") != std::string::npos){
 		this->_cmd = "PRIVMSG";
 		this->_msg = cmd.substr(8, cmd.size() - 1);
-	}
-	else if (cmd.find("MODE") != std::string::npos)
-	{
+	}else if (cmd.find("MODE") != std::string::npos){
 		this->_cmd = "MODE";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("INVITE") != std::string::npos)
-	{
+	}else if (cmd.find("INVITE") != std::string::npos){
 		this->_cmd = "INVITE";
 		this->_msg = cmd.substr(7, cmd.size() - 1);
-	}
-	else if (cmd.find("PART") != std::string::npos)
-	{
+	}else if (cmd.find("PART") != std::string::npos){
 		this->_cmd = "PART";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("TOPIC") != std::string::npos)
-	{
+	}else if (cmd.find("TOPIC") != std::string::npos){
 		this->_cmd = "TOPIC";
 		this->_msg = cmd.substr(6, cmd.size() - 1);
-	}
-	else if (cmd.find("PING") != std::string::npos)
-	{
+	}else if (cmd.find("PING") != std::string::npos){
 		this->_cmd = "PING";
 		this->_msg = cmd.substr(5, cmd.size() - 1);
-	}
-	else if (cmd.find("TOPIC") != std::string::npos)
-	{
+	}else if (cmd.find("TOPIC") != std::string::npos){
 		this->_cmd = "TOPIC";
 		this->_msg = cmd.substr(6, cmd.size() - 1);
 	}
 }
 
-Request::~Request()
-{ }
+Request::~Request(){}
 
 Request	&Request::operator=(const Request &toCopy)
 {
@@ -97,8 +75,6 @@ Request	&Request::operator=(const Request &toCopy)
 
 void	Request::reply(SockInfo &sockInfo)
 {
-	(void)sockInfo;
-
 	if (this->_cmd == "PASS")
 		Command::execPass(*this, sockInfo);
 	else if (this->_cmd == "NICK")

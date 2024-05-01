@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:28:28 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:39:14 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ void	printError(std::string err)
 
 void	signalOverride(int receivedsig)
 {
-	if (receivedsig == SIGINT)
-	{
+	if (receivedsig == SIGINT){
 		std::cout << "server closed" << std::endl;
 		exit (0);
 	}	

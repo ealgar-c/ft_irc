@@ -3,34 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 14:45:11 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/04/13 16:35:04 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:33:14 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
-Client::Client()
-{
-
-}
+Client::Client(){}
 
 Client::Client(C_STATUS status, std::string ip, int clientfd): _status(status), _ip(ip), _clientfd(clientfd)
 {
 	this->_messagebuffer.clear();
 }
 
-Client::~Client()
-{
-
-}
+Client::~Client(){}
 
 Client	&Client::operator=(const Client &toEqual)
 {
-	if (this != &toEqual)
-	{
+	if (this != &toEqual){
 		this->_clientfd = toEqual.getClientFd();
 		this->_ip = toEqual.getIp();
 		this->_status = toEqual.getStatus();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 21:30:02 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:40:49 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ Response::Response(std::string from, std::string to, std::string cmd, std::strin
 
 Response::Response(std::string from, std::string to, RESP_CODE rcode, std::string cmd, std::string msg):_from(from), _cmd(cmd), _msg(msg)
 {
-	switch (rcode)
-	{
+	switch (rcode){
 		case 001:
 			this->_to = "001 " + to;
 			break;
@@ -102,10 +101,7 @@ Response::Response(const Response &toCopy)
 	(void)toCopy;
 }
 
-Response::~Response()
-{
-	
-}
+Response::~Response(){}
 
 Response &Response::operator=(const Response &toEqual)
 {
@@ -143,22 +139,9 @@ void	Response::reply(Client *clt)
 	send(clt->getClientFd(), this->_finalResponse.c_str(), this->_finalResponse.length(), 0);
 }
 
-/* void	Response::reply(Client *clt, Channel &ch, std::string msg)
-{
-	std::string	finalMsg = clt->getNickname() + " " + ch.getName() + " :" + msg;
-	std::cout << "response to send: " << this->_finalResponse << std::endl; // esto fuera
-	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
-} */
-
 void	Response::reply(Client *clt, std::string msg)
 {
 	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg + this->_endmsg;
 	std::cout << "response to send: " << finalMsg << std::endl; // esto fuera
 	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
 }
-
-/* void	Response::reply(Client *clt, std::string msg)
-{
-	std::cout << "response to send: " << msg << std::endl;
-	send(clt->getClientFd(), msg.c_str(), msg.length(), 0);
-} */
