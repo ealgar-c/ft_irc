@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 19:34:39 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 19:37:50 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:26:59 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ SockInfo::~SockInfo()
 	{
 		delete *v_it;
 	}
-	
+	for (std::vector<Channel *>::const_iterator v_it= this->_channels.begin(); v_it != this->_channels.end(); v_it++)
+	{
+		delete *v_it;
+	}
 }
 
 //	getters
