@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 20:45:24 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 21:28:28 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,14 @@ void	signalOverride(int receivedsig)
 	}	
 }
 
+void	leakschecker(void)
+{
+	system("leaks -q ircserv");
+}
+
 int	main(int ac, char **av)
 {
+	atexit(leakschecker);
 	if (ac != 3)
 		printError(ERR_ARGNO);
 	if (atoi(av[1]) == 0)
