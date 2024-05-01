@@ -6,7 +6,7 @@
 /*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 22:08:13 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:21:03 by ealgar-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	Command::execJoin(Request &rqt, SockInfo &serv)
 	}
 	else
 	{
+		if (newChannelName[0] != '#')
+			return ;
 		std::string key;
 		if (rqt.getMsg().find(' ') != std::string::npos)
 			key = rqt.getMsg().substr(newChannelName.size() + 1, rqt.getMsg().size() - 1);
@@ -155,7 +157,6 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 	{
 		Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NORECIPIENT, ":No recipient given", "");
 		reply.reply(rqt.getClient());
-		//	ERR_NORECIPIENT
 		return;
 	}
 	if (rqt.getMsg().find(" ") != std::string::npos)
@@ -166,7 +167,6 @@ void	Command::execPrivmsg(Request &rqt, SockInfo &serv)
 		{
 			Response reply(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTEXTTOSEND, ":No text to send", "");
 			reply.reply(rqt.getClient());
-			//	ERR_NOTEXTTOSESND
 			return;
 		}
 		if (to[0] == '#')
