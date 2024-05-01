@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/04/30 19:34:29 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/01 19:02:25 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,6 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 		}
 		else if (flag.size() == 2)
 		{
-			std::cout << "!\n";
 			if (flag == "+i") // Set Invite-only channel
 			{
 				if (!msg.empty())
@@ -291,7 +290,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 			}
 			else if (flag == "+o") // Give channel operator privilege
 			{
-				if (!msg.empty())
+				if (msg.empty())
 				{
 					rcode = ERR_NEEDMOREPARAMS;
 					throw CommandException(" :Not enough parameters");
@@ -300,6 +299,7 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 					rcode = ERR_NOSUCHNICK;
 					throw CommandException(" " + msg + " :No such nick/channel");
 				}
+				std::cout << "Cliente a ser operador: '" << msg << "'\n";
 				serv.getChannelByName(ch)->addOperator(serv.getClientByNick(msg));
 			}
 			else if (flag == "-o") // Take channel operator privilege
@@ -349,8 +349,34 @@ void	Command::execMode(Request &rqt, SockInfo &serv)
 
 void	Command::execPart(Request &rqt, SockInfo &serv)
 {
-	(void)rqt;
-	(void)serv;
+	if (rqt.getMsg().empty() || rqt.getMsg().find(' ') == std::string::npos || rqt.getMsg().find(':') == std::string::npos)
+	{
+		std::cout << "AV '" << rqt.getMsg() << "'\n";
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NEEDMOREPARAMS, "", "");
+		rpl.reply(rqt.getClient(), " :Not enough parameters");
+		return ;
+	}
+
+	std::string	ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
+	std::string	reason = rqt.getMsg().substr(rqt.getMsg().find(':') - 1, rqt.getMsg().size() - 1);
+
+	if (!serv.getChannelByName(ch))
+	{
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
+		rpl.reply(rqt.getClient(), ch + " :No such channel");
+	}
+	else if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient()))
+	{
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, "", "");
+		rpl.reply(rqt.getClient(), " :You're not on that channel");
+	}
+	else
+	{
+		serv.getChannelByName(ch)->removeClientFromChannel(rqt.getClient());
+		Response partReply(rqt.getClient()->getNickname(), "", "PART ", serv.getChannelByName(ch)->getName() + reason);
+		partReply.reply(rqt.getClient());
+		std::cout << "Funciona\n";
+	}
 }
 
 void	Command::execInvite(Request &rqt, SockInfo &serv)
