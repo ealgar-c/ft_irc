@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 23:22:46 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:34:41 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,6 +471,47 @@ void	Command::execInvite(Request &rqt, SockInfo &serv)
 	{
 		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), rcode, "", "");
 		rpl.reply(rqt.getClient(), e.what());
+	}
+}
+
+void	Command::execKick(Request &rqt, SockInfo &serv)
+{
+	if (rqt.getClient()->getStatus() != CONNECTED)
+		return;
+	if (rqt.getMsg().empty() || rqt.getMsg().find(' ') == std::string::npos || rqt.getMsg().find(' ') + 1 == std::string::npos)
+	{
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NEEDMOREPARAMS, "", "");
+		rpl.reply(rqt.getClient(), " :Not enough parameters");
+		return;
+	}
+	std::string ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
+	std::string nick = rqt.getMsg(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
+	if (!serv.getChannelByName(ch))
+	{
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
+		rpl.reply(rqt.getClient(), ch + " :No such channel");
+	}
+	else if (!serv.getChannelByName(ch)->clientIsInChannel(rqt.getClient()))
+	{
+		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOTONCHANNEL, "", "");
+		rpl.reply(rqt.getClient(), " :You're not on that channel");
+	}
+	else if (!serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(nick)))
+	{
+		Response rpl(serv.getHostname(), nick, ERR_NOTONCHANNEL, "", "");
+		rpl.reply(rqt.getClient(), " :You're not on that channel");
+	}
+	else if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient()))
+	{
+		Response rpl(serv.getHostname(), nick, ERR_NOTONCHANNEL, "", "");
+		rpl.reply(rqt.getClient(), ch + " :You are not channel operator");
+	}
+	else
+	{
+		serv.getChannelByName(ch)->removeClientFromChannel(serv.getClientByNick(nick));
+		Response partReply(nick, "", "KICK ", serv.getChannelByName(ch)->getName());
+		partReply.reply(rqt.getClient());
+		serv.getChannelByName(ch)->broadcastChannel(serv.getClientByNick(nick), partReply, false);
 	}
 }
 

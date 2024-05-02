@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 17:13:10 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 22:45:50 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:24:15 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ void	signalOverride(int receivedsig)
 	}
 }
 
-void	leakschecker(void)
+/* void	leakschecker(void)
 {
 	system("leaks -q ircserv");
-}
+} */
 
 int	main(int ac, char **av)
 {
-	atexit(leakschecker);
+	//atexit(leakschecker);
 	if (ac != 3)
 		printError(ERR_ARGNO);
 	if (atoi(av[1]) == 0)

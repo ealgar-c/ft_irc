@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:52:55 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:13:13 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ Request::Request(std::string cmd, Client *clt)
 	{
 		this->_cmd = "INVITE";
 		this->_msg = cmd.substr(7, cmd.size() - 1);
+	}
+	else if (cmd.find("KICK") != std::string::npos)
+	{
+		this->_cmd = "KICK";
+		this->_msg = cmd.substr(5, cmd.size() - 1);
 	}
 	else if (cmd.find("PART") != std::string::npos)
 	{

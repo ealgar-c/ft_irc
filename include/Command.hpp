@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:56:26 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/01 21:56:07 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:12:42 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Command
 			static void	execMode(Request &, SockInfo &);
 			static void	execPart(Request &, SockInfo &);
 			static void	execInvite(Request &, SockInfo &);
+			static void	execKick(Request &, SockInfo &);
 			static void	execTopic(Request &, SockInfo &);
 			static void	execPing(Request &, SockInfo &);
 		class CommandException: public std::exception
