@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ealgar-c <ealgar-c@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:14:16 by ealgar-c          #+#    #+#             */
-/*   Updated: 2024/05/01 22:06:59 by ealgar-c         ###   ########.fr       */
+/*   Updated: 2024/05/03 20:15:16 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,13 +142,11 @@ void	Response::reply(Client *clt)
 		this->_finalResponse = ":" + this->_from + " " + this->_to + " " + this->_cmd + this->_endmsg;
 	else
 		this->_finalResponse = ":" + this->_from + " " + this->_to + " " + this->_cmd + this->_msg + this->_endmsg;
-	std::cout << "response to send: " << this->_finalResponse << std::endl;
 	send(clt->getClientFd(), this->_finalResponse.c_str(), this->_finalResponse.length(), 0);
 }
 
 void	Response::reply(Client *clt, std::string msg)
 {
 	std::string finalMsg = ":" + this->_from + " " + this->_to + " " + msg + this->_endmsg;
-	std::cout << "response to send: " << finalMsg << std::endl; // esto fuera
 	send(clt->getClientFd(), finalMsg.c_str(), finalMsg.length(), 0);
 }

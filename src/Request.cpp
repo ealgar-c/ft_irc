@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/02 16:13:13 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/03 17:50:37 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	Request::reply(SockInfo &sockInfo)
 		Command::execPart(*this, sockInfo);
 	else if (this->_cmd == "INVITE")
 		Command::execInvite(*this, sockInfo);
+	else if (this->_cmd == "KICK")
+		Command::execKick(*this, sockInfo);
 	else if (this->_cmd == "PING")
 		Command::execPing(*this, sockInfo);
 	else if (this->_cmd == "TOPIC")

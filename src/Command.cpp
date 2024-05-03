@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/02 16:34:41 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/03 20:15:00 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -485,7 +485,7 @@ void	Command::execKick(Request &rqt, SockInfo &serv)
 		return;
 	}
 	std::string ch = rqt.getMsg().substr(0, rqt.getMsg().find(' '));
-	std::string nick = rqt.getMsg(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
+	std::string nick = rqt.getMsg().substr(rqt.getMsg().find(' ') + 1, rqt.getMsg().size() - 1);
 	if (!serv.getChannelByName(ch))
 	{
 		Response rpl(serv.getHostname(), rqt.getClient()->getNickname(), ERR_NOSUCHCHANNEL, "", "");
@@ -499,7 +499,7 @@ void	Command::execKick(Request &rqt, SockInfo &serv)
 	else if (!serv.getChannelByName(ch)->clientIsInChannel(serv.getClientByNick(nick)))
 	{
 		Response rpl(serv.getHostname(), nick, ERR_NOTONCHANNEL, "", "");
-		rpl.reply(rqt.getClient(), " :You're not on that channel");
+		rpl.reply(rqt.getClient(), " :That client is not on that channel");
 	}
 	else if (!serv.getChannelByName(ch)->clientIsOperator(rqt.getClient()))
 	{
@@ -508,10 +508,14 @@ void	Command::execKick(Request &rqt, SockInfo &serv)
 	}
 	else
 	{
-		serv.getChannelByName(ch)->removeClientFromChannel(serv.getClientByNick(nick));
-		Response partReply(nick, "", "KICK ", serv.getChannelByName(ch)->getName());
-		partReply.reply(rqt.getClient());
-		serv.getChannelByName(ch)->broadcastChannel(serv.getClientByNick(nick), partReply, false);
+		Client	*clt = serv.getClientByNick(nick);
+		Channel	*channel = serv.getChannelByName(ch);
+
+		channel->removeClientFromChannel(clt);
+		Response kickReply(nick, "", "KICK ", channel->getName());
+		kickReply.reply(clt);
+		channel->broadcastChannel(clt, kickReply, false);
+		channel->broadcastNamelist(clt, serv);
 	}
 }
 
