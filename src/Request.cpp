@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:02:12 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/03 17:50:37 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:43:31 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ Request::Request(const Request &toCopy)
 Request::Request(std::string cmd, Client *clt)
 {
 	this->_client = clt;
+
+	if (cmd.find(' ') == std::string::npos)
+		return ;
 
 	if (cmd.find("PASS") != std::string::npos)
 	{
