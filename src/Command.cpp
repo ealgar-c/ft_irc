@@ -6,7 +6,7 @@
 /*   By: palucena <palucena@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:50:19 by palucena          #+#    #+#             */
-/*   Updated: 2024/05/03 20:15:00 by palucena         ###   ########.fr       */
+/*   Updated: 2024/05/13 18:22:36 by palucena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -511,9 +511,9 @@ void	Command::execKick(Request &rqt, SockInfo &serv)
 		Client	*clt = serv.getClientByNick(nick);
 		Channel	*channel = serv.getChannelByName(ch);
 
-		channel->removeClientFromChannel(clt);
-		Response kickReply(nick, "", "KICK ", channel->getName());
+		Response kickReply(nick, "", "PART ", channel->getName());
 		kickReply.reply(clt);
+		channel->removeClientFromChannel(clt);
 		channel->broadcastChannel(clt, kickReply, false);
 		channel->broadcastNamelist(clt, serv);
 	}
